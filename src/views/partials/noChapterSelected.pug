@@ -8,7 +8,7 @@ template(x-if="currentChapterIndex === null")
                     hr
             | Paste or drop a video or audio file, or an existing chapters file here to start a new project
             | or select one
-            |  
+            |
             label.text-decoration-underline.cursor-pointer from your disk
                 input#importFileInput.d-none(type="file", accept="audio/*,video/*,.json,.txt,.xml,image/*", @change="fileHandler.handleFile($event.target.files[0])")
             hr
