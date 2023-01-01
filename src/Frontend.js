@@ -1,6 +1,6 @@
 import Alpine from "alpinejs";
 import {Offcanvas, Toast, Tooltip} from "bootstrap";
-import Timeline from "./Frontend/timeline.js";
+import Timeline from "./Frontend/Timeline.js";
 import {secondsToTimestamp, timestampToSeconds} from "./util.js";
 import {FileHandler} from "./Frontend/FileHandler.js";
 import MediaFeatures from "./Frontend/MediaFeatures.js";
