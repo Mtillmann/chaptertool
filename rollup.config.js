@@ -9,13 +9,17 @@ export default {
         format: 'umd'
     },
     plugins: [
-        nodeResolve(),
+        nodeResolve({
+            browser : true,
+            modulesOnly: true
+        }),
         copy({
             targets: [
-                { src: 'node_modules/bootstrap-icons/font/fonts', dest: 'static' }
+                {src: 'node_modules/bootstrap-icons/font/fonts', dest: 'static'}
             ]
         }),
-        replace({ //this.fixes the annoying popper bug
+        replace({ //this fixes the annoying popper bug
+            preventAssignment: true,
             'process.env.NODE_ENV': JSON.stringify('production')
         })
     ]

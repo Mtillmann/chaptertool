@@ -93,8 +93,8 @@ export class ArgumentParser {
         }
 
         for (const key in process.env) {
-            if (key.slice(0, 4).toUpperCase() === 'PCT_') {
-                let actualKey = key.toLowerCase().slice(4).replace(/_(\w)/g, m => m[1].toUpperCase());
+            if (key.slice(0, 4).toUpperCase() === 'CT_') {
+                let actualKey = key.toLowerCase().slice(3).replace(/_(\w)/g, m => m[1].toUpperCase());
                 this.options[actualKey] = this.prepareValue(actualKey, process.env[key]);
             }
         }

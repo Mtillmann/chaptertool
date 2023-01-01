@@ -1,9 +1,19 @@
 {
   "name": "chaptertool",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Manage and generate chapters for podcasts and other media via cli or web",
+  "keywords": [
+    "podcast",
+    "ffmpeg",
+    "chapters",
+    "youtube",
+    "mkvmerge",
+    "matroska"
+  ],
   "type": "module",
   "main": "chaptertool.js",
+  "bin": "chaptertool.js",
+  "homepage": "https://github.com/Mtillmann/chaptertool",
   "scripts": {
     "test": "jest",
     "sass-dev": "node-sass --recursive --watch src/scss --output static",
@@ -11,8 +21,16 @@
     "dev": "rollup -c -w",
     "watch": "concurrently \"node-sass --recursive --watch src/scss --output static\" \"npm run dev\" \"nodemon --watch src/Server.js --exec node chaptertool.js serve\""
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Martin Tillmann<mtillmann@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/Mtillmann/chaptertool/issues"
+  },
+  "files": [
+    "src",
+    "scripts",
+    "static"
+  ],
+  "license": "MIT",
   "dependencies": {
     "@zip.js/zip.js": "^2.6.61",
     "bootstrap": "^5.3.0-alpha1",
