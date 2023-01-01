@@ -1,0 +1,14 @@
+div.offcanvas.offcanvas-bottom#timestampEditDialog(x-ref="timestampedit", style="--bs-offcanvas-height:initial;max-height:100vh")
+    div.offcanvas-header
+        h5.offcanvas-title(x-text="editTimestampLabel")
+        button.btn-close(data-bs-dismiss="offcanvas")
+    div.offcanvas-body
+        div.container
+            div.row
+                div.col-12.col-lg-4.offset-lg-4
+                    form
+                        div.input-group
+                            input.form-control(:min="editTimestampBounds.min", :max="editTimestampBounds.max", type="time", step="1", :value="editTimestampTimestamp[0]")
+                            input.form-control(type="number", min=0, max = 999, step=1, :value="editTimestampTimestamp[1]")
+                            button.btn.btn-outline-secondary set
+                        span.small.text-muted hint: use arrow keys, tab and enter

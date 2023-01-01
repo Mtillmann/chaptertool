@@ -1,0 +1,9 @@
+header.container-lg
+    div.row
+        div.col-12.d-flex.justify-content-between.border-bottom.border-body-color.mb-1
+            div.fs-4
+                a.has-tooltip(href="#", @click.stop.prevent="currentChapterIndex = null")
+                    | chaptertool
+            div.fs-1.d-flex.flex-column
+                a.d-flex.flex-grow-1(href="#", @click.stop.prevent="offcanvasNavi.show()")
+                    i.bi.bi-list.d-flex.align-self-center

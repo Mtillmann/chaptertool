@@ -1,0 +1,136 @@
+{
+  "title" : "this is a episode title!",
+  "chapters": [
+    {
+      "title": "Chapter 1 of 26",
+      "startTime": 6.202,
+      "img": "chapter_001.jpg"
+    },
+    {
+      "title": "Chapter 2 of 26",
+      "startTime": 131.762,
+      "img": "chapter_002.jpg"
+    },
+    {
+      "title": "Chapter 3 of 26",
+      "startTime": 231.002,
+      "img": "chapter_003.jpg"
+    },
+    {
+      "title": "Chapter 4 of 26",
+      "startTime": 376.882,
+      "img": "chapter_004.jpg"
+    },
+    {
+      "title": "Chapter 5 of 26",
+      "startTime": 542.002,
+      "img": "chapter_005.jpg"
+    },
+    {
+      "title": "Chapter 6 of 26",
+      "startTime": 658.242,
+      "img": "chapter_006.jpg"
+    },
+    {
+      "title": "Chapter 7 of 26",
+      "startTime": 831.122,
+      "img": "chapter_007.jpg"
+    },
+    {
+      "title": "Chapter 8 of 26",
+      "startTime": 994.322,
+      "img": "chapter_008.jpg"
+    },
+    {
+      "title": "Chapter 9 of 26",
+      "startTime": 1102.88,
+      "img": "chapter_009.jpg"
+    },
+    {
+      "title": "Chapter 10 of 26",
+      "startTime": 1211.24,
+      "img": "chapter_010.jpg"
+    },
+    {
+      "title": "Chapter 11 of 26",
+      "startTime": 1383.04,
+      "img": "chapter_011.jpg"
+    },
+    {
+      "title": "Chapter 12 of 26",
+      "startTime": 1513.92,
+      "img": "chapter_012.jpg"
+    },
+    {
+      "title": "Chapter 13 of 26",
+      "startTime": 1657.44,
+      "img": "chapter_013.jpg"
+    },
+    {
+      "title": "Chapter 14 of 26",
+      "startTime": 1776.84,
+      "img": "chapter_014.jpg"
+    },
+    {
+      "title": "Chapter 15 of 26",
+      "startTime": 1871.68,
+      "img": "chapter_015.jpg"
+    },
+    {
+      "title": "Chapter 16 of 26",
+      "startTime": 2002,
+      "img": "chapter_016.jpg"
+    },
+    {
+      "title": "Chapter 17 of 26",
+      "startTime": 2115.72,
+      "img": "chapter_017.jpg"
+    },
+    {
+      "title": "Chapter 18 of 26",
+      "startTime": 2223.68,
+      "img": "chapter_018.jpg"
+    },
+    {
+      "title": "Chapter 19 of 26",
+      "startTime": 2369.64,
+      "img": "chapter_019.jpg"
+    },
+    {
+      "title": "Chapter 20 of 26",
+      "startTime": 2500.64,
+      "img": "chapter_020.jpg"
+    },
+    {
+      "title": "Chapter 21 of 26",
+      "startTime": 2604.36,
+      "img": "chapter_021.jpg"
+    },
+    {
+      "title": "Chapter 22 of 26",
+      "startTime": 2739.2,
+      "img": "chapter_022.jpg"
+    },
+    {
+      "title": "Chapter 23 of 26",
+      "startTime": 2836.72,
+      "img": "chapter_023.jpg"
+    },
+    {
+      "title": "Chapter 24 of 26",
+      "startTime": 2937,
+      "img": "chapter_024.jpg"
+    },
+    {
+      "title": "Chapter 25 of 26",
+      "startTime": 3632.44,
+      "img": "chapter_025.jpg"
+    },
+    {
+      "title": "Chapter 26 of 26",
+      "startTime": 5166.24,
+      "img": "chapter_026.jpg"
+    }
+  ],
+  "version": "1.0.0"
+}

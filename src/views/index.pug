@@ -1,0 +1,34 @@
+html(data-bs-theme="auto", lang="en")
+    head
+        title chaptertool
+        link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined")
+        link(rel='stylesheet' href='app.css')
+        script(src='app.js')
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+    body
+        div#app(x-data="APP")
+            div.d-flex.flex-column.vh-100.overflow-hidden
+                include partials/header
+                div.container-xl
+                    div.row
+                        include partials/mediaBox
+                        include partials/timelineControls
+                        include partials/timeline
+                        div.col-12.d-flex.justify-content-center.d-none
+                            a.btn.btn-sm.btn-primary('@click.stop.prevent'="toggleSettings()")="settings"
+                div.container-xl.flex-grow-1.overflow-hidden
+                    div.row.h-100
+                        div.overflow-auto.pt-4.h-100.col-6(x-ref="chapterList",:class="{'d-none' : data.chapters.length === 0}")
+                            template(x-for="(chapter, index) in data.chapters", :key="chapter.id")
+                                include partials/chapterListItem
+                        div.col-6.overflow-auto.h-100.p-4(:class="{'offset-3' : data.chapters.length === 0}")
+                            include partials/noChapterSelected
+                            include partials/chapterEditPanel
+            include partials/exportDialog
+            include partials/importDialog
+            include partials/metaDialog
+            include partials/timestampDialog
+            include partials/offcanvasNavi
+            include partials/analyticsOffcanvas
+            div.toast-container.position-fixed.bottom-0.start-50.translate-middle-x(x-ref="toasts")

@@ -1,0 +1,16 @@
+div.col-12
+    div#timeline-controls.d-flex.justify-content-end
+        div
+            template(x-if="hasVideo")
+                a.has-tooltip(
+                        title="hide/show video"
+                        href="#"
+                        @click.stop.prevent="collapseMedia"
+                    )
+                    i.bi(:class="{'bi-eye' : mediaIsCollapsed, 'bi-eye-slash' : !mediaIsCollapsed}")
+            a.has-tooltip(
+                href="#"
+                title="toggle chapter/timeline lock"
+                @click.stop.prevent="toggleChapterLock"
+            )
+                i.bi(:class="{'bi-unlock' : !chapterLock, 'bi-lock': chapterLock}")

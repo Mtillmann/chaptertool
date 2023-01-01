@@ -1,0 +1,4 @@
+div.col-12
+    div#mediabox.d-none(x-show="hasVideo || hasAudio", :class="{'d-none' : mediaIsCollapsed}")
+        video.w-100(x-ref="video", x-show="hasVideo",preload="metadata", controls)
+        audio.w-100(x-ref="audio", x-show="hasAudio", preload="metadata", controls)

@@ -1,0 +1,37 @@
+;FFMETADATA1
+title=this is a episode title!
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=6202
+END=131761
+title=Chapter 1 of 5
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=131762
+END=231001
+title=Chapter 2 of 5
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=231002
+END=376881
+title=Chapter 3 of 5
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=376882
+END=542001
+title=Chapter 4 of 5
+
+[CHAPTER]
+TIMEBASE=1/1000
+START=542002
+END=658241
+title=Chapter\
+5 of 5
+
+[STREAM]
+title=multi\
+line

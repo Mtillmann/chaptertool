@@ -1,0 +1,31 @@
+template(x-if="currentChapterIndex === null")
+    div.d-flex.align-items-center.justify-content-center
+        div.text-center
+            include mediaExpandNotice
+            template(x-if="data.chapters.length > 0")
+                div
+                    a(@click.stop.prevent="askForNewProject()", href="#") Create a new project
+                    hr
+            | Paste or drop a video or audio file, or an existing chapters file here to start a new project
+            | or select one
+            label.text-decoration-underline.cursor-pointer from your disk
+                input#importFileInput.d-none(type="file", accept="audio/*,video/*,.json,.txt,.xml,image/*", @change="fileHandler.handleFile($event.target.files[0])")
+            hr
+            template(x-if="data.chapters.length === 0")
+                div
+                    a(@click.stop.prevent="addChapter(0)", href="#") Create a new chapter
+                    hr
+            template(x-if="data.chapters.length > 0")
+                div
+                    a(@click.stop.prevent="addChapterFromTime()", href="#") Insert new chapter at given time
+                    hr
+                div
+                    | Select a chapter to edit its properties
+                    hr
+            a(href="#", @click.stop.prevent="chapterDialog.show()") Edit meta attributes
+            hr
+            a(href="#",@click.stop.prevent="changeDuration") Change episode duration
+            hr
+            template(x-if="data.chapters.length > 0")
+                div
+                    a(@click.stop.prevent="exportOffcanvas.show()", href="#") Export/download your project

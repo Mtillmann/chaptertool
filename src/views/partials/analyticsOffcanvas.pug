@@ -1,0 +1,15 @@
+div.offcanvas.offcanvas-bottom#analyticsDialog
+    div.offcanvas-header
+        h5.offcanvas-title Analytics
+    div.offcanvas-body
+        div.container-xl
+            div.row
+                div.col-12
+                    p.text-center Enable Google Analytics to collect usage information and help me improve the app.
+                        |  You can change the option in the main navigation (
+                        i.bi.bi-list
+                        | ) at any time.
+                div.col-12.d-flex.justify-content-evenly
+                    button.btn.btn-secondary(@click="toggleGA('enabled')") Disable Analytics
+                    button.btn.btn-primary(@click="toggleGA('enabled')") Enable Analytics
+

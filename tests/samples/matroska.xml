@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Chapters SYSTEM "matroskachapters.dtd">
+<Chapters>
+    <EditionEntry>
+        <EditionUID>1672085362412100303</EditionUID>
+        <ChapterAtom>
+            <ChapterTimeStart>6202000000</ChapterTimeStart>
+            <ChapterTimeEnd>131761000000</ChapterTimeEnd>
+            <ChapterUID>7189285</ChapterUID>
+            <ChapterDisplay>
+                <ChapString>Chapter 1 of 5</ChapString>
+            </ChapterDisplay>
+        </ChapterAtom>
+        <ChapterAtom>
+            <ChapterTimeStart>131762000000</ChapterTimeStart>
+            <ChapterTimeEnd>231001000000</ChapterTimeEnd>
+            <ChapterUID>132564435</ChapterUID>
+            <ChapterDisplay>
+                <ChapString>Chapter 2 of 5</ChapString>
+            </ChapterDisplay>
+        </ChapterAtom>
+        <ChapterAtom>
+            <ChapterTimeStart>231002000000</ChapterTimeStart>
+            <ChapterTimeEnd>376881000000</ChapterTimeEnd>
+            <ChapterUID>232991026</ChapterUID>
+            <ChapterDisplay>
+                <ChapString>Chapter 3 of 5</ChapString>
+            </ChapterDisplay>
+        </ChapterAtom>
+        <ChapterAtom>
+            <ChapterTimeStart>376882000000</ChapterTimeStart>
+            <ChapterTimeEnd>542001000000</ChapterTimeEnd>
+            <ChapterUID>377990427</ChapterUID>
+            <ChapterDisplay>
+                <ChapString>Chapter 4 of 5</ChapString>
+            </ChapterDisplay>
+        </ChapterAtom>
+        <ChapterAtom>
+            <ChapterTimeStart>542001999999.99994</ChapterTimeStart>
+            <ChapterTimeEnd>658241000000</ChapterTimeEnd>
+            <ChapterUID>543708918</ChapterUID>
+            <ChapterDisplay>
+                <ChapString>Chapter 5 of 5</ChapString>
+            </ChapterDisplay>
+        </ChapterAtom>
+    </EditionEntry>
+</Chapters>

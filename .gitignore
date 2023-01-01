@@ -1,0 +1,11 @@
+/node_modules
+/.idea
+/*.mp4
+/*.mp3
+/*.aac
+/*.m4a
+/*.jpg
+/.env
+/*.webm
+/coverage
+/static/ga-code

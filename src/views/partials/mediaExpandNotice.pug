@@ -1,0 +1,37 @@
+template(x-if="actualMediaDuration && actualMediaDuration > data.duration")
+    div.alert.alert-info
+        | The current duration
+        |
+        span(x-text="`(${secondsToTimestamp(data.duration)})`")
+        |
+        | is shorter than the video duration
+        |
+        span(x-text="`(${secondsToTimestamp(actualMediaDuration)})`")
+        | .
+        |
+        a(href="#",@click.stop.prevent="adaptDuration") Expand duration
+template(x-if="actualMediaDuration && actualMediaDuration < data.duration")
+    div
+        template(x-if="data.chapters.at(-1) && data.chapters.at(-1).startTime < actualMediaDuration")
+            div.alert.alert-info
+                | The current duration
+                |
+                span(x-text="`(${secondsToTimestamp(data.duration)})`")
+                |
+                | is longer than the video duration
+                |
+                span(x-text="`(${secondsToTimestamp(actualMediaDuration)})`")
+                | .
+                |
+                a(href="#",@click.stop.prevent="adaptDuration") Reduce duration
+        template(x-if="data.chapters.at(-1) && data.chapters.at(-1).startTime > actualMediaDuration")
+            div.alert.alert-danger
+                | The current duration
+                |
+                span(x-text="`(${secondsToTimestamp(data.duration)})`")
+                |
+                | is longer than the video duration
+                |
+                span(x-text="`(${secondsToTimestamp(actualMediaDuration)})`")
+                |
+                | but there are chapters that start after that timestamp.

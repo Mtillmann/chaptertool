@@ -1,0 +1,102 @@
+template(x-if="currentChapterIndex !== null")
+    div
+        ul.nav.nav-tabs
+            li.nav-item
+                a.nav-link(href="#", :class="{active : editTab === 'info'}", @click.stop.prevent="editTab='info'") Info
+            li.nav-item
+                a.nav-link(href="#", :class="{active : editTab === 'img'}", @click.stop.prevent="editTab='img'") Image
+            li.nav-item
+                a.nav-link(href="#", :class="{active : editTab === 'geo'}", @click.stop.prevent="editTab='geo'") Location
+            li.nav-item.ms-auto
+                a.nav-link(href="#", @click.stop.prevent="closeChapter") &nbsp;
+                    i.bi.bi-x-lg
+        div(x-show="editTab === 'info'")
+            div.row.p-1.mb-1
+                label.col-3.col-form-label(for="chapterTitle") Title
+                div.col-9
+                    input.form-control#chapterTitle(x-model="data.chapters[currentChapterIndex].title", :placeholder="`Chapter ${currentChapterIndex + 1}`")
+            div.row(x-show="currentChapterIndex === 0 && data.chapters[currentChapterIndex].startTime !== 0")
+                div.col
+                    p.small.alert.alert-info This is the first chapter but it doesn't start at 00:00:
+                        a.ms-1(href="#",@click.stop.prevent="expandFirstToStart") set start time to 00:00
+            div.row.p-1.mb-1
+                label.col-3.col-form-label(for="chapterStartTime") Start time
+                div.col-9
+                    button.form-control#chapterStartTime(x-text="secondsToTimestamp(data.chapters[currentChapterIndex].startTime,{hours : true, milliseconds : true, wtf : true})",@click="editStartTime(currentChapterIndex)")
+            div.row.p-1.mb-1
+                label.col-3.col-form-label(for="chapterURL") URL
+                div.col-9
+                    input.form-control#chapterURL(placeholder="optional", x-model="data.chapters[currentChapterIndex].url")
+            div.row.p-1.mb-1
+                label.col-3.col-form-label(for="chapterTOC") TOC
+                div.col-9.pt-2
+                    div.form-check
+                        input.form-check-input#chapterTOC(type="checkbox",x-model="data.chapters[currentChapterIndex].toc")
+                        label.form-check-label(for="chapterTOC") show chapter in&nbsp;
+                            abbr(title="table of contents") TOC
+
+        div(x-show="editTab === 'img'")
+            div.row.p-1.mb-1(x-show="data.chapters[currentChapterIndex].img_type === 'relative'")
+                p.small.alert.alert-info
+                    i.fs-1.float-start.bi.bi-info-circle.me-2
+                    | The image uses a relative path and can't be displayed.
+                    | You can set an URL prefix in the export dialog.
+            div.row.p-1.mb-1
+                div.col-9.offset-3
+                    div.ratio.ratio-16x9
+                        div.p-2#image-container(:style="`--bg:url(${chapterImage(currentChapterIndex)})`")
+                            img.shadow.position-absolute.translate-middle.start-50.top-50(style="object-fit:contain",:src="chapterImage(currentChapterIndex)")
+                            span.small.position-absolute.translate-middle.start-50.top-50.text-muted(x-show="!chapterImage(currentChapterIndex)")
+                                | drop or paste an image or image URL here
+                                template(x-if="hasVideo")
+                                    span
+                                        | or fetch video snapshot from
+                                        |
+                                        a(href="#", @click.stop.prevent="fetchVideoSnapshot(data.chapters[currentChapterIndex].startTime)") chapter start
+                                        |
+                                        | /
+                                        |
+                                        a(href="#", @click.stop.prevent="fetchVideoSnapshot()") current position
+                            button.position-absolute.end-0.top-0.btn.btn-sm.btn-secondary(@click="deleteImage(currentChapterIndex)", x-show="chapterImage(currentChapterIndex)")
+                                i.bi.bi-trash
+                                | remove
+            div.row.p-1.mb-1
+                label.col-3.col-form-label(for="chapterImage") Image
+                div.col-9
+                    input.form-control#chapterImage(type="file", accept="image/*", @change="fileHandler.handleFile($event.target.files[0])")
+            template(x-if="chapterImage(currentChapterIndex)")
+                div
+                    div.row.p-1.mb-1
+                        label.col-3.col-form-label(
+                            for="imageFilename"
+                            x-text="data.chapters[currentChapterIndex].img_type === 'absolute' ? 'URL':'Filename'"
+                        )
+                        div.col-9
+                            input.form-control#imageFilename(
+                                :readonly="data.chapters[currentChapterIndex].img_type === 'absolute'"
+                                x-model="data.chapters[currentChapterIndex].img_filename"
+                            )
+                    div.row.p-1.mb-1
+                        label.col-3.col-form-label Type
+                        div.col-9
+                            input.form-control(x-show="data.chapters[currentChapterIndex].img_type === 'blob'",disabled, value="in-memory (blob)")
+                            input.form-control(x-show="data.chapters[currentChapterIndex].img_type === 'relative'",disabled, value="relative path")
+                            input.form-control(x-show="data.chapters[currentChapterIndex].img_type === 'absolute'",disabled, value="URL")
+                    div.row.p-1.mb-1
+                        label.col-3.col-form-label Dims
+                        div.col-9
+                            input.form-control(disabled,:value="data.chapters[currentChapterIndex].img_dims")
+                    div.row.p-1.mb-1
+                        label.col-3.col-form-label Size
+                        div.col-9
+                            input.form-control(disabled,:value="data.chapters[currentChapterIndex].img_size")
+
+        div(x-show="editTab === 'geo'")
+            div.row.p-1.mb-1
+                label.col-3.col-form-label(for="chapterGeoName") Name
+                div.col-9
+                    input.form-control#chapterGeoName(x-model="data.chapters[currentChapterIndex].geo_name")
+            div.row.p-1.mb-1
+                label.col-3.col-form-label(for="chapterGeoLL") Geo
+                div.col-9
+                    input.form-control#chapterGeoLL(x-model="data.chapters[currentChapterIndex].geo_name", placeholder="geo:lat,lon")

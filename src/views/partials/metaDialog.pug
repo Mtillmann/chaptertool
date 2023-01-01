@@ -1,0 +1,47 @@
+div.offcanvas.offcanvas-bottom#chapterDialog(x-ref="chapterDialog", style="--bs-offcanvas-height:initial;max-height:100vh")
+    div.offcanvas-header
+        h5.offcanvas-title Podcast <em>Chapter</em> Properties
+            small
+            | (
+            a(href="https://github.com/Podcastindex-org/podcast-namespace/blob/main/chapters/jsonChapters.md#chapters-object",target="_blank") spec
+            | )
+        button.btn-close(data-bs-dismiss="offcanvas")
+    div.offcanvas-body.mt-0
+        div.container-lg
+            div.row.mb-2
+                div.col-2
+                    label.form-label(for="chapterAuthor") Author
+                div.col-4
+                    input.form-control#chapterAuthor(type="text", x-model="data.meta.author")
+                    small The name of the author of this podcast episode.
+                div.col-2
+                    label.form-label(for="chapterTitle") Title
+                div.col-4
+                    input.form-control#chapterTitle(type="text", x-model="data.meta.title")
+                    small The title of this podcast episode.
+            div.row.mb-2
+                div.col-2
+                    label.form-label(for="chapterPodcastName") PodcastName
+                div.col-4
+                    input.form-control#chapterPodcastName(type="text", x-model="data.meta.podcastName")
+                    small The name of the podcast this episode belongs to.
+                div.col-2
+                    label.form-label(for="chapterDescription") Description
+                div.col-4
+                    input.form-control#chapterDescription(type="text", x-model="data.meta.description")
+                    small A description of this episode.
+            div.row.mb-2
+                div.col-2
+                    label.form-label(for="chapterFilename") Filename
+                div.col-4
+                    input.form-control#chapterFilename(type="text", x-model="data.meta.filename")
+                    small The name of the audio file these chapters apply to.
+                div.col-2
+                    label.form-label(for="chapterWaypoints") Waypoints
+                div.col-4
+                    div.form-check.form-switch.mb-1
+                        input.form-check-input#chapterWaypoints(type="checkbox",x-model="data.meta.waypoints")
+                    small If this property is present, the locations in a chapter object should be displayed with a route between locations.
+            div.row
+                div.col-12.d-flex.justify-content-center
+                    button.btn.btn-primary(@click.stop.prevent="chapterDialog.hide()") save & close

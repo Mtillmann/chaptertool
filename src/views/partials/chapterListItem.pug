@@ -1,0 +1,41 @@
+div
+    template(x-if="index === 0 && chapter.startTime > 0")
+        div.d-flex.my-1.justify-content-center
+            button.btn.btn-outline-primary.btn-xs.add-chapter-in-list-btn(@click="addChapter(index)")
+                i.bi.bi-bookmark-plus
+                |  add chapter
+    div.list-chapter.rounded.shadow-sm.border.border-body-color-light(:id="`chapter_${index}`",@click.stop.prevent="editChapter(index)",:class="{'border-body-color':currentChapterIndex === index}")
+        div.row.gx-0.cursor-pointer
+            div.p-2.col-2.col-xl-1.d-flex.align-items-center.justify-content-center
+                div.fs-5(x-text="`${index + 1}`")
+            div.p-2.col-2.position-relative
+                template(x-if="chapterImage(index)")
+                    img.position-absolute.top-50.start-50.translate-middle.mw-100(style="max-height:80%",:src="chapterImage(index)")
+                template(x-if="!chapterImage(index)")
+                    i.fs-3.text-muted.bi.bi-image.opacity-25.position-absolute.top-50.start-50.translate-middle
+                template(x-if="chapter.img_type === 'relative'")
+                    i.fs-6.text-info.bi.bi-info-circle-fill.position-absolute.end-0.top-25
+            div.p-2.col-7.col-xl-8.d-flex.align-items-center
+                div.text-truncate.px-2
+                    span(x-text="chapter.title || `Chapter ${index + 1}`", :class="{'fst-italic text-muted opacity-50' : !chapter.title}")
+                    br
+                    span.small
+                        a.has-tooltip(
+                            @click.stop.prevent="editStartTime(index)"
+                            href="#" x-text="chapter.startTime_hr"
+                            title="change chapter start time"
+                        )
+                        span &nbsp;&ndash;&nbsp;
+                        span(:class="{'text-muted' : !chapter.uses_endTime}",x-text="chapter.endTime_hr")
+                        span(x-text="` (${chapter.duration_hr})`")
+            div.p-2.col-1.d-flex.align-items-center.justify-content-center.border-start.border-body-color-light
+                a.has-tooltip.delete-button(
+                    title="delete chapter"
+                    href="#"
+                    @click.stop.prevent="deleteChapter(index)"
+                )
+                    i.bi.fs-4.bi-trash
+    div.d-flex.my-1.justify-content-center
+        button.btn.btn-outline-primary.btn-xs.add-chapter-in-list-btn(@click="addChapter(index + 1)")
+            i.bi.bi-bookmark-plus
+            |  add chapter

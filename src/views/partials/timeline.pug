@@ -1,0 +1,20 @@
+div.timeline(:class="{'no-chapters' : data.chapters.length === 0}")
+    a.d-none.add-button(href="#")="add chapter"
+    div.d-none.insert-hint(data-popper-placement="left")="click to insert"
+    div.backdrop
+        div.ratio
+        div.marker
+            div(x-text="chapterBelowIndex")
+            div.btn-group.btn-group-micro.shadow
+                a.btn.btn-outline-secondary.has-tooltip.insert(href="#")
+                    i.bi.bi-bookmark-plus
+                a.btn.btn-outline-secondary.has-tooltip.update-below(href="#", title="update chapter below image", x-show="hasVideo && chapterBelowIndex !== false", @click.stop.prevent="addImageFromVideoToChapter(chapterBelowIndex)")
+                    i.bi.bi-arrow-bar-down
+                a.btn.btn-outline-secondary.has-tooltip.update-active(href="#", title="update selected chapter's image",x-show="hasVideo && currentChapterIndex !== null", @click.stop.prevent="addImageFromVideoToChapter")
+                    i.bi.bi-arrow-down-square
+                a.btn.btn-outline-secondary.remove(href="#")
+                    i.bi.bi-x
+        div.hover-indicator
+        div.timecode
+    div.chapters
+        div.drag-handle

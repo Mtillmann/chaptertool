@@ -1,0 +1,16 @@
+div.offcanvas.offcanvas-end#navi(x-ref="navi")
+    div.offcanvas-body
+        nav.nav.flex-column
+            a.nav-link(href="#", @click.stop.prevent="offcanvasNavi.hide();askForNewProject()") New Project
+            label.nav-link(for="importFileInput", @click="offcanvasNavi.hide()") Import File
+            a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();addChapterFromTime()") Insert Chapter At Given Time
+            a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();chapterDialog.show()") Edit Meta Attributes
+            a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();changeDuration()") Change Duration
+            a.nav-link(href="#", @click.stop.prevent="offcanvasNavi.hide();exportOffcanvas.show()") Export / Download
+            a.nav-link(href="#") FAQ
+            div.nav-link(x-show="analyticsIsAvailable")
+                div.form-check.form-switch
+                    input#analytics.form-check-input(type="checkbox", x-model="analyticsEnabled" @change="toggleGA()")
+                    label.form-check-label(for="analytics") Analytics Enabled
+
+

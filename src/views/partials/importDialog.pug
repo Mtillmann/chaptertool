@@ -1,0 +1,37 @@
+.modal(x-ref="importDialog")
+    .modal-dialog.modal-xl
+        .modal-content
+            .modal-header
+                h5.modal-title Import
+            .modal-body
+                template(x-if="importState.mode === 'data'")
+                    div
+                        p
+                            | Create a new project with
+                            |
+                            span(x-text="importState.data.chapters.length")
+                            |
+                            | chapters from
+                            |
+                            code(x-text="importState.name")
+                            | ?
+                template(x-if="importState.mode === 'video'")
+                    div
+                        p
+                            | Choose whether to discard the current project
+                            | and create a new one from
+                            |
+                            code(x-text="importState.name")
+                            |
+                            | or keep the current chapters and use the video
+                            | for screenshots. If the video is longer than
+                            | the current duration, the timeline will be
+                            | be expanded
+
+            .modal-footer.justify-content-evenly
+                button.btn.btn-secondary(@click="importModal.hide()") cancel
+                button.btn.btn-primary(x-show="importState.mode === 'data'", @click="newProject(importState.data)") create new project
+                button.btn.btn-primary(x-show="importState.mode === 'video'", @click="attachVideo(importState.video)") new project
+                button.btn.btn-info(x-show="importState.mode === 'video'", @click="attachVideo(importState.video, true)") only attach video
+
+
