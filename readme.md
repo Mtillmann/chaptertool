@@ -157,10 +157,3 @@ but a natural resolution of 720x576 (1.25). Create images(1024x576) with square 
 wget "https://cdn.media.ccc.de/events/gpn/gpn16/h264-sd/gpn16-7623-deu-Wie_baut_man_eigentlich_Raumschiffe_sd.mp4" -o baddar.mp4
 chaptertool generate baddar.mp4 --force-dar
 ```
-
-sample file: https://berlin-ak.ftp.media.ccc.de/events/gpn/gpn16/h264-sd/gpn16-7623-deu-Wie_baut_man_eigentlich_Raumschiffe_sd.mp4
-
-
-normales dings: ffmpeg -i '.\PODCAST #075 - Die Züge gehören uns (1987) - Lesung & Gespräch im Stadtmuseum MÜNCHEN.mp4' -vf "select='gt(scene,0.10)',showinfo" -vsync vfr opt/img%03d.png
-
-crossfade: ffmpeg -i '.\WDL Podcast #38 - _Flying Förtress_.mp4' -filter_complex "select='not(mod(n,120))',select='gt(scene,0.2)',showinfo" -vsync vfr .\opt\scene_%03d.jpg
