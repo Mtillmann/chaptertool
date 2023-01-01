@@ -35,7 +35,7 @@ jobs:
       - name: inject analytics id
         env:
           GA_ID: ${{ secrets.GA_ID }}
-        run: ls -la && echo "$GA_ID" > static/ga-code
+        run: echo "$GA_ID" > static/ga-code
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
