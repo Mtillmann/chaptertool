@@ -26,8 +26,9 @@ div
                             title="change chapter start time"
                         )
                         span &nbsp;&ndash;&nbsp;
-                        span(:class="{'text-muted' : !chapter.uses_endTime}",x-text="chapter.endTime_hr")
-                        span(x-text="` (${chapter.duration_hr})`")
+                        span(x-text="chapter.endTime_hr")
+                        |
+                        span(x-text="`(${chapter.duration_hr})`")
             div.p-2.col-1.d-flex.align-items-center.justify-content-center.border-start.border-body-color-light
                 a.has-tooltip.delete-button(
                     title="delete chapter"

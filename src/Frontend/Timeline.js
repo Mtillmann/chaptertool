@@ -234,7 +234,7 @@ export default class Timeline {
         const parentNodes = this.node.querySelector('.chapters');
         this.chapters.forEach((chapter, i) => {
             const nextStart = this.chapters[i + 1] ? this.chapters[i + 1].startTime : this.duration;
-            const width = (chapter.uses_endTime ? (((chapter.endTime - chapter.startTime) / this.duration) * 100) : (((nextStart - chapter.startTime) / this.duration) * 100)) + '%';
+            const width = ((((nextStart - chapter.startTime) / this.duration) * 100)) + '%';
             const node = document.createElement('div');
             const left = (chapter.startTime / this.duration) * 100;
             node.setAttribute('href', `#chapter_${i}`);

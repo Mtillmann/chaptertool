@@ -124,25 +124,13 @@ export class ArgumentParser {
             if (['serve', 'generate', 'convert'].includes(key)) {
                 this.action = key;
                 this.options['@action'] = key;
-                expectsInput = true;
+                if (['generate', 'convert'].includes(key)) {
+                    expectsInput = true;
+                }
                 return true;
             }
 
             if (expectsInput) {
-                if (this.action === 'serve' && arg[0].slice(0, 2) !== '--') {
-                    key = key.replace(new RegExp(escapeStringRegexp(sep) + '$'), '');
-                    if (Os.platform() === 'win32') {
-                        //a trailing quote may appear, I guess due to powershell's escaping mechanism
-                        key = key.replace(/"$/, '');
-                    }
-                    if (key && !lstatSync(key).isDirectory()) {
-                        throw new Error(`input directory ${key} isn't a directory`);
-                    }
-                    expectsInput = false;
-                    this.options.input = key;
-                    return;
-                }
-
                 if (!existsSync(key)) {
                     throw new Error(`input file ${key} doesn't exist`);
                 }

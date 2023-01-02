@@ -19,10 +19,11 @@ export class ChapterGenerator {
         const chapters = new FFMpegInfo(infoTxt);
 
         if (!this.options.noEndTimes) {
-            chapters.chapters.forEach((chapter, i) => {
-                chapters.chapters[i].uses_endTime = true;
-            });
-            chapters.chapters.at(-1).endTime = this.getVideoLength();
+            if(chapters.chapters.at(-1)){
+                chapters.chapters.at(-1).endTime = this.getVideoLength();
+            }else{
+                chapters.addChapterAt(0);
+            }
             chapters.bump();
         }
 
