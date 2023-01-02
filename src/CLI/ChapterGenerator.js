@@ -46,6 +46,11 @@ export class ChapterGenerator {
             chapters.chapters[i].img = `chapter_${zeroPad(i + 1)}.jpg`
         });
 
+        if(this.options.imgUri){
+            chapters.applyImgUri(this.options.imgUri);
+        }
+
+
         return chapters.to(ChaptersJson);
     }
 

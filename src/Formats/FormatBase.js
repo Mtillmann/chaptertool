@@ -362,4 +362,12 @@ export class FormatBase {
         });
 
     }
+
+    applyImgUri(imgUri){
+        this.chapters.forEach((chapter, i) => {
+            if('img' in chapter){
+                this.chapters[i].img = imgUri.replace(/\/*$/,'')  + '/' + chapter.img.replace(/^\/*/,'');
+            }
+        });
+    }
 }
