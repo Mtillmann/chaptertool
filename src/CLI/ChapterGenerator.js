@@ -19,9 +19,9 @@ export class ChapterGenerator {
         const chapters = new FFMpegInfo(infoTxt);
 
         if (!this.options.noEndTimes) {
-            if(chapters.chapters.at(-1)){
+            if (chapters.chapters.at(-1)) {
                 chapters.chapters.at(-1).endTime = this.getVideoLength();
-            }else{
+            } else {
                 chapters.addChapterAt(0);
             }
             chapters.bump();
@@ -40,10 +40,17 @@ export class ChapterGenerator {
                 }
             } else {
                 newIndex = parseInt(newIndex);
-                renameSync(
-                    `${this.options.outputFolder}/chapter_${zeroPad(index + 1, 5)}.jpg`,
-                    `${this.options.outputFolder}/chapter_${zeroPad(newIndex + 1, 5)}.jpg`
-                );
+                if(index === newIndex){
+                    return;
+                }
+                try {
+                    renameSync(
+                        `${this.options.outputFolder}/chapter_${zeroPad(index + 1, 5)}.jpg`,
+                        `${this.options.outputFolder}/chapter_${zeroPad(newIndex + 1, 5)}.jpg`
+                    );
+                } catch (e) {
+                    //might fail when no image is present
+                }
             }
         });
 
