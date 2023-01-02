@@ -10,7 +10,7 @@ dotenv.config();
 
 const CLIArgs = new ArgumentParser();
 
-const help = `Chaptertools
+const help = `chaptertool
 available commands:
 generate    generate chapters from video file
 convert     convert chapter files between different formats

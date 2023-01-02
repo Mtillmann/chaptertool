@@ -1,6 +1,6 @@
 # chaptertool
 
-Create and convert chapters for podcasts, youtube, mkv and ffmpeg.  
+Create and convert chapters for podcasts, youtube, matroska, webvtt and ffmpeg.  
 
 The cli tools can automatically create chapters with images from videos using ffmpeg's scene detection.
 

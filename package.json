@@ -1,6 +1,6 @@
 {
   "name": "chaptertool",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Manage and generate chapters for podcasts and other media via cli or web",
   "keywords": [
     "podcast",
@@ -8,7 +8,8 @@
     "chapters",
     "youtube",
     "mkvmerge",
-    "matroska"
+    "matroska",
+    "webvtt"
   ],
   "type": "module",
   "main": "chaptertool.js",

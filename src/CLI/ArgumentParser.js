@@ -93,7 +93,7 @@ export class ArgumentParser {
         }
 
         for (const key in process.env) {
-            if (key.slice(0, 4).toUpperCase() === 'CT_') {
+            if (key.slice(0, 3).toUpperCase() === 'CT_') {
                 let actualKey = key.toLowerCase().slice(3).replace(/_(\w)/g, m => m[1].toUpperCase());
                 this.options[actualKey] = this.prepareValue(actualKey, process.env[key]);
             }
@@ -186,15 +186,12 @@ export class ArgumentParser {
     }
 
     prepareValue(key, value) {
-        if ('cast' in this.optionDefinition[key] && this.optionDefinition[key].cast === 'float') {
+        if (this.optionDefinition[key]?.cast === 'float') {
             value = parseFloat(value);
         }
-        if ('cast' in this.optionDefinition[key] && this.optionDefinition[key].cast === 'int') {
+        if (this.optionDefinition[key]?.cast === 'int') {
             value = parseInt(value);
         }
-
         return value || true;
     }
-
-
 }
