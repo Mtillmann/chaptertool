@@ -32,7 +32,11 @@ export class ChapterGenerator {
 
             index = parseInt(index);
             if (newIndex === 'deleted') {
-                unlinkSync(`${this.options.outputFolder}/chapter_${zeroPad(index + 1)}.jpg`);
+                try {
+                    unlinkSync(`${this.options.outputFolder}/chapter_${zeroPad(index + 1)}.jpg`);
+                } catch (e) {
+                    //may fail when first is removed...
+                }
             } else {
                 newIndex = parseInt(newIndex);
                 renameSync(
@@ -46,7 +50,7 @@ export class ChapterGenerator {
             chapters.chapters[i].img = `chapter_${zeroPad(i + 1)}.jpg`
         });
 
-        if(this.options.imgUri){
+        if (this.options.imgUri) {
             chapters.applyImgUri(this.options.imgUri);
         }
 
