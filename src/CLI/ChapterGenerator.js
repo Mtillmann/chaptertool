@@ -55,7 +55,7 @@ export class ChapterGenerator {
         });
 
         chapters.chapters.forEach((chapter, i) => {
-            chapters.chapters[i].img = `chapter_${zeroPad(i + 1)}.jpg`
+            chapters.chapters[i].img = `chapter_${zeroPad(i + 1, 5)}.jpg`
         });
 
         if (this.options.imgUri) {
