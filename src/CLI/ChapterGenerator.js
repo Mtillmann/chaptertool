@@ -33,15 +33,15 @@ export class ChapterGenerator {
             index = parseInt(index);
             if (newIndex === 'deleted') {
                 try {
-                    unlinkSync(`${this.options.outputFolder}/chapter_${zeroPad(index + 1)}.jpg`);
+                    unlinkSync(`${this.options.outputFolder}/chapter_${zeroPad(index + 1, 5)}.jpg`);
                 } catch (e) {
                     //may fail when first is removed...
                 }
             } else {
                 newIndex = parseInt(newIndex);
                 renameSync(
-                    `${this.options.outputFolder}/chapter_${zeroPad(index + 1)}.jpg`,
-                    `${this.options.outputFolder}/chapter_${zeroPad(newIndex + 1)}.jpg`
+                    `${this.options.outputFolder}/chapter_${zeroPad(index + 1, 5)}.jpg`,
+                    `${this.options.outputFolder}/chapter_${zeroPad(newIndex + 1, 5)}.jpg`
                 );
             }
         });
@@ -109,7 +109,7 @@ export class ChapterGenerator {
 
         ffmpegArgs.push(this.options.overwriteMode);
 
-        ffmpegArgs.push(`-vsync vfr "${this.options.outputFolder + sep}chapter_%03d.jpg"`)
+        ffmpegArgs.push(`-vsync vfr "${this.options.outputFolder + sep}chapter_%05d.jpg"`)
 
         await this.ffmpegCall(ffmpegArgs, false, () => {
             const info = readFileSync(`${this.options.outputFolder}/info.txt`, 'utf-8');
