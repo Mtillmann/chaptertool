@@ -30,7 +30,7 @@ export class MatroskaXML extends FormatBase {
             dom = (new DOMParser()).parseFromString(string, 'application/xml');
         } else {
             const {JSDOM} = jsdom;
-            dom = new JSDOM(string, {type: 'application/xml'});
+            dom = new JSDOM(string, {contentType: 'application/xml'});
             dom = dom.window.document;
         }
 
