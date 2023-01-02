@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import {ArgumentParser} from "./src/CLI/ArgumentParser.js";
 import {ChapterGenerator} from "./src/CLI/ChapterGenerator.js";
 import {AudioExtractor} from "./src/CLI/AudioExtractor.js";
