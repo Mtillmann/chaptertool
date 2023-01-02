@@ -78,6 +78,9 @@ export class ArgumentParser {
         },
         noEndTimes: {
             default: false
+        },
+        outputFile: {
+            default: false
         }
     };
 

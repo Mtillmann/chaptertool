@@ -21,6 +21,7 @@ export const AutoFormat = {
 
     detect(inputString, returnWhat = 'instance') {
         let detected = false;
+
         Object.entries(this.classMap)
             .forEach(([key, className]) => {
 

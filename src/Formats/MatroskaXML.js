@@ -1,4 +1,5 @@
 import {FormatBase} from "./FormatBase.js";
+import jsdom from "jsdom";
 
 
 export class MatroskaXML extends FormatBase {
@@ -24,7 +25,15 @@ export class MatroskaXML extends FormatBase {
             throw new Error('Input needs xml declaration and a <Chapters> node');
         }
 
-        const dom = (new DOMParser()).parseFromString(string, 'application/xml');
+        let dom;
+        if (typeof DOMParser !== 'undefined') {
+            dom = (new DOMParser()).parseFromString(string, 'application/xml');
+        } else {
+            const {JSDOM} = jsdom;
+            dom = new JSDOM(string, {type: 'application/xml'});
+            dom = dom.window.document;
+        }
+
         this.chapters = [...dom.querySelectorAll('ChapterAtom')].map(chapter => {
             return {
                 title: chapter.querySelector(this.chapterStringNodeName).textContent,

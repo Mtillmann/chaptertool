@@ -1,4 +1,4 @@
-import {lstatSync, readFileSync} from "fs";
+import {lstatSync, readFileSync, writeFileSync} from "fs";
 import {AutoFormat} from "../Formats/AutoFormat.js";
 
 export class ChapterConverter {
@@ -16,6 +16,11 @@ export class ChapterConverter {
                     chapters.chapters[i].img = options.imgUri.replace(/\/*$/,'')  + '/' + chapter.img.replace(/^\/*/,'');
                 }
             });
+        }
+
+        if(options.outputFile){
+            writeFileSync(options.outputFile, AutoFormat.as(options.outputFormat, chapters).toString(options.pretty));
+            return;
         }
 
         console.log(AutoFormat.as(options.outputFormat, chapters).toString(options.pretty));
