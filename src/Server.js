@@ -16,10 +16,16 @@ export class Server {
         app.set('view engine', 'pug')
         app.set('views', dir + '/src/views');
         app.use(express.static(dir + '/static'));
+
+        // this fixes the issue on localhost with webmanifest being broken and requested again every 5
+        // seconds by chrome..
+        app.use('/chaptertool/', express.static(dir + '/static'));
         app.locals.pretty = true;
         app.get('/', (req, res) => {
             res.render('index')
         });
+
+
 
         app.listen(port, () => {
             console.log(`open http://localhost:${port} in your browser`)

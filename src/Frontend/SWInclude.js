@@ -1,4 +1,10 @@
-export function SWInclude(){
+export function SWInclude() {
+
+    if (/localhost/.test(new URL(window.location).host)) {
+        console.log(`skipping service worker for localhost...`);
+        return;
+    }
+
     (async () => {
         if ("serviceWorker" in navigator) {
             try {

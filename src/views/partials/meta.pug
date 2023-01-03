@@ -1,7 +1,7 @@
 meta(charset="utf-8")
 meta(name="viewport" content="width=device-width, initial-scale=1")
 
--// Primary Meta Tags
+// Primary Meta Tags
 - var title = 'chaptertool - manage chapters for podcasts, webvtt, youtube, mkv and ffmpeg'
 - var description = 'Create and convert chapters for podcasts, youtube, matroska, webvtt and ffmpeg. Extract snapshots from video files for podcasting 2.0 chapters.json'
 - var url = 'https://mtillmann.github.io/chaptertool'
@@ -10,14 +10,14 @@ title= title
 meta(name="title" content=title)
 meta(name="description" content=description)
 
-<!-- Open Graph / Facebook -->
+// Open Graph / Facebook
 meta(property="og:type" content="website")
 meta(property="og:url" content=url)
 meta(property="og:title" content=title)
 meta(property="og:description" content=description)
 meta(property="og:image" itemprop="image" content=`${url}/icons/icon-512.png`)
 
-<!-- Twitter -->
+// Twitter
 meta(name="twitter:card" content="summary_large_image")
 meta(name="twitter:url" content=url)
 meta(name="twitter:title" content=title)
@@ -27,4 +27,5 @@ meta(name="twitter:image" content=`${url}/img/icon-512.png`)
 link(rel="apple-touch-icon" sizes="180x180" href=`${url}/icons/icon-180.png`)
 link(rel="icon" type="image/png" sizes="32x32" href=`${url}/icons/icon-32.png`)
 link(rel="icon" type="image/png" sizes="16x16" href=`${url}/icons/icon-16.png`)
-link(rel="manifest" href="/chaptertool/manifest.webmanifest")
+// this will throw a 404 on localhost
+link(rel="manifest" href=`/chaptertool/manifest.webmanifest`)
