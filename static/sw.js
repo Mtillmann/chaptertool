@@ -62,17 +62,17 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('install', (event) => {
     event.waitUntil(
         addResourcesToCache([
-            '/',
-            '/index.html',
-            '/app.css',
-            '/app.js',
-            '/version',
-            '/icons/icon-16.png',
-            '/icons/icon-32.png',
-            '/icons/icon-64.png',
-            '/icons/icon-180.png',
-            '/icons/icon-192.png',
-            '/icons/icon-512.png',
+            '/chaptertool/',
+            '/chaptertool/index.html',
+            '/chaptertool/app.css',
+            '/chaptertool/app.js',
+            '/chaptertool/version',
+            '/chaptertool/icons/icon-16.png',
+            '/chaptertool/icons/icon-32.png',
+            '/chaptertool/icons/icon-64.png',
+            '/chaptertool/icons/icon-180.png',
+            '/chaptertool/icons/icon-192.png',
+            '/chaptertool/icons/icon-512.png',
 
         ])
     );
