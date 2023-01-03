@@ -24577,10 +24577,31 @@ Z`;
       }
   }
 
+  function SWInclude(){
+      (async () => {
+          if ("serviceWorker" in navigator) {
+              try {
+                  const registration = await navigator.serviceWorker.register("/sw.js", {
+                      scope: "/",
+                  });
+                  if (registration.installing) {
+                      console.log("Service worker installing");
+                  } else if (registration.waiting) {
+                      console.log("Service worker installed");
+                  } else if (registration.active) {
+                      console.log("Service worker active");
+                  }
+              } catch (error) {
+                  console.error(`Registration failed with ${error}`);
+              }
+          }
+      })();
+  }
+
   window.Alpine = module_default;
 
 
-
+  SWInclude();
 
   window.GAIsDeployed = false;
   window.deployGA = () => {
@@ -24620,7 +24641,6 @@ Z`;
       window.st = new ShepherdTour();
 
 
-
       fetch('ga-code').then(r => r.text())
           .then(code => {
               window.GACODE = code;
@@ -24653,14 +24673,13 @@ Z`;
           offcanvasNavi: null,
           analyticsEnabled: false,
           analyticsIsAvailable: false,
-          versionString : '',
+          versionString: '',
 
           init() {
 
 
               fetch('version').then(r => r.text())
                   .then(version => this.versionString = `Version ${version}`);
-
 
 
               this.offcanvasNavi = new Offcanvas(this.$refs.navi);
@@ -25076,8 +25095,8 @@ Z`;
               this.chapterLock = !this.chapterLock;
               gtag('event', 'toggleChapterLock', this.chapterLock ? 'locked' : 'unlocked');
           },
-          showTourAgain(){
-              if(this.data.chapters.length === 0 || (this.data.chapters.length > 0 && confirm('abandon current project?'))){
+          showTourAgain() {
+              if (this.data.chapters.length === 0 || (this.data.chapters.length > 0 && confirm('abandon current project?'))) {
                   const url = new URL(window.location);
                   url.hash = 'show-tour';
                   window.location = url.toString();

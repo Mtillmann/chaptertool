@@ -9,10 +9,12 @@ import ChapterFeatures from "./Frontend/ChapterFeatures.js";
 import {ChaptersJson} from "./Formats/ChaptersJson.js";
 import ImportDialog from "./Frontend/ImportDialog.js";
 import {ShepherdTour} from "./Frontend/ShepherdTour.js";
+import {SWInclude} from "./Frontend/SWInclude.js";
+
 window.Alpine = Alpine;
 
 
-
+SWInclude();
 
 window.GAIsDeployed = false;
 window.deployGA = () => {
@@ -52,7 +54,6 @@ window.addEventListener('DOMContentLoaded', () => {
     window.st = new ShepherdTour();
 
 
-
     fetch('ga-code').then(r => r.text())
         .then(code => {
             window.GACODE = code;
@@ -85,14 +86,13 @@ window.APP = {
         offcanvasNavi: null,
         analyticsEnabled: false,
         analyticsIsAvailable: false,
-        versionString : '',
+        versionString: '',
 
         init() {
 
 
             fetch('version').then(r => r.text())
                 .then(version => this.versionString = `Version ${version}`);
-
 
 
             this.offcanvasNavi = new Offcanvas(this.$refs.navi);
@@ -508,8 +508,8 @@ window.APP = {
             this.chapterLock = !this.chapterLock;
             gtag('event', 'toggleChapterLock', this.chapterLock ? 'locked' : 'unlocked')
         },
-        showTourAgain(){
-            if(this.data.chapters.length === 0 || (this.data.chapters.length > 0 && confirm('abandon current project?'))){
+        showTourAgain() {
+            if (this.data.chapters.length === 0 || (this.data.chapters.length > 0 && confirm('abandon current project?'))) {
                 const url = new URL(window.location);
                 url.hash = 'show-tour';
                 window.location = url.toString();
