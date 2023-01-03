@@ -1,11 +1,9 @@
 html(data-bs-theme="auto", lang="en")
     head
-        title chaptertool
         link(rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined")
         link(rel='stylesheet' href='app.css')
         script(src='app.js')
-        meta(charset="utf-8")
-        meta(name="viewport" content="width=device-width, initial-scale=1")
+        include partials/meta
     body
         div#app(x-data="APP")
             div.d-flex.flex-column.vh-100.overflow-hidden

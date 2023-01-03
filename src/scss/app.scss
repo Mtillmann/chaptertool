@@ -79,7 +79,17 @@ $bootstrap-icons-font: bootstrap-icons;
 header {
   a {
     text-decoration: none;
+  }
 
+  a.has-tooltip{
+    transition: opacity 200ms;
+    &:hover{
+      opacity:0.8;
+    }
+  }
+
+  img{
+    height:32px;
   }
 }
 

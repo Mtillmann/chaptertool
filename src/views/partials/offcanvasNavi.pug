@@ -1,13 +1,14 @@
 div.offcanvas.offcanvas-end#navi(x-ref="navi")
     div.offcanvas-body
         nav.nav.flex-column
-            a.nav-link(href="#", @click.stop.prevent="offcanvasNavi.hide();askForNewProject()") New Project
+            a.nav-link(href="#"  @click.stop.prevent="offcanvasNavi.hide();askForNewProject()") New Project
             label.nav-link(for="importFileInput", @click="offcanvasNavi.hide()") Import File
-            a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();addChapterFromTime()") Insert Chapter At Given Time
-            a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();chapterDialog.show()") Edit Meta Attributes
-            a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();changeDuration()") Change Duration
-            a.nav-link.offcanvas-export-link(href="#", @click.stop.prevent="offcanvasNavi.hide();exportOffcanvas.show()") Export / Download
-            a.nav-link(href="#", @click.stop.prevent="showTourAgain()") Show Onboarding Tour
+            a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();addChapterFromTime()") Insert Chapter At Given Time
+            a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();chapterDialog.show()") Edit Meta Attributes
+            a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();changeDuration()") Change Duration
+            a.nav-link.offcanvas-export-link(href="#"  @click.stop.prevent="offcanvasNavi.hide();exportOffcanvas.show()") Export / Download
+            a.nav-link(href="#"  @click.stop.prevent="showTourAgain()") Show Onboarding Tour
+            a.nav-link(href="https://github.com/Mtillmann/chaptertool" target="_blank") Github Repo
             div.nav-link(x-show="analyticsIsAvailable")
                 div.form-check.form-switch
                     input#analytics.form-check-input(type="checkbox", x-model="analyticsEnabled" @change="toggleGA()")

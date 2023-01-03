@@ -216,6 +216,7 @@ window.APP = {
             let currentState = localStorage.getItem('ct-analytics-state');
             if (!currentState) {
                 hasState = false;
+                window.st.show();
             }
             if (!state) {
                 state = currentState === 'disabled' ? 'enabled' : 'disabled';

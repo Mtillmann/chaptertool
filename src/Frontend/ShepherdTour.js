@@ -270,15 +270,16 @@ export class ShepherdTour {
         ]);
 
 
-        if (!localStorage.getItem('ct-tour-seen') || /show-tour/.test(window.location.hash)) {
-            window.location.hash = '';
-            this.show();
-        }
+
 
 
     }
 
     show() {
-        this.tour.start();
+        console.log('A');
+        if (!localStorage.getItem('ct-tour-seen') || /show-tour/.test(window.location.hash)) {
+            window.location.hash = '';
+            this.tour.start();
+        }
     }
 }
