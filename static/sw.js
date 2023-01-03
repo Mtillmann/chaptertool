@@ -1,89 +1,44 @@
-// from: https://raw.githubusercontent.com/mdn/dom-examples/main/service-worker/simple-service-worker/sw.js
+// Licensed under a CC0 1.0 Universal (CC0 1.0) Public Domain Dedication
+// http://creativecommons.org/publicdomain/zero/1.0/
 
-const addResourcesToCache = async (resources) => {
-    const cache = await caches.open('v1');
-    await cache.addAll(resources);
-};
+// HTML files: try the network first, then the cache.
+// Other files: try the cache first, then the network.
+// Both: cache a fresh version if possible.
+// (beware: the cache will grow and grow; there's no cleanup)
 
-const putInCache = async (request, response) => {
-    const cache = await caches.open('v1');
-    await cache.put(request, response);
-};
+const cacheName = 'files';
 
-const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
-    // First try to get the resource from the cache
-    const responseFromCache = await caches.match(request);
-    if (responseFromCache) {
-        return responseFromCache;
+addEventListener('fetch',  fetchEvent => {
+
+  return; //return always?! will this work
+
+  const request = fetchEvent.request;
+  if (request.method !== 'GET') {
+    return;
+  }
+  const url = new URL(request.url);
+  if (url.origin !== location.origin) {
+    return;
+  }
+
+  fetchEvent.respondWith(async function() {
+    const fetchPromise = fetch(request);
+    fetchEvent.waitUntil(async function() {
+      const responseFromFetch = await fetchPromise;
+      const responseCopy = responseFromFetch.clone();
+      const myCache = await caches.open(cacheName);
+      return myCache.put(request, responseCopy);
+    }());
+    if (request.headers.get('Accept').includes('text/html')) {
+      try {
+        return await fetchPromise;
+      }
+      catch(error) {
+        return caches.match(request);
+      }
+    } else {
+      const responseFromCache = await caches.match(request);
+      return responseFromCache || fetchPromise;
     }
-
-    // Next try to use the preloaded response, if it's there
-    const preloadResponse = await preloadResponsePromise;
-    if (preloadResponse) {
-        console.info('using preload response', preloadResponse);
-        putInCache(request, preloadResponse.clone());
-        return preloadResponse;
-    }
-
-    // Next try to get the resource from the network
-    try {
-        const responseFromNetwork = await fetch(request);
-        // response may be used only once
-        // we need to save clone to put one copy in cache
-        // and serve second one
-        putInCache(request, responseFromNetwork.clone());
-        return responseFromNetwork;
-    } catch (error) {
-        const fallbackResponse = await caches.match(fallbackUrl);
-        if (fallbackResponse) {
-            return fallbackResponse;
-        }
-        // when even the fallback response is not available,
-        // there is nothing we can do, but we must always
-        // return a Response object
-        return new Response('Network error happened', {
-            status: 408,
-            headers: { 'Content-Type': 'text/plain' },
-        });
-    }
-};
-
-const enableNavigationPreload = async () => {
-    if (self.registration.navigationPreload) {
-        // Enable navigation preloads!
-        await self.registration.navigationPreload.enable();
-    }
-};
-
-self.addEventListener('activate', (event) => {
-    event.waitUntil(enableNavigationPreload());
-});
-
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        addResourcesToCache([
-            '/chaptertool/',
-            '/chaptertool/index.html',
-            '/chaptertool/app.css',
-            '/chaptertool/app.js',
-            '/chaptertool/version',
-            '/chaptertool/icons/icon-16.png',
-            '/chaptertool/icons/icon-32.png',
-            '/chaptertool/icons/icon-64.png',
-            '/chaptertool/icons/icon-180.png',
-            '/chaptertool/icons/icon-192.png',
-            '/chaptertool/icons/icon-512.png',
-
-        ])
-    );
-});
-
-self.addEventListener('fetch', (event) => {
-    event.respondWith(
-        cacheFirst({
-            request: event.request,
-            preloadResponsePromise: event.preloadResponse,
-            fallbackUrl: '/icons/icon-512.png',
-        })
-    );
+  }());
 });
