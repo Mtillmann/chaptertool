@@ -1,4 +1,4 @@
-div.offcanvas.offcanvas-bottom#chapterDialog(x-ref="exportDialog", style="--bs-offcanvas-height:initial;;min-height:50vh;max-height:100vh")
+div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-offcanvas-height:initial;;min-height:50vh;max-height:100vh")
     div.offcanvas-header
         h5.offcanvas-title Export Chapters
         button.btn-close(data-bs-dismiss="offcanvas")
@@ -44,18 +44,18 @@ div.offcanvas.offcanvas-bottom#chapterDialog(x-ref="exportDialog", style="--bs-o
                                 button.btn.btn-outline-primary(@click="download")
                                     i.bi.bi-download
                                     |
-                                    | download
+                                    | Download
                                 button.btn.btn-outline-primary(
                                         @click="downloadZip"
                                         x-show="exportSettings.type === 'chaptersjson' && exportSettings.hasImages"
                                     )
                                     i.bi.bi-file-zip
                                     |
-                                    | zip w/ images
+                                    | Zip w/ Images
                                 button.btn.btn-outline-primary(@click="copyToClipboard")
                                     i.bi.bi-clipboard
                                     |
-                                    | copy to clipboard
+                                    | Copy to Clipboard
                         div.col-4
                             div.mb-2.form-check.form-switch(x-show="exportSettings.supportsPretty")
                                 input#exportPretty.form-check-input(@change="updateExportContent()",type="checkbox", x-model="exportSettings.pretty")

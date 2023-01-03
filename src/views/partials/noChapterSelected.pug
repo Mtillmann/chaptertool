@@ -6,12 +6,13 @@ template(x-if="currentChapterIndex === null")
                 div
                     a(@click.stop.prevent="askForNewProject()", href="#") Create a new project
                     hr
-            | Paste or drop a video or audio file, or an existing chapters file here to start a new project
-            | or select one
-            |
-            label.text-decoration-underline.cursor-pointer from your disk
-                input#importFileInput.d-none(type="file", accept="audio/*,video/*,.json,.txt,.xml,image/*", @change="fileHandler.handleFile($event.target.files[0])")
-            hr
+            div
+                | Paste or drop a video or audio file, or an existing chapters file here to start a new project
+                | or select one
+                |
+                label.text-decoration-underline.cursor-pointer from your disk
+                    input#importFileInput.d-none(type="file", accept="audio/*,video/*,.json,.txt,.xml,image/*", @change="fileHandler.handleFile($event.target.files[0])")
+                hr
             template(x-if="data.chapters.length === 0")
                 div
                     a(@click.stop.prevent="addChapter(0)", href="#") Create a new chapter

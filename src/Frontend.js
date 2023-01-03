@@ -8,8 +8,11 @@ import ExportFeatures from "./Frontend/ExportFeatures.js";
 import ChapterFeatures from "./Frontend/ChapterFeatures.js";
 import {ChaptersJson} from "./Formats/ChaptersJson.js";
 import ImportDialog from "./Frontend/ImportDialog.js";
-
+import {ShepherdTour} from "./Frontend/ShepherdTour.js";
 window.Alpine = Alpine;
+
+
+
 
 window.GAIsDeployed = false;
 window.deployGA = () => {
@@ -46,6 +49,10 @@ window.addEventListener('DOMContentLoaded', () => {
     Alpine.start();
 
 
+    window.st = new ShepherdTour();
+
+
+
     fetch('ga-code').then(r => r.text())
         .then(code => {
             window.GACODE = code;
@@ -78,8 +85,16 @@ window.APP = {
         offcanvasNavi: null,
         analyticsEnabled: false,
         analyticsIsAvailable: false,
+        versionString : '',
 
         init() {
+
+
+            fetch('version').then(r => r.text())
+                .then(version => this.versionString = `Version ${version}`);
+
+
+
             this.offcanvasNavi = new Offcanvas(this.$refs.navi);
             this.$refs.navi.addEventListener('show.bs.offcanvas', () => {
                 gtag('event', 'navi', 'show');
@@ -141,8 +156,12 @@ window.APP = {
             });
 
             window.addEventListener('dragndrop:audio', e => {
-
                 this.attachAudio(e.detail.audio);
+            });
+
+
+            window.addEventListener('generic:reset', e => {
+                this.reset();
             });
 
 
@@ -424,6 +443,13 @@ window.APP = {
         },
 
         reset() {
+
+            this.offcanvasNavi.hide();
+            this.chapterDialog.hide();
+            this.exportOffcanvas.hide();
+            this.timestampOffcanvas.hide();
+            this.importModal.hide();
+
             this.data.chapters.forEach(chapter => {
                 if (chapter.img && chapter.img.slice(0, 5) === 'blob:') {
                     URL.revokeObjectURL(chapter.img)
@@ -480,6 +506,15 @@ window.APP = {
         toggleChapterLock() {
             this.chapterLock = !this.chapterLock;
             gtag('event', 'toggleChapterLock', this.chapterLock ? 'locked' : 'unlocked')
+        },
+        showTourAgain(){
+            if(this.data.chapters.length === 0 || (this.data.chapters.length > 0 && confirm('abandon current project?'))){
+                const url = new URL(window.location);
+                url.hash = 'show-tour';
+                window.location = url.toString();
+                location.reload();
+
+            }
         }
     },
     ...MediaFeatures,

@@ -1,6 +1,6 @@
 {
   "name": "chaptertool",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Manage and generate chapters for podcasts and other media via cli or web",
   "keywords": [
     "podcast",
@@ -18,7 +18,8 @@
   "scripts": {
     "test": "jest",
     "sass-dev": "node-sass --recursive --watch src/scss --output static",
-    "build": "rollup -c && terser static/app.js --compress ecma=2021 --output static/app.js && node-sass --recursive --output-style compressed src/scss --output static && node scripts/empuggen.js",
+    "build": "rollup -c && terser static/app.js --compress ecma=2021 --output static/app.js && node-sass --recursive --output-style compressed src/scss --output static && node scripts/writeversion.js",
+    "createIndexHTML" : "node scripts/empuggen.js",
     "dev": "rollup -c -w",
     "watch": "concurrently \"node-sass --recursive --watch src/scss --output static\" \"npm run dev\" \"nodemon --watch src/Server.js --exec node chaptertool.js serve\""
   },
@@ -43,6 +44,7 @@
     "jsdom": "^20.0.3",
     "node-fetch-native": "^1.0.1",
     "pug": "^3.0.2",
+    "shepherd.js": "^11.0.1",
     "yaml": "^2.1.3"
   },
   "devDependencies": {

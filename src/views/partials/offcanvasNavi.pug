@@ -6,11 +6,12 @@ div.offcanvas.offcanvas-end#navi(x-ref="navi")
             a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();addChapterFromTime()") Insert Chapter At Given Time
             a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();chapterDialog.show()") Edit Meta Attributes
             a.nav-link(href="#",@click.stop.prevent="offcanvasNavi.hide();changeDuration()") Change Duration
-            a.nav-link(href="#", @click.stop.prevent="offcanvasNavi.hide();exportOffcanvas.show()") Export / Download
-            a.nav-link(href="#") FAQ
+            a.nav-link.offcanvas-export-link(href="#", @click.stop.prevent="offcanvasNavi.hide();exportOffcanvas.show()") Export / Download
+            a.nav-link(href="#", @click.stop.prevent="showTourAgain()") Show Onboarding Tour
             div.nav-link(x-show="analyticsIsAvailable")
                 div.form-check.form-switch
                     input#analytics.form-check-input(type="checkbox", x-model="analyticsEnabled" @change="toggleGA()")
                     label.form-check-label(for="analytics") Analytics Enabled
+            span.nav-link.text-muted(x-text="versionString")
 
 
