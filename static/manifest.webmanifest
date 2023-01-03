@@ -8,7 +8,7 @@
   "scope": "/chaptertool/",
   "description": "chapter management tool",
   "theme_color": "#111111",
-  "orientation": "portrait",
+  "orientation": "natural",
   "icons": [
     {
       "src": "icons/icon-192.png",
