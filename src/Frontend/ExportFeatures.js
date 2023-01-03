@@ -42,7 +42,7 @@ export default {
     },
 
     download() {
-        gtag('event', 'download', this.exportData.constructor.name);
+        gtag('event', 'download', {format : this.exportData.constructor.name});
 
         this.triggerDownload(({
             url: URL.createObjectURL(new Blob([this.exportContent], {type: this.exportData.mimeType})),
@@ -62,14 +62,14 @@ export default {
         document.execCommand('copy');
         window.getSelection()?.removeAllRanges();
 
-        gtag('event', 'copy', this.exportData.constructor.name);
+        gtag('event', 'copy', {format : this.exportData.constructor.name});
 
         this.toast('copied to clipboard');
     },
 
     async downloadZip() {
 
-        gtag('event', 'downloadZip', this.exportData.constructor.name);
+        gtag('event', 'downloadZip', {format : this.exportData.constructor.name});
 
         let zipWriter = new zip.ZipWriter(
             new zip.BlobWriter("application/zip"), {bufferedWrite: true}

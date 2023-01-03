@@ -25,7 +25,7 @@ export class FileHandler {
             try {
                 const url = new URL(text);
                 if (/(jpg|png|jpeg|webm|gif)$/.test(url.pathname)) {
-                    gtag('event', 'paste', 'image-url');
+                    gtag('event', 'paste', {type : 'image-url'});
                     return window.dispatchEvent(new CustomEvent('dragndrop:image', {
                         detail: {
                             image: url.toString(),
@@ -41,7 +41,7 @@ export class FileHandler {
             try {
                 const detected = AutoFormat.from(text);
                 const data = new ChaptersJson(detected);
-                gtag('event', 'paste', 'data', detected.constructor.name);
+                gtag('event', 'paste', {type : 'data', format : detected.constructor.name});
                 return window.dispatchEvent(new CustomEvent('dragndrop:json', {
                     detail: {
                         data,
@@ -98,7 +98,7 @@ export class FileHandler {
                     try {
                         const detected = AutoFormat.from(text);
                         const data = new ChaptersJson(detected);
-                        gtag('event', origin, 'data', detected.constructor.name);
+                        gtag('event', origin, {type : 'data', format : detected.constructor.name});
                         return window.dispatchEvent(new CustomEvent('dragndrop:json', {
                             detail: {
                                 data,
@@ -114,7 +114,7 @@ export class FileHandler {
 
         if (file.type.slice(0, 5) === 'video') {
 
-            gtag('event', origin, 'video');
+            gtag('event', origin, {type : 'video'});
 
             window.dispatchEvent(new CustomEvent('dragndrop:video', {
                 detail: {
@@ -126,7 +126,7 @@ export class FileHandler {
         }
 
         if (file.type.slice(0, 5) === 'audio' && this.askForNewProject()) {
-            gtag('event', origin, 'audio');
+            gtag('event', origin, {type : 'audio'});
 
             window.dispatchEvent(new CustomEvent('dragndrop:audio', {
                 detail: {
@@ -138,7 +138,7 @@ export class FileHandler {
         }
 
         if (file.type.slice(0, 5) === 'image') {
-            gtag('event', origin, 'image');
+            gtag('event', origin, {type : 'image'});
 
             window.dispatchEvent(new CustomEvent('dragndrop:image', {
                 detail: {
