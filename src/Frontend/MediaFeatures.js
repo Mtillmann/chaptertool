@@ -104,7 +104,7 @@ export default {
 
         index = index || this.currentChapterIndex;
 
-        gtag('event', 'videoStillToChapter');
+        gtag('event', 'chapter', {action: 'videoStillToChapter'});
 
         this.getVideoCanvas(url => {
             this.data.chapters[index].img = url;
@@ -134,7 +134,7 @@ export default {
             URL.revokeObjectURL(this.data.chapters[index].img);
         }
 
-        gtag('event', 'removeImage');
+        gtag('event', 'chapter', {action: 'removeImage'});
 
         delete this.data.chapters[index].img;
         delete this.data.chapters[index].img_type;
@@ -158,9 +158,9 @@ export default {
                 }
             })(initObject));
     },
-    toggleMedia(){
+    toggleMedia() {
         this.mediaIsCollapsed = !this.mediaIsCollapsed;
-        gtag('event','mediaToggle', this.mediaIsCollapsed ? 'collapsed' : 'visible');
+        gtag('event', 'ui', {action: 'mediatoggle', mode: this.mediaIsCollapsed ? 'collapsed' : 'visible'});
         this.$refs.video.pause();
     }
 

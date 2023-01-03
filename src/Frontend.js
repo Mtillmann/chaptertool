@@ -97,7 +97,7 @@ window.APP = {
 
             this.offcanvasNavi = new Offcanvas(this.$refs.navi);
             this.$refs.navi.addEventListener('show.bs.offcanvas', () => {
-                gtag('event', 'navi', { action : 'show'});
+                gtag('event', 'ui', {action: 'navi', mode: 'show'});
             });
 
 
@@ -240,15 +240,15 @@ window.APP = {
 
         askForNewProject() {
             if (this.data.chapters.length > 0 && !confirm('discard current project?')) {
-                gtag('event', 'askForNew', {answer : 'reject'});
+                gtag('event', 'ui', {action: 'askForNew', answer: 'reject'});
                 return;
             }
-            gtag('event', 'askForNew', {answer : 'confirm'});
+            gtag('event', 'ui', {action: 'askForNew', answer: 'confirm'});
             this.newProject();
         },
 
         newProject(data) {
-            gtag('event', 'createNew');
+            gtag('event', 'ui', {action: 'newproject'});
             this.reset();
             this.$nextTick(() => {
                 this.data = data || new ChaptersJson();
@@ -297,7 +297,7 @@ window.APP = {
                     min: secondsToTimestamp(this.data.chapters.at(-1) ? this.data.chapters.at(-1).startTime : 0).slice(0, 8)
                 },
                 (newTimestamp) => {
-                    gtag('event', 'durationChange');
+                    gtag('event', 'meta', {action: 'durationChange'});
                     this.data.duration = timestampToSeconds(newTimestamp);
                     this.data.bump(true);
                     this.updateTimeline();
@@ -316,7 +316,7 @@ window.APP = {
 
 
         updateChapterStartTime(index, startTime, forceEdit = false, origin = 'dialog') {
-            gtag('event', 'startTimeChange', {origin});
+            gtag('event', 'chapter', {action: 'startTimeChange', origin});
 
             const result = this.data.updateChapterStartTime(index, startTime);
             if (result === 'timeInUse') {
@@ -355,7 +355,7 @@ window.APP = {
 
         deleteChapter(index) {
             this.currentChapterIndex = null;
-            gtag('event', 'deleteChapter');
+            gtag('event', 'chapter', {action: 'deleteChapter'});
             this.$nextTick(() => {
                 this.data.remove(index);
                 this.updateTimeline();
@@ -365,7 +365,7 @@ window.APP = {
         },
 
         addChapterAtTime(startTime, options = {}, origin) {
-            gtag('event', 'addChapterAtTime', {origin});
+            gtag('event', 'chapter', {action: 'add', where: 'atTime', origin});
             let chapter = {};
             if (options.title?.length > 0) {
                 chapter.title = options.title;
@@ -403,7 +403,7 @@ window.APP = {
                 return;
             }
 
-            gtag('event', 'addChapterAtIndex');
+            gtag('event', 'chapter', {action: 'add', where: 'atIndex'});
 
             let startTime = this.data.addChapterAt(index);
             this.updateTimeline();
@@ -475,7 +475,7 @@ window.APP = {
         },
 
         closeChapter() {
-            gtag('event', 'closeChapter');
+            gtag('event', 'chapter', {action: 'close'});
             this.$nextTick(() => {
                 this.currentChapterIndex = null;
                 window.timeline.setActive(false);
@@ -483,7 +483,7 @@ window.APP = {
         },
 
         expandToFirstToStart() {
-            gtag('event', 'startTimeChange', {origin : 'expand'});
+            gtag('event', 'chapter', {action: 'startTimeChange', origin: 'expand'});
             this.data.expandFirstToStart();
             this.updateTimeline();
         },
@@ -497,7 +497,7 @@ window.APP = {
             );
         },
         adaptDuration() {
-            gtag('event', 'adaptDuration');
+            gtag('event', 'meta', {action: 'adaptDuration'});
             this.data.duration = this.actualMediaDuration;
             this.data.bump(true);
             this.updateTimeline();
@@ -506,7 +506,7 @@ window.APP = {
         },
         toggleChapterLock() {
             this.chapterLock = !this.chapterLock;
-            gtag('event', 'toggleChapterLock', { mode : this.chapterLock ? 'locked' : 'unlocked'})
+            gtag('event', 'ui', {action: 'toggleChapterLock', mode: this.chapterLock ? 'locked' : 'unlocked'})
         },
         showTourAgain() {
             if (this.data.chapters.length === 0 || (this.data.chapters.length > 0 && confirm('abandon current project?'))) {
