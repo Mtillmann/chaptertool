@@ -13,10 +13,13 @@ export default class Timeline {
     color = null;
 
     constructor(duration, chapters = [], node, options = {}) {
+        this.node = node;
 
         this.color = getComputedStyle(document.documentElement).getPropertyValue('--ct-fg-full');
+        const ratio = parseFloat(getComputedStyle(this.node.querySelector('.ratio')).getPropertyValue('--bs-aspect-ratio')) * 0.01;
 
-        this.node = node;
+
+
         this.id = ((Math.random() * 10e16).toString(16)).split('.').shift();
 
         this.dragHandle = this.node.querySelector('.drag-handle');
@@ -26,15 +29,10 @@ export default class Timeline {
         this.options = {
             ...{
                 backgroundWidth: 2560,
-                backgroundHeight: 2560 * 0.05,
+                backgroundHeight: 2560 * ratio,
                 secondSnap: 1
             }, ...options
         };
-
-        this.node.querySelector('.backdrop .ratio').style.setProperty(
-            '--bs-aspect-ratio',
-            (this.options.backgroundHeight / this.options.backgroundWidth * 100) + '%'
-        );
 
         this.setDuration(duration);
         this.setChapters(chapters);

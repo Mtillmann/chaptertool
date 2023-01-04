@@ -5,14 +5,12 @@ $bootstrap-icons-font: bootstrap-icons;
 @import "../../node_modules/bootstrap-icons/font/bootstrap-icons.scss";
 
 
-
-
 .shepherd-element {
   &[data-popper-placement="bottom"] {
     margin-top: 16px;
   }
 
-  --padding:0.45rem;
+  --padding: 0.45rem;
 
   .shepherd-header {
     justify-content: space-between;
@@ -30,15 +28,16 @@ $bootstrap-icons-font: bootstrap-icons;
   .shepherd-footer {
 
     padding: 0 var(--padding) var(--padding);
-    &::before{
+
+    &::before {
       padding: calc(var(--padding) * 0.5) calc(var(--padding) * 1.5);
-      content:"use right arrow key or ";
+      content: "use right arrow key or ";
       margin-right: calc(var(--padding) * .5);
       opacity: 0.5;
     }
   }
 
-  .shepherd-button{
+  .shepherd-button {
     padding: calc(var(--padding) * 0.5) calc(var(--padding) * 1.5);
   }
 }
@@ -81,15 +80,16 @@ header {
     text-decoration: none;
   }
 
-  a.has-tooltip{
+  a.has-tooltip {
     transition: opacity 200ms;
-    &:hover{
-      opacity:0.8;
+
+    &:hover {
+      opacity: 0.8;
     }
   }
 
-  img{
-    height:32px;
+  img {
+    height: 32px;
   }
 }
 
@@ -267,7 +267,10 @@ video {
     }
 
     .ratio {
-
+      --bs-aspect-ratio: 20%;
+      @include media-breakpoint-up(lg) {
+        --bs-aspect-ratio: 5%;
+      }
       background-position: center;
       background-size: contain;
       background-repeat: no-repeat;
@@ -374,3 +377,21 @@ a.icon {
 
 }
 
+#appWrap{
+  @include media-breakpoint-up(lg){
+    overflow: hidden;
+    height:100vh;
+  }
+}
+
+#lower {
+  @include media-breakpoint-up(lg){
+    overflow: hidden;
+    & > .row{
+      height: 100%;
+    }
+    #chapterList{
+      height: 100%;
+    }
+  }
+}

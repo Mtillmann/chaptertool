@@ -1,3 +1,5 @@
+![chaptertool](../static/icons/icon-180.png)
+
 # chaptertool
 
 Create and convert chapters for podcasts, youtube, matroska, webvtt and ffmpeg.  
@@ -21,14 +23,14 @@ linux: [node](https://www.startpage.com/sp/search?q=linux%20install%20node), [ff
 First, navigate your terminal to the folder that contains the video file. Next, run
 
 ```shell
-npx chaptertool generate --input=YOUR_FILE.mp4
+npx chaptertool@latest generate YOUR_FILE.mp4
 ```
 Wait for the process to finish, afterwards a new folder called `YOUR_FILE_chapters` should be present.
 It contains the screenshots from the video and a `chapters.json`-file that contains the automatically generated chapters.
 
 ## commands
 
-> `npx chaptertool <command> <input?> --option-a --option-b=value`
+> `npx chaptertool@latest <command> <input?> --option-a --option-b=value`
 
 ### `serve`
 Run the http-server that hosts the web ui.
@@ -135,7 +137,7 @@ only uses a small portion of the video:
 
 ```shell
 yt-dlp "https://www.youtube.com/watch?v=rpDWoshRnME" -o cropme.webm
-npx chaptertool generate cropme.webm --crop="926:608:831:72"
+npx chaptertool@latest generate cropme.webm --crop="926:608:831:72"
 ```
 
 ### handling cross-fade slideshows
@@ -146,7 +148,7 @@ because the difference between the frames during the the transition is very smal
 
 ```shell
 yt-dlp "https://www.youtube.com/watch?v=EL9ftQJ3Yjw" -o crossfaded.webm
-npx chaptertool generate crossfaded.webm --use-crossfade-fix
+npx chaptertool@latest generate crossfaded.webm --use-crossfade-fix
 ```
 
 ### Bad Display Aspect Ratio
@@ -157,5 +159,5 @@ but a natural resolution of 720x576 (1.25). Create images(1024x576) with square 
 
 ```shell
 wget "https://cdn.media.ccc.de/events/gpn/gpn16/h264-sd/gpn16-7623-deu-Wie_baut_man_eigentlich_Raumschiffe_sd.mp4" -o baddar.mp4
-npx chaptertool generate baddar.mp4 --force-dar
+npx chaptertool@latest generate baddar.mp4 --force-dar
 ```

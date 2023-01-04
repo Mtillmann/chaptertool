@@ -6,7 +6,7 @@ html(data-bs-theme="auto", lang="en")
         include partials/meta
     body
         div#app(x-data="APP")
-            div.d-flex.flex-column.vh-100.overflow-hidden
+            div#appWrap.d-flex.flex-column
                 include partials/header
                 div.container-xl
                     div.row
@@ -15,12 +15,12 @@ html(data-bs-theme="auto", lang="en")
                         include partials/timeline
                         div.col-12.d-flex.justify-content-center.d-none
                             a.btn.btn-sm.btn-primary('@click.stop.prevent'="toggleSettings()")="settings"
-                div.container-xl.flex-grow-1.overflow-hidden
-                    div.row.h-100
-                        div.overflow-auto.pt-4.h-100.col-6(x-ref="chapterList",:class="{'d-none' : data.chapters.length === 0}")
+                div#lower.container-xl.flex-grow-1
+                    div.row
+                        div#chapterList.overflow-auto.pt-4.col-12.col-lg-6(x-ref="chapterList",:class="{'d-none' : data.chapters.length === 0}")
                             template(x-for="(chapter, index) in data.chapters", :key="chapter.id")
                                 include partials/chapterListItem
-                        div.col-6.overflow-auto.h-100.p-4(:class="{'offset-3' : data.chapters.length === 0}")
+                        div.col-12.col-lg-6.overflow-auto.h-100.p-4(:class="{'offset-lg-3' : data.chapters.length === 0}")
                             include partials/noChapterSelected
                             include partials/chapterEditPanel
             include partials/exportDialog
