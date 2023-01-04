@@ -357,7 +357,7 @@ window.APP = {
 
         deleteChapter(index) {
             this.currentChapterIndex = null;
-            gtag('event', 'chapter', {action: 'deleteChapter'});
+            gtag('event', 'chapter', {action: 'delete'});
             this.$nextTick(() => {
                 this.data.remove(index);
                 this.updateTimeline();
