@@ -29,6 +29,8 @@ window.deployGA = () => {
         ['src', `https://www.googletagmanager.com/gtag/js?id=${window.GACODE}`]
     ].forEach(([key, value]) => script.setAttribute(key, value));
 
+    gtag('config', window.GACODE);
+
     document.body.insertAdjacentElement('beforeend', script)
     window.GAIsDeployed = true;
 };
