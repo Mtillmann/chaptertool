@@ -6,9 +6,9 @@ Create and convert chapters for podcasts, youtube, matroska, webvtt and ffmpeg.
 
 The cli tools can automatically create chapters with images from videos using ffmpeg's scene detection.
 
-## [WEB GUI](https://mtillmann.github.io/chaptertool)
+## [Web App](https://mtillmann.github.io/chaptertool)
 
-[Click here to open the web GUI](https://mtillmann.github.io/chaptertool).
+[Click here to open the web app](https://mtillmann.github.io/chaptertool).
 
 ## CLI Prerequisite
 
