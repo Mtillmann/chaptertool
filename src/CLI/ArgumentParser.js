@@ -1,7 +1,4 @@
-import escapeStringRegexp from "escape-string-regexp";
-import {sep} from "path";
-import Os from "os";
-import {existsSync, lstatSync, readFileSync} from "fs";
+import {existsSync, readFileSync} from "fs";
 import {parse} from 'yaml';
 
 export class ArgumentParser {
@@ -105,15 +102,19 @@ export class ArgumentParser {
         process.argv.forEach(arg => {
             if (arg.slice(0, 9) === '--config=') {
                 let filename = arg.slice(9);
-                lstatSync(filename);
-                let content = readFileSync(filename, 'utf-8');
-                let parsed = parse(content);
-                parsed.forEach(arg => {
-                    let {key, value, isOption} = this.keyAndValueFromOption(arg);
-                    if (isOption && key in this.optionDefinition) {
-                        this.options[key] = this.prepareValue(key, value);
+                if (existsSync(filename)) {
+                    let content = readFileSync(filename, 'utf-8');
+                    let parsed = parse(content);
+                    if (parsed && 'forEach' in parsed) {
+
+                        parsed.forEach(arg => {
+                            let {key, value, isOption} = this.keyAndValueFromOption(arg);
+                            if (isOption && key in this.optionDefinition) {
+                                this.options[key] = this.prepareValue(key, value);
+                            }
+                        });
                     }
-                });
+                }
             }
         });
 
