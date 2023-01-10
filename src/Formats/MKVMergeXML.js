@@ -11,7 +11,7 @@ export class MKVMergeXML extends MatroskaXML {
         super(input, {
             chapterStringNodeName: 'ChapterString',
             inputTimeToSeconds: string => timestampToSeconds(string),
-            secondsToOutputTime: seconds => secondsToTimestamp(seconds, {hours :true, milliseconds : true})
+            secondsToOutputTime: seconds => secondsToTimestamp(seconds, {hours: true, milliseconds: true})
         });
     }
 }

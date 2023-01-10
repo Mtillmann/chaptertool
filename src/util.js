@@ -1,6 +1,5 @@
-
 export function zeroPad(num, len = 3) {
-    return ("0".repeat(len) + String(num)).slice(len * -1);
+    return String(num).padStart(len, '0');
 }
 
 export function secondsToTimestamp(s, options = {}) {

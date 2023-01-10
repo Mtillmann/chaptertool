@@ -1,6 +1,6 @@
 import {basename, extname, sep} from "path";
-import {renameSync, mkdirSync, readFileSync, writeFileSync, unlinkSync, lstatSync} from "fs";
-import {spawn, execSync} from "child_process";
+import {lstatSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync} from "fs";
+import {execSync, spawn} from "child_process";
 import {secondsToTimestamp, zeroPad} from "../util.js";
 import {addSuffixToPath} from "../cli_util.js";
 import {FFMpegInfo} from "../Formats/FFMpegInfo.js";
@@ -40,7 +40,7 @@ export class ChapterGenerator {
                 }
             } else {
                 newIndex = parseInt(newIndex);
-                if(index === newIndex){
+                if (index === newIndex) {
                     return;
                 }
                 try {
@@ -122,7 +122,10 @@ export class ChapterGenerator {
         await this.ffmpegCall(ffmpegArgs, false, () => {
             const info = readFileSync(`${this.options.outputFolder}/info.txt`, 'utf-8');
             const chapters = AutoFormat.as(this.options.outputFormat, this.infoTxtToChaptersJson(info));
-            writeFileSync(`${this.options.outputFolder}/${chapters.filename}`, chapters.toString(this.options.pretty));
+            writeFileSync(`${this.options.outputFolder}/${chapters.filename}`, chapters.toString(this.options.pretty, {
+                imagePrefix: this.options.imgUri,
+                writeEndTimes: !this.options.noEndTimes
+            }));
             if (!('keepInfo' in this.options)) {
                 unlinkSync(`${this.options.outputFolder}/info.txt`);
             }

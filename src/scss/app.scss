@@ -377,20 +377,20 @@ a.icon {
 
 }
 
-#appWrap{
-  @include media-breakpoint-up(lg){
+#appWrap {
+  @include media-breakpoint-up(lg) {
     overflow: hidden;
-    height:100vh;
+    height: 100vh;
   }
 }
 
 #lower {
-  @include media-breakpoint-up(lg){
+  @include media-breakpoint-up(lg) {
     overflow: hidden;
-    & > .row{
+    & > .row {
       height: 100%;
     }
-    #chapterList{
+    #chapterList {
       height: 100%;
     }
   }

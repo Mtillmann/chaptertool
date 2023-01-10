@@ -1,5 +1,5 @@
 import express from 'express';
-import {dirname, resolve, sep} from 'path';
+import {dirname} from 'path';
 
 export class Server {
     options = null;
@@ -24,7 +24,6 @@ export class Server {
         app.get('/', (req, res) => {
             res.render('index')
         });
-
 
 
         app.listen(port, () => {

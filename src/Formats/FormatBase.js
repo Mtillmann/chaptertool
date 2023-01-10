@@ -342,7 +342,7 @@ export class FormatBase {
         }, false);
     }
 
-    ensureUniqueFilenames(){
+    ensureUniqueFilenames() {
         const usedFilenames = [];
         this.chapters = this.chapters.map(chapter => {
             if (chapter.img_type !== 'blob') {
@@ -352,8 +352,8 @@ export class FormatBase {
             chapter.img_filename = filenamify(chapter.img_filename);
 
             let filename = chapter.img_filename;
-            if(usedFilenames.includes(filename)){
-                filename = filename.replace(/(\.\w+)$/,`_${hash()}$1`);
+            if (usedFilenames.includes(filename)) {
+                filename = filename.replace(/(\.\w+)$/, `_${hash()}$1`);
                 chapter.img_filename = filename;
             }
             usedFilenames.push(filename);
@@ -363,10 +363,10 @@ export class FormatBase {
 
     }
 
-    applyImgUri(imgUri){
+    applyImgUri(imgUri) {
         this.chapters.forEach((chapter, i) => {
-            if('img' in chapter){
-                this.chapters[i].img = imgUri.replace(/\/*$/,'')  + '/' + chapter.img.replace(/^\/*/,'');
+            if ('img' in chapter) {
+                this.chapters[i].img = imgUri.replace(/\/*$/, '') + '/' + chapter.img.replace(/^\/*/, '');
             }
         });
     }

@@ -1,15 +1,15 @@
 import {Modal} from "bootstrap";
 
-export default{
+export default {
 
-    importState : {
-        mode : null
+    importState: {
+        mode: null
     },
-    importModal : null,
-    initImportDialog(){
+    importModal: null,
+    initImportDialog() {
         this.importModal = new Modal(this.$refs.importDialog);
     },
-    showImportDialog(state){
+    showImportDialog(state) {
 
         this.importState = state;
         this.importModal.show();

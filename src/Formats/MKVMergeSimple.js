@@ -11,7 +11,7 @@ export class MKVMergeSimple extends FormatBase {
     }
 
     parse(string) {
-        if(!this.detect(string)){
+        if (!this.detect(string)) {
             throw new Error('File must start with CHAPTER01')
         }
 

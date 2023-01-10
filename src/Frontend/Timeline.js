@@ -19,7 +19,6 @@ export default class Timeline {
         const ratio = parseFloat(getComputedStyle(this.node.querySelector('.ratio')).getPropertyValue('--bs-aspect-ratio')) * 0.01;
 
 
-
         this.id = ((Math.random() * 10e16).toString(16)).split('.').shift();
 
         this.dragHandle = this.node.querySelector('.drag-handle');

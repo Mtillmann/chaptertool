@@ -46,9 +46,9 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                     |
                                     | Download
                                 button.btn.btn-outline-primary(
-                                        @click="downloadZip"
-                                        x-show="exportSettings.type === 'chaptersjson' && exportSettings.hasImages"
-                                    )
+                                    @click="downloadZip"
+                                    x-show="exportSettings.type === 'chaptersjson' && exportSettings.hasImages"
+                                )
                                     i.bi.bi-file-zip
                                     |
                                     | Zip w/ Images
