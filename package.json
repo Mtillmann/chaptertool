@@ -19,7 +19,7 @@
     "test": "jest",
     "sass-dev": "node-sass --recursive --watch src/scss --output static",
     "build": "rollup -c && terser static/app.js --compress ecma=2021 --output static/app.js && node-sass --recursive --output-style compressed src/scss --output static && node scripts/writeversion.js",
-    "createIndexHTML" : "node scripts/empuggen.js",
+    "createIndexHTML": "node scripts/empuggen.js",
     "dev": "rollup -c -w",
     "watch": "concurrently \"node-sass --recursive --watch src/scss --output static\" \"npm run dev\" \"nodemon --watch src/Server.js --exec node chaptertool.js serve\""
   },
@@ -63,9 +63,12 @@
     "terser": "^5.16.1"
   },
   "jest": {
+    "transformIgnorePatterns": [
+      "!node_modules/"
+    ],
     "testMatch": [
       "<rootDir>/tests/*.test.js"
     ],
-    "testEnvironment": "jsdom"
+    "testEnvironment": "./jest-env-jsdom.js"
   }
 }

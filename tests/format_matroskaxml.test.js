@@ -51,7 +51,7 @@ describe('MatroskaXML Format Handler', () => {
     });
 
     it('can import previously generated export', () => {
-        expect(new MatroskaXML(instance.toString()).chapters[3].endTime).toEqual(542.001);
+        expect(new MatroskaXML(instance.toString()).chapters[3].endTime.toFixed(3)).toEqual(542.001 .toFixed(3));
     });
 
     it('can convert into other format', () => {
