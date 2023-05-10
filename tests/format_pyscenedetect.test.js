@@ -17,7 +17,7 @@ describe('PySceneDetect Format Handler', () => {
         }).toThrowError(Error);
     });
 
-    const content = readFileSync(module.path + sep + 'samples' + sep + 'PySceneDetect.txt', 'utf-8');
+    const content = readFileSync(module.path + sep + 'samples' + sep + 'pyscenedetect.csv', 'utf-8');
 
     it('parses well-formed input', () => {
         expect(() => {
