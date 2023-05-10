@@ -16,15 +16,15 @@ export class ChapterConverter {
 
         if (options.outputFile) {
             writeFileSync(options.outputFile, AutoFormat.as(options.outputFormat, chapters).toString(options.pretty, {
-                imagePrefix: this.options.imgUri,
-                writeEndTimes: !this.options.noEndTimes
+                imagePrefix: options.imgUri,
+                writeEndTimes: !options.noEndTimes
             }));
             return;
         }
 
         console.log(AutoFormat.as(options.outputFormat, chapters).toString(options.pretty, {
-            imagePrefix: this.options.imgUri,
-            writeEndTimes: !this.options.noEndTimes
+            imagePrefix: options.imgUri,
+            writeEndTimes: !options.noEndTimes
         }));
     }
 }

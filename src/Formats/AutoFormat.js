@@ -6,6 +6,7 @@ import {MKVMergeSimple} from "./MKVMergeSimple.js";
 import {WebVTT} from "./WebVTT.js";
 import {Youtube} from "./Youtube.js";
 import {FFMpegInfo} from "./FFMpegInfo.js";
+import {PySceneDetect} from "./PySceneDetect.js";
 
 export const AutoFormat = {
     classMap: {
@@ -16,7 +17,8 @@ export const AutoFormat = {
         mkvmergesimple: MKVMergeSimple,
         webvtt: WebVTT,
         youtube: Youtube,
-        ffmpeginfo: FFMpegInfo
+        ffmpeginfo: FFMpegInfo,
+        pyscenedetect: PySceneDetect
     },
 
     detect(inputString, returnWhat = 'instance') {
