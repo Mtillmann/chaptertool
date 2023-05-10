@@ -28,31 +28,32 @@ describe('PySceneDetect Format Handler', () => {
     const instance = new PySceneDetect(content);
 
     it('has the correct number of chapters from content', () => {
-        expect(instance.chapters.length).toEqual(5);
+        expect(instance.chapters.length).toEqual(20);
     });
-
-    it('has the correct title from content', () => {
-        expect(instance.meta.title).toEqual('this is the title :D');
-    });
-
     it('has parsed the timestamps correctly', () => {
-        expect(instance.chapters[0].startTime).toBe(6.202)
+        expect(instance.chapters[0].endTime.toFixed(3)).toBe(4.921 .toFixed(3))
     });
 
-    it('has parsed the chapter titles correctly', () => {
-        expect(instance.chapters[0].title).toBe('Chapter 1 of 26')
-    });
 
     it('exports to correct format',() => {
-        expect(instance.toString().slice(0,6)).toEqual('WEBVTT');
+        expect(instance.toString().slice(0,13)).toEqual('Timecode List');
     });
 
+    it('exports to correct format without timecodes',() => {
+        expect(instance.toString({psdOmitTimecodes : true}).slice(0,12)).toEqual('Scene Number');
+    });
+
+    it('respects framerate option',() => {
+        expect(instance.toString({psdFramerate : 60})).toContain('2806');
+    });
+
+
     it('export includes correct timestamp',() => {
-        expect(instance.toString()).toContain('00:03:51.001');
+        expect(instance.toString()).toContain('00:00:40.123');
     });
 
     it('can import previously generated export',() => {
-        expect(new PySceneDetect(instance.toString()).chapters[3].endTime).toEqual(542.001);
+        expect(new PySceneDetect(instance.toString()).chapters[3].startTime).toEqual(18.560);
     });
 
     it('can convert into other format', () => {

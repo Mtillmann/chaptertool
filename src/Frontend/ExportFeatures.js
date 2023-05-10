@@ -4,7 +4,8 @@ import * as zip from "@zip.js/zip.js"
 
 
 export default {
-    exportOffcanvas: null, exportSettings: {
+    exportOffcanvas: null,
+    exportSettings: {
         type: 'chaptersjson',
         supportsPretty: false,
         pretty: true,
@@ -13,12 +14,16 @@ export default {
         imagePrefix: '',
         writeRedundantToc: false,
         writeEndTimes: false
-    }, exportContent: '', exportData: null, initExportDialog() {
+    },
+    exportContent: '',
+    exportData: null,
+    initExportDialog() {
         this.exportOffcanvas = new Offcanvas(this.$refs.exportDialog);
         this.$refs.exportDialog.addEventListener('show.bs.offcanvas', () => {
             this.updateExportContent()
         })
-    }, updateExportContent(type) {
+    },
+    updateExportContent(type) {
         if (type) {
             this.exportSettings.type = type;
         }

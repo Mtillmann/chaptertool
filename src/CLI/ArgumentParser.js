@@ -78,6 +78,12 @@ export class ArgumentParser {
         },
         outputFile: {
             default: false
+        },
+        psdFrameRate : {
+            default :  23.976
+        },
+        psdOmitTimecodes : {
+            default: false
         }
     };
 

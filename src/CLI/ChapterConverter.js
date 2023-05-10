@@ -17,7 +17,9 @@ export class ChapterConverter {
         if (options.outputFile) {
             writeFileSync(options.outputFile, AutoFormat.as(options.outputFormat, chapters).toString(options.pretty, {
                 imagePrefix: options.imgUri,
-                writeEndTimes: !options.noEndTimes
+                writeEndTimes: !options.noEndTimes,
+                psdFrameRate: options.psdFrameRate,
+                psdOmitTimecodes : options.psdOmitTimecodes
             }));
             return;
         }

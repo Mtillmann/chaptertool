@@ -7,6 +7,10 @@ export class PySceneDetect extends FormatBase {
     }
 
     parse(string) {
+        if (!this.detect(string)) {
+            throw new Error('File must start with "Scene Number" or "Timecode List"')
+        }
+
         const lines = string.split(/\r?\n/)
             .filter(line => line.trim().length > 0)
             .map(line => line.trim());
@@ -14,11 +18,7 @@ export class PySceneDetect extends FormatBase {
         if (/^Timecode/.test(lines[0])) {
             lines.shift()
         }
-
         lines.shift();
-
-        const chapters = [];
-        const re = /^\d+,\d+,(?<start>\d+:\d+:\d+\.\d+),[\d.]+,\d+,(?<end>\d+:\d+:\d+\.\d+)/;
 
         this.chapters = lines.map(line => {
             const cols = line.split(',');
@@ -32,9 +32,10 @@ export class PySceneDetect extends FormatBase {
 
     }
 
-    toString(exportOptions = {}) {
+    toString(pretty = 'ignored', exportOptions = {}) {
 
         const framerate = exportOptions.psdFramerate || 23.976;
+        const omitTimecodes = !!exportOptions.psdOmitTimecodes;
 
         let lines = this.chapters.map((chapter, index) => {
 
@@ -64,7 +65,7 @@ export class PySceneDetect extends FormatBase {
 
         lines.unshift('Scene Number,Start Frame,Start Timecode,Start Time (seconds),End Frame,End Timecode,End Time (seconds),Length (frames),Length (timecode),Length (seconds)')
 
-        if(true){ //todo use option here...
+        if(!omitTimecodes){
             lines.unshift(tl);
         }
 
