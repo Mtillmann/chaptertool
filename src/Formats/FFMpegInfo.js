@@ -13,7 +13,7 @@ export class FFMpegInfo extends FormatBase {
             throw new Error('input must start with frame:')
         }
 
-        const matches = Array.from(input.matchAll(/frame:(\d+).*pts_time:([\d.]+)\n/g));
+        const matches = Array.from(input.matchAll(/frame:(\d+).*pts_time:([\d.]+)\r?\n/g));
         this.chapters = matches.map(match => {
             const startTime = enforceMilliseconds(parseFloat(match[2]));
             return {

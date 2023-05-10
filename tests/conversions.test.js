@@ -5,11 +5,12 @@ import {FFMetadata} from "../src/Formats/FFMetadata.js";
 import {MatroskaXML} from "../src/Formats/MatroskaXML.js";
 import {MKVMergeXML} from "../src/Formats/MKVMergeXML.js";
 import {MKVMergeSimple} from "../src/Formats/MKVMergeSimple.js";
+import {PySceneDetect} from "../src/Formats/PySceneDetect.js";
 import {readFileSync} from "fs";
 import {sep} from "path";
 
 describe('conversions from one format to any other', () => {
-    const formats = [ChaptersJson, WebVTT, Youtube, FFMetadata, MatroskaXML, MKVMergeXML, MKVMergeSimple];
+    const formats = [ChaptersJson, WebVTT, Youtube, FFMetadata, MatroskaXML, MKVMergeXML, MKVMergeSimple, PySceneDetect];
 
     const content = readFileSync(module.path + sep + 'samples' + sep + 'chapters.json', 'utf-8');
 

@@ -112,6 +112,7 @@ export class FormatBase {
             return this.chapters[index].endTime;
         }
          */
+
         return this.chapters[index + 1] ? (this.chapters[index + 1].startTime - 0.001) : this.duration;
     }
 

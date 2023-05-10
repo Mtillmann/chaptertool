@@ -1,5 +1,5 @@
 import {FormatBase} from "./FormatBase.js";
-import {timestampToSeconds} from "../util.js";
+import {secondsToTimestamp, timestampToSeconds} from "../util.js";
 
 export class PySceneDetect extends FormatBase {
     detect(inputString) {
@@ -22,17 +22,52 @@ export class PySceneDetect extends FormatBase {
 
         this.chapters = lines.map(line => {
             const cols = line.split(',');
+
             return {
-                startTime : timestampToSeconds(cols[2]),
-                endTime : timestampToSeconds(cols[5])
+                startTime: timestampToSeconds(cols[2]),
+                endTime: timestampToSeconds(cols[5])
             }
         })
-
 
 
     }
 
     toString(exportOptions = {}) {
-        return 'lol';
+
+        const framerate = exportOptions.psdFramerate || 23.976;
+
+        let lines = this.chapters.map((chapter, index) => {
+
+            const next = this.chapters[index + 1];
+            const endTime = next?.startTime || this.duration;
+            //use next chapter's start time for maximum native PySceneDetect compatibility
+            const l = endTime - chapter.startTime;
+
+            return [
+                index + 1,//Scene Number
+                Math.round(chapter.startTime * framerate) + 1,//Start Frame
+                secondsToTimestamp(chapter.startTime, {hours: true, milliseconds: true}),// Start Timecode
+                parseInt(chapter.startTime * 1000),// Start Time (seconds)
+                Math.round(endTime * framerate),// End Frame
+                secondsToTimestamp(endTime, {hours: true, milliseconds: true}),// End Timecode
+                parseInt(endTime * 1000),// End Time (seconds)
+                Math.round((endTime - chapter.startTime) * framerate),// Length (frames)
+                secondsToTimestamp(l, {hours: true, milliseconds: true}),// Length (timecode)
+                parseInt(Math.ceil(l * 1000))// Length (seconds)
+            ]
+
+        });
+
+
+        const tl = 'Timecode List:' + lines.slice(1).map(l => l[2]).join(',')
+        lines = lines.map(l => l.join(','));
+
+        lines.unshift('Scene Number,Start Frame,Start Timecode,Start Time (seconds),End Frame,End Timecode,End Time (seconds),Length (frames),Length (timecode),Length (seconds)')
+
+        if(true){ //todo use option here...
+            lines.unshift(tl);
+        }
+
+        return lines.join("\n");
     }
 }
