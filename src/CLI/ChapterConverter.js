@@ -24,9 +24,18 @@ export class ChapterConverter {
             return;
         }
 
+        console.log( {
+            imagePrefix: options.imgUri,
+            writeEndTimes: !options.noEndTimes,
+            psdFramerate: options.psdFramerate,
+            psdOmitTimecodes : options.psdOmitTimecodes
+        })
+
         console.log(AutoFormat.as(options.outputFormat, chapters).toString(options.pretty, {
             imagePrefix: options.imgUri,
-            writeEndTimes: !options.noEndTimes
+            writeEndTimes: !options.noEndTimes,
+            psdFramerate: options.psdFramerate,
+            psdOmitTimecodes : options.psdOmitTimecodes
         }));
     }
 }

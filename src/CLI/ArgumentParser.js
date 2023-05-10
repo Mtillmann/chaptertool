@@ -81,7 +81,7 @@ export class ArgumentParser {
         outputFile: {
             default: false
         },
-        psdFrameRate: {
+        psdFramerate: {
             default: 23.976,
             cast: 'float'
         },

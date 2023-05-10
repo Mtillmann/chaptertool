@@ -88,6 +88,7 @@ Converts existing chapters between the following formats:
 - `webvtt` WebVTT chapter format ([spec](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API))
 - `youtube` Youtube description chapter notation
 - `ffmpeginfo` (readonly) ffmpeg scene detection output, used internally
+- `pyscenedetect` PySceneDetect list-scenes CSV Format ([project home](https://github.com/Breakthrough/PySceneDetect)) 
  
 | option                 | description                                                                         | default |
 |------------------------|-------------------------------------------------------------------------------------|---------|
