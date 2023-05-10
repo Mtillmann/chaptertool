@@ -1,8 +1,7 @@
 import { TextEncoder, TextDecoder } from "util";
-import jejsdom from 'jest-environment-jsdom';
-const { default: $JSDOMEnvironment, TestEnvironment: te } = jejsdom;
-
-class JSDOMEnvironment extends $JSDOMEnvironment {
+import pkg from 'jest-environment-jsdom';
+const { default: $JSDOMEnvironment } = pkg;
+export default class JSDOMEnvironment extends $JSDOMEnvironment {
     constructor(...args) {
         const { global } = super(...args);
         if (!global.TextEncoder)
@@ -11,6 +10,3 @@ class JSDOMEnvironment extends $JSDOMEnvironment {
             global.TextDecoder = TextDecoder;
     }
 }
-
-export default JSDOMEnvironment;
-export const TestEnvironment = te === $JSDOMEnvironment ? JSDOMEnvironment : te;
