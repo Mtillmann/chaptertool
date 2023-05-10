@@ -2,6 +2,10 @@ import {FormatBase} from "./FormatBase.js";
 import {secondsToTimestamp, timestampToSeconds} from "../util.js";
 
 export class PySceneDetect extends FormatBase {
+
+    filename = 'psd-scenes.csv';
+    mimeType = 'text/csv';
+
     detect(inputString) {
         return ['Scene Number', 'Timecode Lis'].includes(inputString.trim().slice(0, 12));
     }
@@ -32,7 +36,7 @@ export class PySceneDetect extends FormatBase {
 
     }
 
-    toString(pretty = 'ignored', exportOptions = {}) {
+    toString(pretty = false, exportOptions = {}) {
 
         const framerate = exportOptions.psdFramerate || 23.976;
         const omitTimecodes = !!exportOptions.psdOmitTimecodes;

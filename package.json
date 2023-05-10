@@ -1,6 +1,6 @@
 {
   "name": "chaptertool",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Manage and generate chapters for podcasts and other media via cli or web",
   "keywords": [
     "podcast",
@@ -9,7 +9,8 @@
     "youtube",
     "mkvmerge",
     "matroska",
-    "webvtt"
+    "webvtt",
+    "pyscenedetect"
   ],
   "type": "module",
   "main": "chaptertool.js",
@@ -35,7 +36,7 @@
   "license": "MIT",
   "dependencies": {
     "@zip.js/zip.js": "^2.6.61",
-    "bootstrap": "^5.3.0-alpha1",
+    "bootstrap": "^5.3.0-alpha3",
     "bootstrap-icons": "^1.10.2",
     "dotenv": "^16.0.3",
     "escape-string-regexp": "^5.0.0",

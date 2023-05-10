@@ -13,7 +13,9 @@ export default {
         canUseImagePrefix: false,
         imagePrefix: '',
         writeRedundantToc: false,
-        writeEndTimes: false
+        writeEndTimes: false,
+        psdFramerate: 23.976,
+        psdOmitTimecodes: false
     },
     exportContent: '',
     exportData: null,
@@ -37,7 +39,9 @@ export default {
         this.exportContent = this.exportData.toString(this.exportSettings.pretty, {
             imagePrefix: this.exportSettings.imagePrefix,
             writeRedundantToc: this.exportSettings.writeRedundantToc,
-            writeEndTimes: this.exportSettings.writeEndTimes
+            writeEndTimes: this.exportSettings.writeEndTimes,
+            psdFramerate: this.exportSettings.psdFramerate,
+            psdOmitTimecodes: this.exportSettings.psdOmitTimecodes,
         });
     },
 

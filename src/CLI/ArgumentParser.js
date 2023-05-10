@@ -25,13 +25,15 @@ export class ArgumentParser {
         crop: {},
         useCrossfadeFix: {},
         crossfadeFrames: {
-            default: 120, cast: 'int'
+            default: 120,
+            cast: 'int'
         },
         serveAfterRun: {},
         serve: {},
         generate: {},
         port: {
-            default: 8989, cast: 'int'
+            default: 8989,
+            cast: 'int'
         },
         silent: {
             default: false
@@ -79,10 +81,11 @@ export class ArgumentParser {
         outputFile: {
             default: false
         },
-        psdFrameRate : {
-            default :  23.976
+        psdFrameRate: {
+            default: 23.976,
+            cast: 'float'
         },
-        psdOmitTimecodes : {
+        psdOmitTimecodes: {
             default: false
         }
     };

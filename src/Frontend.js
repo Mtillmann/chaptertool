@@ -484,7 +484,7 @@ window.APP = {
             })
         },
 
-        expandToFirstToStart() {
+        expandFirstToStart() {
             gtag('event', 'chapter', {action: 'startTimeChange', origin: 'expand'});
             this.data.expandFirstToStart();
             this.updateTimeline();

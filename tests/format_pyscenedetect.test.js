@@ -40,11 +40,11 @@ describe('PySceneDetect Format Handler', () => {
     });
 
     it('exports to correct format without timecodes',() => {
-        expect(instance.toString({psdOmitTimecodes : true}).slice(0,12)).toEqual('Scene Number');
+        expect(instance.toString(false, {psdOmitTimecodes : true}).slice(0,12)).toEqual('Scene Number');
     });
 
     it('respects framerate option',() => {
-        expect(instance.toString({psdFramerate : 60})).toContain('2806');
+        expect(instance.toString(false, {psdFramerate : 60})).toContain('2806');
     });
 
 

@@ -2,7 +2,7 @@
 
 # chaptertool
 
-Create and convert chapters for podcasts, youtube, matroska, webvtt and ffmpeg.  
+Create and convert chapters for podcasts, youtube, matroska, webvtt, ffmpeg and pySceneDetect.  
 
 The cli tools can automatically create chapters with images from videos using ffmpeg's scene detection.
 
@@ -89,13 +89,15 @@ Converts existing chapters between the following formats:
 - `youtube` Youtube description chapter notation
 - `ffmpeginfo` (readonly) ffmpeg scene detection output, used internally
  
-| option          | description                                                                           | default |
-|-----------------|---------------------------------------------------------------------------------------|---------|
-| `<input>`       | the file that you want to convert, format will be detected                            |         |
-| `--format`      | target format, one of those listed above. When omitted, detected input format is used |         |
-| `--pretty`      | some formats support pretty printing                                                  |         |
-| `--img-uri`     | see above, works only with `chaptersjson`                                             |         |
-| `--output-file` | file to write the output to. see below                                                |         |
+| option                 | description                                                                         | default |
+|------------------------|-------------------------------------------------------------------------------------|---------|
+| `<input>`              | the file that you want to convert, format will be detected                          |         |
+| `--format`             | target format, one of those listed above. When omitted, detected input format is used |         |
+| `--pretty`             | some formats support pretty printing                                                |         |
+| `--img-uri`            | see above, works only with `chaptersjson`                                           |         |
+| `--output-file`        | file to write the output to. see below                                              |         |
+| `--psd-omit-timecodes` | When set, first line of _PySceneDetect_-CSV will not be written                     |         |
+| `--psd-framerate`      | set the framerate for _PySceneDetect_ output                                        |         |
 
 > use `--output-file` when using powershell, otherwise you'll have BOMs in your output 
 
