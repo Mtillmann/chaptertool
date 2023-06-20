@@ -1,5 +1,5 @@
-import {lstatSync, readFileSync, writeFileSync} from "fs";
-import {AutoFormat} from "../Formats/AutoFormat.js";
+import { lstatSync, readFileSync, writeFileSync } from "fs";
+import { AutoFormat } from "../Formats/AutoFormat.js";
 
 export class ChapterConverter {
 
@@ -23,13 +23,6 @@ export class ChapterConverter {
             }));
             return;
         }
-
-        console.log( {
-            imagePrefix: options.imgUri,
-            writeEndTimes: !options.noEndTimes,
-            psdFramerate: options.psdFramerate,
-            psdOmitTimecodes : options.psdOmitTimecodes
-        })
 
         console.log(AutoFormat.as(options.outputFormat, chapters).toString(options.pretty, {
             imagePrefix: options.imgUri,
