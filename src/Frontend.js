@@ -1,11 +1,11 @@
 import Alpine from "alpinejs";
 import { Offcanvas, Toast, Tooltip } from "bootstrap";
 import { ChaptersJson } from "./Formats/ChaptersJson.js";
-import ChapterFeatures from "./Frontend/ChapterFeatures.js";
 import ExportFeatures from "./Frontend/ExportFeatures.js";
 import { FileHandler } from "./Frontend/FileHandler.js";
 import ImportDialog from "./Frontend/ImportDialog.js";
 import MediaFeatures from "./Frontend/MediaFeatures.js";
+import MetaProperties from "./Frontend/MetaProperties.js";
 import { SWInclude } from "./Frontend/SWInclude.js";
 import { ShepherdTour } from "./Frontend/ShepherdTour.js";
 import Timeline from "./Frontend/Timeline.js";
@@ -220,7 +220,7 @@ window.APP = {
             });
 
             this.initExportDialog();
-            this.initChapterDialog();
+            this.initMetaPropertiesDialog();
             this.initImportDialog();
         },
 
@@ -459,7 +459,7 @@ window.APP = {
         reset() {
 
             this.offcanvasNavi.hide();
-            this.chapterDialog.hide();
+            this.metaPropertiesDialog.hide();
             this.exportOffcanvas.hide();
             this.timestampOffcanvas.hide();
             this.importModal.hide();
@@ -533,6 +533,6 @@ window.APP = {
     },
     ...MediaFeatures,
     ...ExportFeatures,
-    ...ChapterFeatures,
+    ...MetaProperties,
     ...ImportDialog
 }

@@ -30,7 +30,7 @@ div
                         |
                         span(x-text="`(${chapter.duration_hr})`")
             div.p-2.col-1.d-flex.align-items-center.justify-content-center.border-start.border-body-color-light
-                a.has-tooltip.delete-button(
+                a.w-100.h-100.d-flex.has-tooltip.delete-button.justify-content-center.align-items-center(
                     title="delete chapter"
                     href="#"
                     @click.stop.prevent="deleteChapter(index)"

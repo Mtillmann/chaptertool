@@ -29,4 +29,5 @@ html(data-bs-theme="auto", lang="en")
             include partials/timestampDialog
             include partials/offcanvasNavi
             include partials/analyticsOffcanvas
+            input#importFileInput.d-none(type="file", accept="audio/*,video/*,.json,.txt,.xml,image/*", @change="fileHandler.handleFile($event.target.files[0])")
             div.toast-container.position-fixed.bottom-0.start-50.translate-middle-x(x-ref="toasts")

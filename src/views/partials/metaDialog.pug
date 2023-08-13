@@ -1,12 +1,14 @@
-div.offcanvas.offcanvas-bottom#chapterDialog(x-ref="chapterDialog", style="--bs-offcanvas-height:initial;max-height:100vh")
+div.offcanvas.offcanvas-bottom#metaPropertiesDialog(x-ref="metaPropertiesDialog", style="--bs-offcanvas-height:initial;max-height:100vh")
     div.offcanvas-header
-        h5.offcanvas-title Podcast <em>Chapter</em> Properties
+        h5.offcanvas-title <em>Podcast Episode</em> Properties
+            | &nbsp;
             small
             | (
             a(href="https://github.com/Podcastindex-org/podcast-namespace/blob/main/chapters/jsonChapters.md#chapters-object",target="_blank") spec
             | )
         button.btn-close(data-bs-dismiss="offcanvas")
-    div.offcanvas-body.mt-0
+    div.offcanvas-body.pt-0
+        p.small These properties are only used for <code>chapters.json</code> format!
         div.container-lg
             div.row.mb-2
                 div.col-2
@@ -44,4 +46,4 @@ div.offcanvas.offcanvas-bottom#chapterDialog(x-ref="chapterDialog", style="--bs-
                     small If this property is present, the locations in a chapter object should be displayed with a route between locations.
             div.row
                 div.col-12.d-flex.justify-content-center
-                    button.btn.btn-primary(@click.stop.prevent="chapterDialog.hide()") save & close
+                    button.btn.btn-primary(@click.stop.prevent="metaPropertiesDialog.hide()") save & close

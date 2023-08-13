@@ -10,12 +10,10 @@ template(x-if="currentChapterIndex === null")
                 | Paste or drop a video or audio file, or an existing chapters file here to start a new project
                 | or select one
                 |
-                label.text-decoration-underline.cursor-pointer from your disk
-                    input#importFileInput.d-none(type="file", accept="audio/*,video/*,.json,.txt,.xml,image/*", @change="fileHandler.handleFile($event.target.files[0])")
+                label.text-decoration-underline.cursor-pointer(for="importFileInput") from your disk
                 hr
             div.d-lg-none
-                label.text-decoration-underline.cursor-pointer pick video/audio file, or an existing chapters file from your device
-                    input#importFileInput.d-none(type="file", accept="audio/*,video/*,.json,.txt,.xml,image/*", @change="fileHandler.handleFile($event.target.files[0])")
+                label.text-decoration-underline.cursor-pointer(for="importFileInput") pick video/audio file, or an existing chapters file from your device
                 hr
             template(x-if="data.chapters.length === 0")
                 div
@@ -28,7 +26,7 @@ template(x-if="currentChapterIndex === null")
                 div
                     | Select a chapter to edit its properties
                     hr
-            a(href="#", @click.stop.prevent="chapterDialog.show()") Edit meta attributes
+            a(href="#", @click.stop.prevent="metaPropertiesDialog.show()") Edit Meta properties
             hr
             a(href="#",@click.stop.prevent="changeDuration") Change episode duration
             hr

@@ -2,9 +2,9 @@ div.offcanvas.offcanvas-end#navi(x-ref="navi")
     div.offcanvas-body
         nav.nav.flex-column
             a.nav-link(href="#"  @click.stop.prevent="offcanvasNavi.hide();askForNewProject()") New Project
-            label.nav-link(for="importFileInput" @click="offcanvasNavi.hide()") Import File
+            label.nav-link(for="importFileInput" @click="offcanvasNavi.hide();") Import File
             a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();addChapterFromTime()") Insert Chapter At Given Time
-            a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();chapterDialog.show()") Edit Meta Attributes
+            a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();metaPropertiesDialog.show()") Edit Meta Attributes
             a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();changeDuration()") Change Duration
             a.nav-link.offcanvas-export-link(href="#"  @click.stop.prevent="offcanvasNavi.hide();exportOffcanvas.show()") Export / Download
             hr

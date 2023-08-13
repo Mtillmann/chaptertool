@@ -9774,17 +9774,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       supportsPrettyPrint = true;
   }
 
-  var ChapterFeatures = {
-
-      chapterDialog: null,
-      initChapterDialog() {
-          this.chapterDialog = new Offcanvas(this.$refs.chapterDialog);
-          this.$refs.chapterDialog.addEventListener('shown.bs.offcanvas', () => {
-              gtag('event', 'meta', {action: 'attributeDialog'});
-          });
-      }
-  };
-
   /*
    Copyright (c) 2022 Gildas Lormeau. All rights reserved.
 
@@ -19752,6 +19741,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   };
 
+  var MetaProperties = {
+
+      metaPropertiesDialog: null,
+      initMetaPropertiesDialog() {
+          this.metaPropertiesDialog = new Offcanvas(this.$refs.metaPropertiesDialog);
+          this.$refs.metaPropertiesDialog.addEventListener('shown.bs.offcanvas', () => {
+              gtag('event', 'meta', {action: 'attributeDialog'});
+          });
+      }
+  };
+
   function SWInclude() {
 
       if (/localhost/.test(new URL(window.location).host)) {
@@ -25001,7 +25001,7 @@ Z`;
               });
 
               this.initExportDialog();
-              this.initChapterDialog();
+              this.initMetaPropertiesDialog();
               this.initImportDialog();
           },
 
@@ -25240,7 +25240,7 @@ Z`;
           reset() {
 
               this.offcanvasNavi.hide();
-              this.chapterDialog.hide();
+              this.metaPropertiesDialog.hide();
               this.exportOffcanvas.hide();
               this.timestampOffcanvas.hide();
               this.importModal.hide();
@@ -25314,7 +25314,7 @@ Z`;
       },
       ...MediaFeatures,
       ...ExportFeatures,
-      ...ChapterFeatures,
+      ...MetaProperties,
       ...ImportDialog
   };
 
