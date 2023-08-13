@@ -1,6 +1,6 @@
-import {Offcanvas} from "bootstrap";
-import {AutoFormat} from "../Formats/AutoFormat.js";
-import * as zip from "@zip.js/zip.js"
+import * as zip from "@zip.js/zip.js";
+import { Offcanvas } from "bootstrap";
+import { AutoFormat } from "../Formats/AutoFormat.js";
 
 
 export default {
@@ -15,7 +15,8 @@ export default {
         writeRedundantToc: false,
         writeEndTimes: false,
         psdFramerate: 23.976,
-        psdOmitTimecodes: false
+        psdOmitTimecodes: false,
+        acUseTextAttr: false
     },
     exportContent: '',
     exportData: null,
@@ -42,6 +43,7 @@ export default {
             writeEndTimes: this.exportSettings.writeEndTimes,
             psdFramerate: this.exportSettings.psdFramerate,
             psdOmitTimecodes: this.exportSettings.psdOmitTimecodes,
+            acUseTextAttr: this.exportSettings.acUseTextAttr
         });
     },
 

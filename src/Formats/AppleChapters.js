@@ -10,7 +10,6 @@ export class AppleChapters extends MatroskaXML {
     mimeType = 'text/xml';
 
 
-
     detect(inputString) {
         return /^<\?xml/.test(inputString.trim()) && /<TextStream/.test(inputString);
     }
@@ -38,7 +37,7 @@ export class AppleChapters extends MatroskaXML {
         });
     }
 
-    toString(pretty = false) {
+    toString(pretty = false, exportOptions = {}) {
         const indent = (depth, string, spacesPerDepth = 2) => (pretty ? ' '.repeat(depth * spacesPerDepth) : '') + string;
 
         let output = [
@@ -50,9 +49,14 @@ export class AppleChapters extends MatroskaXML {
             indent(1, '</TextStreamHeader>')
         ];
 
-        this.chapters.forEach((chapter, index) => {
+        this.chapters.forEach(chapter => {
             
-            output.push(indent(3, `<TextSample sampleTime="${secondsToTimestamp(chapter.startTime, {milliseconds: true})}">${chapter.title}</TextSample>`));
+            const attrContent = exportOptions.acUseTextAttr && chapter.title ? ` text="${chapter.title}"` :'';
+            const content = !exportOptions.acUseTextAttr && chapter.title ? chapter.title :'';
+
+            console.log();
+
+            output.push(indent(3, `<TextSample sampleTime="${secondsToTimestamp(chapter.startTime, {milliseconds: true})}"${attrContent}>${content}</TextSample>`));
         });
 
         output.push(

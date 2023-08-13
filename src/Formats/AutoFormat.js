@@ -1,3 +1,4 @@
+import { AppleChapters } from "./AppleChapters.js";
 import { ChaptersJson } from "./ChaptersJson.js";
 import { FFMetadata } from "./FFMetadata.js";
 import { FFMpegInfo } from "./FFMpegInfo.js";
@@ -20,7 +21,8 @@ export const AutoFormat = {
         youtube: Youtube,
         ffmpeginfo: FFMpegInfo,
         pyscenedetect: PySceneDetect,
-        vorbiscomment: VorbisComment
+        vorbiscomment: VorbisComment,
+        applechapters: AppleChapters
     },
 
     detect(inputString, returnWhat = 'instance') {

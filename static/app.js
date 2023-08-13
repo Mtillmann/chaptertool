@@ -9785,538 +9785,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
   };
 
-  class FFMetadata extends FormatBase {
-
-      filename = 'FFMpegdata.txt';
-      mimeType = 'text/plain';
-
-      constructor(input) {
-          const characters = ["=", ";", "#", "\\", "\n"];
-          const safeCharacters = characters.map(char => escapeRegExpCharacters(char)).join('|');
-          super(input, {
-              unescapeRegexp: new RegExp('\\\\(' + safeCharacters + ')', 'g'),
-              escapeRegexp: new RegExp('(' + safeCharacters + ')', 'g')
-          });
-      }
-
-      detect(inputString) {
-          return inputString.trim().slice(0, 12) === ';FFMETADATA1';
-      }
-
-      parse(string) {
-          if (!this.detect(string)) {
-              throw new Error(';FFMETADATA1 header missing :(');
-          }
-          const lines = this.stringToLines(string);
-
-
-          let chapters = [];
-          let ignoreAllUntilNextChapter = false;
-          let isMultilineTitle = false;
-
-          lines.forEach(line => {
-              let [key, value] = line.split('=');
-              if (chapters.length === 0 && key === 'title') {
-                  this.meta.title = this.unescape(value);
-                  return;
-              }
-
-
-              if (line === '[CHAPTER]') {
-                  chapters.push({});
-                  ignoreAllUntilNextChapter = false;
-                  return;
-              }
-              if (line.slice(0, 1) === '[') {
-                  ignoreAllUntilNextChapter = true;
-              }
-              if (chapters.length === 0 || ignoreAllUntilNextChapter) {
-                  return;
-              }
-
-              if (!/[^\\]=/.test(line) && isMultilineTitle) {
-                  //should I keep the multilines?!
-                  chapters[chapters.length - 1].title += ' ' + line;
-                  return;
-              }
-              isMultilineTitle = false;
-
-              if (key === 'title') {
-                  chapters[chapters.length - 1].title = this.unescape(value);
-                  if (/\\$/.test(value)) {
-                      isMultilineTitle = true;
-                  }
-              } else if (key === 'START') {
-                  chapters[chapters.length - 1].startTime = enforceMilliseconds(parseFloat(value) * 1e-3);
-              } else if (key === 'END') {
-                  chapters[chapters.length - 1].endTime = enforceMilliseconds(parseFloat(value) * 1e-3);
-              }
-          });
-
-          this.chapters = chapters;
-      }
-
-      unescape(string) {
-          return string.replace(this.unescapeRegexp, '$1').replace(/\\$/g, '');
-      }
-
-      escape(string) {
-          return string.replace(this.escapeRegexp, '\\$1')
-      }
-
-      toString() {
-          let output = [';FFMETADATA1'];
-          if (this.meta.title.trim().length > 0) {
-              output.push(`title=${this.escape(this.meta.title)}`);
-          }
-          output.push('');
-          this.chapters.forEach(chapter => {
-              output.push('[CHAPTER]', 'TIMEBASE=1/1000');
-              output.push('START=' + (enforceMilliseconds(chapter.startTime) * 1000));
-              output.push('END=' + (enforceMilliseconds(chapter.endTime) * 1000));
-              if (chapter.title?.trim().length > 0) {
-                  output.push(`title=${this.escape(chapter.title)}`);
-              }
-              output.push('');
-          });
-
-          return output.join("\n");
-      }
-  }
-
-  class FFMpegInfo extends FormatBase {
-
-
-      detect(inputString) {
-          return /^frame:\d/.test(inputString.trim());
-      }
-
-      parse(input) {
-          if (!this.detect(input)) {
-              throw new Error('input must start with frame:')
-          }
-
-          const matches = Array.from(input.matchAll(/frame:(\d+).*pts_time:([\d.]+)\r?\n/g));
-          this.chapters = matches.map(match => {
-              const startTime = enforceMilliseconds(parseFloat(match[2]));
-              return {
-                  startTime
-              };
-          });
-
-          this.rebuildChapterTitles();
-      }
-
-
-      toString() {
-          throw new Error(`this class won't generate actual output`)
-      }
-  }
-
-  class MKVMergeSimple extends FormatBase {
-
-      filename = 'mkvmerge-chapters.txt';
-      mimeType = 'text/plain';
-      
-
-      constructor(input = null, extraProperties = {}) {
-          super(input, {zeroPad: 2, ...extraProperties});
-      }
-
-      detect(inputString) {
-          const re = new RegExp(`^CHAPTER${zeroPad(1, this.zeroPad)}`);
-          return re.test(inputString.trim());
-      }
-
-      parse(string) {
-          if (!this.detect(string)) {
-              throw new Error(`File must start with CHAPTER${zeroPad(1, this.zeroPad)}`)
-          }
-
-          const lines = string.split(/\r?\n/)
-              .filter(line => line.trim().length > 0)
-              .map(line => line.trim());
-
-          let chapters = [];
-          lines.forEach(line => {
-              const match = /^CHAPTER(?<index>\d+)(?<key>NAME)?=(?<value>.*)/.exec(line);
-              const index = parseInt(match.groups.index) - 1;
-              const key = match.groups.key === 'NAME' ? 'title' : 'startTime';
-              const value = key === 'startTime' ? timestampToSeconds(match.groups.value) : match.groups.value;
-
-              if (chapters[index]) {
-                  chapters[index][key] = value;
-              } else {
-                  chapters[index] = {[key]: value};
-              }
-
-          });
-
-          this.chapters = chapters;
-      }
-
-      toString() {
-          return this.chapters.map((chapter, index) => {
-              const i = zeroPad(index + 1, this.zeroPad);
-              const options = {
-                  hours: true,
-                  milliseconds: true
-              };
-              let output = [
-                  `CHAPTER${i}=${secondsToTimestamp(chapter.startTime, options)}`
-              ];
-              if (chapter.title?.trim().length > 0) {
-                  output.push(`CHAPTER${i}NAME=${chapter.title}`);
-              }
-              return output.join("\n");
-          }).join("\n");
-      }
-  }
-
-  class MatroskaXML extends FormatBase {
-
-      supportsPrettyPrint = true;
-      filename = 'matroska-chapters.xml';
-      mimeType = 'text/xml';
-
-      constructor(input, extraProperties = null) {
-          super(input, extraProperties || {
-              chapterStringNodeName: 'ChapString',
-              inputTimeToSeconds: string => parseFloat(string) / 1e9,
-              secondsToOutputTime: seconds => parseInt(seconds * 1e9)
-          });
-      }
-
-      detect(inputString) {
-          return /^<\?xml/.test(inputString.trim()) && /<Chapters>/.test(inputString) && inputString.indexOf(`<${this.chapterStringNodeName}>`) > -1;
-      }
-
-      parse(string) {
-          if (!this.detect(string)) {
-              throw new Error('Input needs xml declaration and a <Chapters> node');
-          }
-
-          let dom;
-          if (typeof DOMParser !== 'undefined') {
-              dom = (new DOMParser()).parseFromString(string, 'application/xml');
-          } else {
-              const {JSDOM} = jsdom;
-              dom = new JSDOM(string, {contentType: 'application/xml'});
-              dom = dom.window.document;
-          }
-
-          this.chapters = [...dom.querySelectorAll('ChapterAtom')].map(chapter => {
-              return {
-                  title: chapter.querySelector(this.chapterStringNodeName).textContent,
-                  startTime: this.inputTimeToSeconds(chapter.querySelector('ChapterTimeStart').textContent),
-                  endTime: this.inputTimeToSeconds(chapter.querySelector('ChapterTimeEnd').textContent),
-              };
-          });
-
-      }
-
-      toString(pretty = false) {
-          const indent = (depth, string, spacesPerDepth = 2) => (pretty ? ' '.repeat(depth * spacesPerDepth) : '') + string;
-
-          let output = [
-              '<?xml version="1.0" encoding="UTF-8"?>',
-              '<!DOCTYPE Chapters SYSTEM "matroskachapters.dtd">',
-              '<Chapters>',
-              indent(1, '<EditionEntry>'),
-              indent(2, `<EditionUID>${Date.now()}${parseInt(Math.random() * 1e6)}</EditionUID>`)
-          ];
-
-          this.chapters.forEach((chapter, index) => {
-
-              output.push(indent(2, '<ChapterAtom>'));
-              output.push(indent(3, `<ChapterTimeStart>${this.secondsToOutputTime(chapter.startTime)}</ChapterTimeStart>`));
-              output.push(indent(3, `<ChapterTimeEnd>${this.secondsToOutputTime(chapter.endTime)}</ChapterTimeEnd>`));
-              output.push(indent(3, `<ChapterUID>${parseInt(1 + chapter.startTime)}${parseInt(Math.random() * 1e6)}</ChapterUID>`));
-              output.push(indent(3, '<ChapterDisplay>'));
-              output.push(indent(4, `<${this.chapterStringNodeName}>${chapter.title || this.getChapterTitle(index)}</${this.chapterStringNodeName}>`));
-              output.push(indent(3, '</ChapterDisplay>'));
-              output.push(indent(2, '</ChapterAtom>'));
-          });
-
-          output.push(
-              indent(1, '</EditionEntry>'),
-              '</Chapters>'
-          );
-
-          return output.join(pretty ? "\n" : '');
-      }
-  }
-
-  class MKVMergeXML extends MatroskaXML {
-
-      supportsPrettyPrint = true;
-      filename = 'mkvmerge-chapters.xml';
-      mimeType = 'text/xml';
-
-      constructor(input) {
-          super(input, {
-              chapterStringNodeName: 'ChapterString',
-              inputTimeToSeconds: string => timestampToSeconds(string),
-              secondsToOutputTime: seconds => secondsToTimestamp(seconds, {hours: true, milliseconds: true})
-          });
-      }
-  }
-
-  class PySceneDetect extends FormatBase {
-
-      filename = 'psd-scenes.csv';
-      mimeType = 'text/csv';
-
-      detect(inputString) {
-          return ['Scene Number', 'Timecode Lis'].includes(inputString.trim().slice(0, 12));
-      }
-
-      parse(string) {
-          if (!this.detect(string)) {
-              throw new Error('File must start with "Scene Number" or "Timecode List"')
-          }
-
-          const lines = string.split(/\r?\n/)
-              .filter(line => line.trim().length > 0)
-              .map(line => line.trim());
-
-          if (/^Timecode/.test(lines[0])) {
-              lines.shift();
-          }
-          lines.shift();
-
-          this.chapters = lines.map(line => {
-              const cols = line.split(',');
-
-              return {
-                  startTime: timestampToSeconds(cols[2]),
-                  endTime: timestampToSeconds(cols[5])
-              }
-          });
-
-
-      }
-
-      toString(pretty = false, exportOptions = {}) {
-
-          const framerate = exportOptions.psdFramerate || 23.976;
-          const omitTimecodes = !!exportOptions.psdOmitTimecodes;
-
-          let lines = this.chapters.map((chapter, index) => {
-
-              const next = this.chapters[index + 1];
-              const endTime = next?.startTime || this.duration;
-              //use next chapter's start time for maximum native PySceneDetect compatibility
-              const l = endTime - chapter.startTime;
-
-              return [
-                  index + 1,//Scene Number
-                  Math.round(chapter.startTime * framerate) + 1,//Start Frame
-                  secondsToTimestamp(chapter.startTime, {hours: true, milliseconds: true}),// Start Timecode
-                  parseInt(chapter.startTime * 1000),// Start Time (seconds)
-                  Math.round(endTime * framerate),// End Frame
-                  secondsToTimestamp(endTime, {hours: true, milliseconds: true}),// End Timecode
-                  parseInt(endTime * 1000),// End Time (seconds)
-                  Math.round((endTime - chapter.startTime) * framerate),// Length (frames)
-                  secondsToTimestamp(l, {hours: true, milliseconds: true}),// Length (timecode)
-                  parseInt(Math.ceil(l * 1000))// Length (seconds)
-              ]
-
-          });
-
-
-          const tl = 'Timecode List:' + lines.slice(1).map(l => l[2]).join(',');
-          lines = lines.map(l => l.join(','));
-
-          lines.unshift('Scene Number,Start Frame,Start Timecode,Start Time (seconds),End Frame,End Timecode,End Time (seconds),Length (frames),Length (timecode),Length (seconds)');
-
-          if(!omitTimecodes){
-              lines.unshift(tl);
-          }
-
-          return lines.join("\n");
-      }
-  }
-
-  class VorbisComment extends MKVMergeSimple {
-
-      filename = 'vorbis-comment.txt';
-      mimeType = 'text/plain';
-      
-
-      constructor(input = null, extraProperties = {}) {
-          super(input, {...extraProperties, zeroPad: 3});
-      }
-  }
-
-  class WebVTT extends FormatBase {
-
-      filename = 'webvtt-chapters.txt';
-      mimeType = 'text/plain';
-
-      detect(inputString) {
-          return inputString.trim().slice(0, 6) === 'WEBVTT';
-      }
-
-      parse(string) {
-          if (!this.detect(string)) {
-              throw new Error('WEBVTT header missing :(');
-          }
-
-          const lines = string.split(/\r?\n/)
-              .filter(line => line.trim().length > 0)
-              .map(line => line.trim());
-
-          const header = lines.shift().split(/\s*-\s*/);
-
-
-          if (header[1]) {
-              this.meta.title = header[1];
-          }
-
-          let chapters = [];
-
-          lines.forEach(line => {
-              if (/^\d+$/.test(line)) {
-                  chapters.push({});
-                  return;
-              }
-
-              const index = chapters.length - 1;
-              const timestamps = /(.*)\s+-->\s+(.*)/.exec(line);
-              if (timestamps && timestamps.length === 3) {
-                  chapters[index].startTime = timestampToSeconds(timestamps[1]);
-                  chapters[index].endTime = timestampToSeconds(timestamps[2]);
-                  return;
-              }
-
-              chapters[index].title = line;
-          });
-
-          this.chapters = chapters;
-      }
-
-      toString() {
-          let output = ['WEBVTT'];
-          if (this.meta.title.trim().length > 0) {
-              output[0] += ' - ' + this.meta.title.trim();
-          }
-          const options = {hours: true, milliseconds: true};
-
-
-          this.chapters.forEach((chapter, index) => {
-              output.push('');
-              output.push(...[
-                      index + 1,
-                      secondsToTimestamp(chapter.startTime, options) + ' --> ' + secondsToTimestamp(chapter.endTime, options),
-                      chapter.title || this.getChapterTitle(index)
-                  ].filter(line => String(line).trim().length > 0)
-              );
-          });
-
-          return output.join("\n");
-      }
-  }
-
-  class Youtube extends FormatBase {
-
-      filename = "youtube-chapters.txt";
-      mimeType = 'text/plain';
-
-      detect(inputString) {
-          return /^0?0:00/.test(inputString.trim());
-      }
-
-      parse(string) {
-          if (!this.detect(string)) {
-              throw new Error('Youtube Chapters *MUST* begin with (0)0:00');
-          }
-          this.chapters = this.stringToLines(string).map(line => {
-              line = line.split(' ');
-              return {
-                  startTime: timestampToSeconds(line.shift(line)),
-                  title: line.join(' ')
-              }
-          });
-
-      }
-
-      toString() {
-          let options = {
-              milliseconds: false,
-              hours: this.chapters.at(-1).startTime > 3600
-          };
-
-          return this.chapters.map((chapter, index) => {
-              const startTime = index === 0 && chapter.startTime !== 0 ? 0 : chapter.startTime;
-              return `${secondsToTimestamp(startTime, options)} ${chapter.title || 'Chapter' + (index + 1)}`
-          }).join("\n");
-      }
-  }
-
-  const AutoFormat = {
-      classMap: {
-          chaptersjson: ChaptersJson,
-          ffmetadata: FFMetadata,
-          matroskaxml: MatroskaXML,
-          mkvmergexml: MKVMergeXML,
-          mkvmergesimple: MKVMergeSimple,
-          webvtt: WebVTT,
-          youtube: Youtube,
-          ffmpeginfo: FFMpegInfo,
-          pyscenedetect: PySceneDetect,
-          vorbiscomment: VorbisComment
-      },
-
-      detect(inputString, returnWhat = 'instance') {
-          let detected = false;
-
-          Object.entries(this.classMap)
-              .forEach(([key, className]) => {
-
-                  if (detected) {
-                      return;
-                  }
-                  try {
-                      detected = new className(inputString);
-                      if (detected) {
-                          if (returnWhat === 'class') {
-                              detected = className;
-                          } else if (returnWhat === 'key') {
-                              detected = key;
-                          }
-                      }
-                  } catch (e) {
-                      //do nothing
-                  }
-              });
-
-          if (!detected) {
-              throw new Error('failed to detect type of given input :(')
-          }
-
-          return detected;
-      },
-
-      from(inputString) {
-          return this.detect(inputString);
-      },
-
-      as(classKeyOrClass, input) {
-          if (typeof classKeyOrClass === 'string') {
-              if (!(classKeyOrClass in this.classMap)) {
-                  throw new Error(`invalid class key "${classKeyOrClass}"`);
-              }
-              return new this.classMap[classKeyOrClass](input);
-          }
-
-          return new classKeyOrClass(input);
-
-      }
-
-
-  };
-
   /*
    Copyright (c) 2022 Gildas Lormeau. All rights reserved.
 
@@ -19246,6 +18714,603 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
   configure({ Deflate: ZipDeflate, Inflate: ZipInflate });
 
+  class MatroskaXML extends FormatBase {
+
+      supportsPrettyPrint = true;
+      filename = 'matroska-chapters.xml';
+      mimeType = 'text/xml';
+
+      constructor(input, extraProperties = null) {
+          super(input, extraProperties || {
+              chapterStringNodeName: 'ChapString',
+              inputTimeToSeconds: string => parseFloat(string) / 1e9,
+              secondsToOutputTime: seconds => parseInt(seconds * 1e9)
+          });
+      }
+
+      detect(inputString) {
+          return /^<\?xml/.test(inputString.trim()) && /<Chapters>/.test(inputString) && inputString.indexOf(`<${this.chapterStringNodeName}>`) > -1;
+      }
+
+      parse(string) {
+          if (!this.detect(string)) {
+              throw new Error('Input needs xml declaration and a <Chapters> node');
+          }
+
+          let dom;
+          if (typeof DOMParser !== 'undefined') {
+              dom = (new DOMParser()).parseFromString(string, 'application/xml');
+          } else {
+              const {JSDOM} = jsdom;
+              dom = new JSDOM(string, {contentType: 'application/xml'});
+              dom = dom.window.document;
+          }
+
+          this.chapters = [...dom.querySelectorAll('ChapterAtom')].map(chapter => {
+              return {
+                  title: chapter.querySelector(this.chapterStringNodeName).textContent,
+                  startTime: this.inputTimeToSeconds(chapter.querySelector('ChapterTimeStart').textContent),
+                  endTime: this.inputTimeToSeconds(chapter.querySelector('ChapterTimeEnd').textContent),
+              };
+          });
+
+      }
+
+      toString(pretty = false) {
+          const indent = (depth, string, spacesPerDepth = 2) => (pretty ? ' '.repeat(depth * spacesPerDepth) : '') + string;
+
+          let output = [
+              '<?xml version="1.0" encoding="UTF-8"?>',
+              '<!DOCTYPE Chapters SYSTEM "matroskachapters.dtd">',
+              '<Chapters>',
+              indent(1, '<EditionEntry>'),
+              indent(2, `<EditionUID>${Date.now()}${parseInt(Math.random() * 1e6)}</EditionUID>`)
+          ];
+
+          this.chapters.forEach((chapter, index) => {
+
+              output.push(indent(2, '<ChapterAtom>'));
+              output.push(indent(3, `<ChapterTimeStart>${this.secondsToOutputTime(chapter.startTime)}</ChapterTimeStart>`));
+              output.push(indent(3, `<ChapterTimeEnd>${this.secondsToOutputTime(chapter.endTime)}</ChapterTimeEnd>`));
+              output.push(indent(3, `<ChapterUID>${parseInt(1 + chapter.startTime)}${parseInt(Math.random() * 1e6)}</ChapterUID>`));
+              output.push(indent(3, '<ChapterDisplay>'));
+              output.push(indent(4, `<${this.chapterStringNodeName}>${chapter.title || this.getChapterTitle(index)}</${this.chapterStringNodeName}>`));
+              output.push(indent(3, '</ChapterDisplay>'));
+              output.push(indent(2, '</ChapterAtom>'));
+          });
+
+          output.push(
+              indent(1, '</EditionEntry>'),
+              '</Chapters>'
+          );
+
+          return output.join(pretty ? "\n" : '');
+      }
+  }
+
+  class AppleChapters extends MatroskaXML {
+
+      supportsPrettyPrint = true;
+      filename = 'apple-chapters.xml';
+      mimeType = 'text/xml';
+
+
+      detect(inputString) {
+          return /^<\?xml/.test(inputString.trim()) && /<TextStream/.test(inputString);
+      }
+
+      parse(string) {
+          if (!this.detect(string)) {
+              throw new Error('Input needs xml declaration and a <TextStream...> node');
+          }
+
+          let dom;
+          if (typeof DOMParser !== 'undefined') {
+              dom = (new DOMParser()).parseFromString(string, 'application/xml');
+          } else {
+              const {JSDOM} = jsdom;
+              dom = new JSDOM(string, {contentType: 'application/xml'});
+              dom = dom.window.document;
+          }
+
+          this.chapters = [...dom.querySelectorAll('TextSample')].map(chapter => {
+              const title = chapter.getAttribute('text') ?? chapter.textContent;
+              return {
+                  title,
+                  startTime: timestampToSeconds(chapter.getAttribute('sampleTime')),
+              };
+          });
+      }
+
+      toString(pretty = false, exportOptions = {}) {
+          const indent = (depth, string, spacesPerDepth = 2) => (pretty ? ' '.repeat(depth * spacesPerDepth) : '') + string;
+
+          let output = [
+              '<?xml version="1.0" encoding="UTF-8"?>',
+              '<TextStream version="1.1">',
+              indent(1, '<TextStreamHeader>'),
+              indent(2, '<TextSampleDescription>'),
+              indent(2, '</TextSampleDescription>'),
+              indent(1, '</TextStreamHeader>')
+          ];
+
+          this.chapters.forEach(chapter => {
+              
+              const attrContent = exportOptions.acUseTextAttr && chapter.title ? ` text="${chapter.title}"` :'';
+              const content = !exportOptions.acUseTextAttr && chapter.title ? chapter.title :'';
+
+              console.log();
+
+              output.push(indent(3, `<TextSample sampleTime="${secondsToTimestamp(chapter.startTime, {milliseconds: true})}"${attrContent}>${content}</TextSample>`));
+          });
+
+          output.push(
+              '</TextStream>'
+          );
+
+          return output.join(pretty ? "\n" : '');
+      }
+  }
+
+  class FFMetadata extends FormatBase {
+
+      filename = 'FFMpegdata.txt';
+      mimeType = 'text/plain';
+
+      constructor(input) {
+          const characters = ["=", ";", "#", "\\", "\n"];
+          const safeCharacters = characters.map(char => escapeRegExpCharacters(char)).join('|');
+          super(input, {
+              unescapeRegexp: new RegExp('\\\\(' + safeCharacters + ')', 'g'),
+              escapeRegexp: new RegExp('(' + safeCharacters + ')', 'g')
+          });
+      }
+
+      detect(inputString) {
+          return inputString.trim().slice(0, 12) === ';FFMETADATA1';
+      }
+
+      parse(string) {
+          if (!this.detect(string)) {
+              throw new Error(';FFMETADATA1 header missing :(');
+          }
+          const lines = this.stringToLines(string);
+
+
+          let chapters = [];
+          let ignoreAllUntilNextChapter = false;
+          let isMultilineTitle = false;
+
+          lines.forEach(line => {
+              let [key, value] = line.split('=');
+              if (chapters.length === 0 && key === 'title') {
+                  this.meta.title = this.unescape(value);
+                  return;
+              }
+
+
+              if (line === '[CHAPTER]') {
+                  chapters.push({});
+                  ignoreAllUntilNextChapter = false;
+                  return;
+              }
+              if (line.slice(0, 1) === '[') {
+                  ignoreAllUntilNextChapter = true;
+              }
+              if (chapters.length === 0 || ignoreAllUntilNextChapter) {
+                  return;
+              }
+
+              if (!/[^\\]=/.test(line) && isMultilineTitle) {
+                  //should I keep the multilines?!
+                  chapters[chapters.length - 1].title += ' ' + line;
+                  return;
+              }
+              isMultilineTitle = false;
+
+              if (key === 'title') {
+                  chapters[chapters.length - 1].title = this.unescape(value);
+                  if (/\\$/.test(value)) {
+                      isMultilineTitle = true;
+                  }
+              } else if (key === 'START') {
+                  chapters[chapters.length - 1].startTime = enforceMilliseconds(parseFloat(value) * 1e-3);
+              } else if (key === 'END') {
+                  chapters[chapters.length - 1].endTime = enforceMilliseconds(parseFloat(value) * 1e-3);
+              }
+          });
+
+          this.chapters = chapters;
+      }
+
+      unescape(string) {
+          return string.replace(this.unescapeRegexp, '$1').replace(/\\$/g, '');
+      }
+
+      escape(string) {
+          return string.replace(this.escapeRegexp, '\\$1')
+      }
+
+      toString() {
+          let output = [';FFMETADATA1'];
+          if (this.meta.title.trim().length > 0) {
+              output.push(`title=${this.escape(this.meta.title)}`);
+          }
+          output.push('');
+          this.chapters.forEach(chapter => {
+              output.push('[CHAPTER]', 'TIMEBASE=1/1000');
+              output.push('START=' + (enforceMilliseconds(chapter.startTime) * 1000));
+              output.push('END=' + (enforceMilliseconds(chapter.endTime) * 1000));
+              if (chapter.title?.trim().length > 0) {
+                  output.push(`title=${this.escape(chapter.title)}`);
+              }
+              output.push('');
+          });
+
+          return output.join("\n");
+      }
+  }
+
+  class FFMpegInfo extends FormatBase {
+
+
+      detect(inputString) {
+          return /^frame:\d/.test(inputString.trim());
+      }
+
+      parse(input) {
+          if (!this.detect(input)) {
+              throw new Error('input must start with frame:')
+          }
+
+          const matches = Array.from(input.matchAll(/frame:(\d+).*pts_time:([\d.]+)\r?\n/g));
+          this.chapters = matches.map(match => {
+              const startTime = enforceMilliseconds(parseFloat(match[2]));
+              return {
+                  startTime
+              };
+          });
+
+          this.rebuildChapterTitles();
+      }
+
+
+      toString() {
+          throw new Error(`this class won't generate actual output`)
+      }
+  }
+
+  class MKVMergeSimple extends FormatBase {
+
+      filename = 'mkvmerge-chapters.txt';
+      mimeType = 'text/plain';
+      
+
+      constructor(input = null, extraProperties = {}) {
+          super(input, {zeroPad: 2, ...extraProperties});
+      }
+
+      detect(inputString) {
+          const re = new RegExp(`^CHAPTER${zeroPad(1, this.zeroPad)}`);
+          return re.test(inputString.trim());
+      }
+
+      parse(string) {
+          if (!this.detect(string)) {
+              throw new Error(`File must start with CHAPTER${zeroPad(1, this.zeroPad)}`)
+          }
+
+          const lines = string.split(/\r?\n/)
+              .filter(line => line.trim().length > 0)
+              .map(line => line.trim());
+
+          let chapters = [];
+          lines.forEach(line => {
+              const match = /^CHAPTER(?<index>\d+)(?<key>NAME)?=(?<value>.*)/.exec(line);
+              const index = parseInt(match.groups.index) - 1;
+              const key = match.groups.key === 'NAME' ? 'title' : 'startTime';
+              const value = key === 'startTime' ? timestampToSeconds(match.groups.value) : match.groups.value;
+
+              if (chapters[index]) {
+                  chapters[index][key] = value;
+              } else {
+                  chapters[index] = {[key]: value};
+              }
+
+          });
+
+          this.chapters = chapters;
+      }
+
+      toString() {
+          return this.chapters.map((chapter, index) => {
+              const i = zeroPad(index + 1, this.zeroPad);
+              const options = {
+                  hours: true,
+                  milliseconds: true
+              };
+              let output = [
+                  `CHAPTER${i}=${secondsToTimestamp(chapter.startTime, options)}`
+              ];
+              if (chapter.title?.trim().length > 0) {
+                  output.push(`CHAPTER${i}NAME=${chapter.title}`);
+              }
+              return output.join("\n");
+          }).join("\n");
+      }
+  }
+
+  class MKVMergeXML extends MatroskaXML {
+
+      supportsPrettyPrint = true;
+      filename = 'mkvmerge-chapters.xml';
+      mimeType = 'text/xml';
+
+      constructor(input) {
+          super(input, {
+              chapterStringNodeName: 'ChapterString',
+              inputTimeToSeconds: string => timestampToSeconds(string),
+              secondsToOutputTime: seconds => secondsToTimestamp(seconds, {hours: true, milliseconds: true})
+          });
+      }
+  }
+
+  class PySceneDetect extends FormatBase {
+
+      filename = 'psd-scenes.csv';
+      mimeType = 'text/csv';
+
+      detect(inputString) {
+          return ['Scene Number', 'Timecode Lis'].includes(inputString.trim().slice(0, 12));
+      }
+
+      parse(string) {
+          if (!this.detect(string)) {
+              throw new Error('File must start with "Scene Number" or "Timecode List"')
+          }
+
+          const lines = string.split(/\r?\n/)
+              .filter(line => line.trim().length > 0)
+              .map(line => line.trim());
+
+          if (/^Timecode/.test(lines[0])) {
+              lines.shift();
+          }
+          lines.shift();
+
+          this.chapters = lines.map(line => {
+              const cols = line.split(',');
+
+              return {
+                  startTime: timestampToSeconds(cols[2]),
+                  endTime: timestampToSeconds(cols[5])
+              }
+          });
+
+
+      }
+
+      toString(pretty = false, exportOptions = {}) {
+
+          const framerate = exportOptions.psdFramerate || 23.976;
+          const omitTimecodes = !!exportOptions.psdOmitTimecodes;
+
+          let lines = this.chapters.map((chapter, index) => {
+
+              const next = this.chapters[index + 1];
+              const endTime = next?.startTime || this.duration;
+              //use next chapter's start time for maximum native PySceneDetect compatibility
+              const l = endTime - chapter.startTime;
+
+              return [
+                  index + 1,//Scene Number
+                  Math.round(chapter.startTime * framerate) + 1,//Start Frame
+                  secondsToTimestamp(chapter.startTime, {hours: true, milliseconds: true}),// Start Timecode
+                  parseInt(chapter.startTime * 1000),// Start Time (seconds)
+                  Math.round(endTime * framerate),// End Frame
+                  secondsToTimestamp(endTime, {hours: true, milliseconds: true}),// End Timecode
+                  parseInt(endTime * 1000),// End Time (seconds)
+                  Math.round((endTime - chapter.startTime) * framerate),// Length (frames)
+                  secondsToTimestamp(l, {hours: true, milliseconds: true}),// Length (timecode)
+                  parseInt(Math.ceil(l * 1000))// Length (seconds)
+              ]
+
+          });
+
+
+          const tl = 'Timecode List:' + lines.slice(1).map(l => l[2]).join(',');
+          lines = lines.map(l => l.join(','));
+
+          lines.unshift('Scene Number,Start Frame,Start Timecode,Start Time (seconds),End Frame,End Timecode,End Time (seconds),Length (frames),Length (timecode),Length (seconds)');
+
+          if(!omitTimecodes){
+              lines.unshift(tl);
+          }
+
+          return lines.join("\n");
+      }
+  }
+
+  class VorbisComment extends MKVMergeSimple {
+
+      filename = 'vorbis-comment.txt';
+      mimeType = 'text/plain';
+      
+
+      constructor(input = null, extraProperties = {}) {
+          super(input, {...extraProperties, zeroPad: 3});
+      }
+  }
+
+  class WebVTT extends FormatBase {
+
+      filename = 'webvtt-chapters.txt';
+      mimeType = 'text/plain';
+
+      detect(inputString) {
+          return inputString.trim().slice(0, 6) === 'WEBVTT';
+      }
+
+      parse(string) {
+          if (!this.detect(string)) {
+              throw new Error('WEBVTT header missing :(');
+          }
+
+          const lines = string.split(/\r?\n/)
+              .filter(line => line.trim().length > 0)
+              .map(line => line.trim());
+
+          const header = lines.shift().split(/\s*-\s*/);
+
+
+          if (header[1]) {
+              this.meta.title = header[1];
+          }
+
+          let chapters = [];
+
+          lines.forEach(line => {
+              if (/^\d+$/.test(line)) {
+                  chapters.push({});
+                  return;
+              }
+
+              const index = chapters.length - 1;
+              const timestamps = /(.*)\s+-->\s+(.*)/.exec(line);
+              if (timestamps && timestamps.length === 3) {
+                  chapters[index].startTime = timestampToSeconds(timestamps[1]);
+                  chapters[index].endTime = timestampToSeconds(timestamps[2]);
+                  return;
+              }
+
+              chapters[index].title = line;
+          });
+
+          this.chapters = chapters;
+      }
+
+      toString() {
+          let output = ['WEBVTT'];
+          if (this.meta.title.trim().length > 0) {
+              output[0] += ' - ' + this.meta.title.trim();
+          }
+          const options = {hours: true, milliseconds: true};
+
+
+          this.chapters.forEach((chapter, index) => {
+              output.push('');
+              output.push(...[
+                      index + 1,
+                      secondsToTimestamp(chapter.startTime, options) + ' --> ' + secondsToTimestamp(chapter.endTime, options),
+                      chapter.title || this.getChapterTitle(index)
+                  ].filter(line => String(line).trim().length > 0)
+              );
+          });
+
+          return output.join("\n");
+      }
+  }
+
+  class Youtube extends FormatBase {
+
+      filename = "youtube-chapters.txt";
+      mimeType = 'text/plain';
+
+      detect(inputString) {
+          return /^0?0:00/.test(inputString.trim());
+      }
+
+      parse(string) {
+          if (!this.detect(string)) {
+              throw new Error('Youtube Chapters *MUST* begin with (0)0:00');
+          }
+          this.chapters = this.stringToLines(string).map(line => {
+              line = line.split(' ');
+              return {
+                  startTime: timestampToSeconds(line.shift(line)),
+                  title: line.join(' ')
+              }
+          });
+
+      }
+
+      toString() {
+          let options = {
+              milliseconds: false,
+              hours: this.chapters.at(-1).startTime > 3600
+          };
+
+          return this.chapters.map((chapter, index) => {
+              const startTime = index === 0 && chapter.startTime !== 0 ? 0 : chapter.startTime;
+              return `${secondsToTimestamp(startTime, options)} ${chapter.title || 'Chapter' + (index + 1)}`
+          }).join("\n");
+      }
+  }
+
+  const AutoFormat = {
+      classMap: {
+          chaptersjson: ChaptersJson,
+          ffmetadata: FFMetadata,
+          matroskaxml: MatroskaXML,
+          mkvmergexml: MKVMergeXML,
+          mkvmergesimple: MKVMergeSimple,
+          webvtt: WebVTT,
+          youtube: Youtube,
+          ffmpeginfo: FFMpegInfo,
+          pyscenedetect: PySceneDetect,
+          vorbiscomment: VorbisComment,
+          applechapters: AppleChapters
+      },
+
+      detect(inputString, returnWhat = 'instance') {
+          let detected = false;
+
+          Object.entries(this.classMap)
+              .forEach(([key, className]) => {
+
+                  if (detected) {
+                      return;
+                  }
+                  try {
+                      detected = new className(inputString);
+                      if (detected) {
+                          if (returnWhat === 'class') {
+                              detected = className;
+                          } else if (returnWhat === 'key') {
+                              detected = key;
+                          }
+                      }
+                  } catch (e) {
+                      //do nothing
+                  }
+              });
+
+          if (!detected) {
+              throw new Error('failed to detect type of given input :(')
+          }
+
+          return detected;
+      },
+
+      from(inputString) {
+          return this.detect(inputString);
+      },
+
+      as(classKeyOrClass, input) {
+          if (typeof classKeyOrClass === 'string') {
+              if (!(classKeyOrClass in this.classMap)) {
+                  throw new Error(`invalid class key "${classKeyOrClass}"`);
+              }
+              return new this.classMap[classKeyOrClass](input);
+          }
+
+          return new classKeyOrClass(input);
+
+      }
+
+
+  };
+
   var ExportFeatures = {
       exportOffcanvas: null,
       exportSettings: {
@@ -19258,7 +19323,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           writeRedundantToc: false,
           writeEndTimes: false,
           psdFramerate: 23.976,
-          psdOmitTimecodes: false
+          psdOmitTimecodes: false,
+          acUseTextAttr: false
       },
       exportContent: '',
       exportData: null,
@@ -19285,6 +19351,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
               writeEndTimes: this.exportSettings.writeEndTimes,
               psdFramerate: this.exportSettings.psdFramerate,
               psdOmitTimecodes: this.exportSettings.psdOmitTimecodes,
+              acUseTextAttr: this.exportSettings.acUseTextAttr
           });
       },
 
