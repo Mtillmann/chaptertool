@@ -75,3 +75,9 @@ be 00:00.
 
 ## how to use WebVTT chapters?
 [see MDN docs](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API)
+
+## What's the difference between mkvmergesimple and vorbis comment?
+[mkvmergesimple](https://savvyadmin.com/adding-chapters-to-videos-using-mkv-containers/#:~:text=chapter.txt.-,CHAPTER01,-%3D00%3A00%3A00.000) apparently pads the chapter index to 2 digits, while [vorbis comment](https://wiki.xiph.org/Chapter_Extension#:~:text=two%20sequential%20chapters%3A-,CHAPTER001,-%3D00%3A00%3A00.000) uses 3 digits.
+
+## How to use the apple chapters?
+I honestly don't know as the only reference I could find is [NVEnc's documentation](https://github.com/rigaya/NVEnc/blob/master/NVEncC_Options.en.md#--chapter-string:~:text=CHAPTER03NAME%3Dchapter%2D3-,apple%20format,-(should%20be%20in.)

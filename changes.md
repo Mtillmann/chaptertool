@@ -1,3 +1,11 @@
+# 0.4.0
+
+- added vorbis comment support
+- added apple chapters support
+- improved onboarding
+- minor ui stuff
+- bumped bootstrap and icons
+
 # 0.3.0
 
 - added PySceneDetect format

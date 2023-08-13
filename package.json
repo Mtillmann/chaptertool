@@ -10,7 +10,9 @@
     "mkvmerge",
     "matroska",
     "webvtt",
-    "pyscenedetect"
+    "pyscenedetect",
+    "vorbis",
+    "apple-chapters"
   ],
   "type": "module",
   "main": "chaptertool.js",
