@@ -5,6 +5,7 @@
 - improved onboarding
 - minor ui stuff
 - bumped bootstrap and icons
+- lots of bugfixes
 
 # 0.3.0
 

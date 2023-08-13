@@ -99,6 +99,7 @@ Converts existing chapters between the following formats:
 | `--output-file`        | file to write the output to. see below                                              |         |
 | `--psd-omit-timecodes` | When set, first line of _PySceneDetect_-CSV will not be written                     |         |
 | `--psd-framerate`      | set the framerate for _PySceneDetect_ output                                        |         |
+| `--ac-use-text-attr`      | use the text-attribute for _Apple Chapters_            |      |
 
 > use `--output-file` when using powershell, otherwise you'll have BOMs in your output 
 

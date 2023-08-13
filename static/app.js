@@ -19677,6 +19677,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
 
       addImageFromVideoToChapter(index) {
 
+
           index = index || this.currentChapterIndex;
 
           gtag('event', 'chapter', {action: 'videoStillToChapter'});
@@ -24233,6 +24234,7 @@ Z`;
           });
 
           this.tour.addSteps([
+              
               {
                   id: 'describe-timeline',
                   text: 'Clicking anywhere on the timeline brings up the marker.',
@@ -24394,23 +24396,17 @@ Z`;
                   id: 'explain-navi-toggle',
                   text: 'The same features can be accessed at any time from the offcanvas menu.',
                   attachTo: {
-                      element: 'header .flex-column',
+                      element: 'header .flex-column#offcanvasNaviToggle',
                       on: 'left'
                   }
-              }, {
-                  id: 'show-open-navi',
+              }, 
+              
+              {
+                  id: 'show-open-export-button',
                   text: 'Let\'s focus on the export feature.',
                   attachTo: {
-                      element: '#navi .offcanvas-export-link',
-                      on: 'left'
-                  },
-                  beforeShowPromise: function () {
-                      return new Promise(function (resolve) {
-                          document.querySelector('#navi').addEventListener('shown.bs.offcanvas', function () {
-                              resolve();
-                          });
-                          document.querySelector('header .flex-column a').click();
-                      });
+                      element: '#headerExportButton',
+                      on: 'bottom'
                   }
               }, {
                   id: 'show-format-tabs',

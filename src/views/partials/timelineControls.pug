@@ -5,7 +5,7 @@ div.col-12
                 a.has-tooltip(
                     title="hide/show video"
                     href="#"
-                    @click.stop.prevent="collapseMedia"
+                    @click.stop.prevent="toggleMedia"
                 )
                     i.bi(:class="{'bi-eye' : mediaIsCollapsed, 'bi-eye-slash' : !mediaIsCollapsed}")
             a.has-tooltip(

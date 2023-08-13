@@ -1,5 +1,5 @@
-import {existsSync, readFileSync} from "fs";
-import {parse} from 'yaml';
+import { existsSync, readFileSync } from "fs";
+import { parse } from 'yaml';
 
 export class ArgumentParser {
 
@@ -87,6 +87,9 @@ export class ArgumentParser {
         },
         psdOmitTimecodes: {
             default: false
+        },
+        acUseTextAttr: {
+            default: false
         }
     };
 
@@ -117,7 +120,7 @@ export class ArgumentParser {
                     if (parsed && 'forEach' in parsed) {
 
                         parsed.forEach(arg => {
-                            let {key, value, isOption} = this.keyAndValueFromOption(arg);
+                            let { key, value, isOption } = this.keyAndValueFromOption(arg);
                             if (isOption && key in this.optionDefinition) {
                                 this.options[key] = this.prepareValue(key, value);
                             }
@@ -129,7 +132,7 @@ export class ArgumentParser {
 
         let expectsInput = false;
         process.argv.forEach(arg => {
-            let {key, value} = this.keyAndValueFromOption(arg);
+            let { key, value } = this.keyAndValueFromOption(arg);
 
             if (['serve', 'generate', 'convert'].includes(key)) {
                 this.action = key;
@@ -183,7 +186,7 @@ export class ArgumentParser {
         }
 
         let value = arg ? arg.join('=') : null;
-        return {key, value, isOption};
+        return { key, value, isOption };
     }
 
     prepareValue(key, value) {

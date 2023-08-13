@@ -13,9 +13,9 @@ header.container-lg
             div.fs-3.d-none.d-md-flex.flex-column.me-3
                 a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="metaPropertiesDialog.show()" title="Edit Meta Attributes")
                     i.bi.bi-pencil-square.d-flex.align-self-center
-            div.fs-3.d-none.d-md-flex.flex-column.me-4
+            div.fs-3.d-none.d-md-flex.flex-column.me-4#headerExportButton
                 a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="exportOffcanvas.show()" :class="{ 'disabled opacity-50' : data.chapters.length === 0 }" title="Export / Download")
                     i.bi.bi-download.d-flex.align-self-center
-            div.fs-1.d-flex.flex-column
+            div.fs-1.d-flex.flex-column#offcanvasNaviToggle
                 a.d-flex.flex-grow-1(href="#" @click.stop.prevent="offcanvasNavi.show()")
                     i.bi.bi-list.d-flex.align-self-center

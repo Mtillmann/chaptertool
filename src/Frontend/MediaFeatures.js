@@ -1,4 +1,4 @@
-import {formatBytes} from "../util.js";
+import { formatBytes } from "../util.js";
 
 export default {
     videoHandlersAttached: false,
@@ -101,6 +101,7 @@ export default {
     },
 
     addImageFromVideoToChapter(index) {
+
 
         index = index || this.currentChapterIndex;
 
