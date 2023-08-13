@@ -1,15 +1,15 @@
 import Alpine from "alpinejs";
-import {Offcanvas, Toast, Tooltip} from "bootstrap";
-import Timeline from "./Frontend/Timeline.js";
-import {secondsToTimestamp, timestampToSeconds} from "./util.js";
-import {FileHandler} from "./Frontend/FileHandler.js";
-import MediaFeatures from "./Frontend/MediaFeatures.js";
-import ExportFeatures from "./Frontend/ExportFeatures.js";
+import { Offcanvas, Toast, Tooltip } from "bootstrap";
+import { ChaptersJson } from "./Formats/ChaptersJson.js";
 import ChapterFeatures from "./Frontend/ChapterFeatures.js";
-import {ChaptersJson} from "./Formats/ChaptersJson.js";
+import ExportFeatures from "./Frontend/ExportFeatures.js";
+import { FileHandler } from "./Frontend/FileHandler.js";
 import ImportDialog from "./Frontend/ImportDialog.js";
-import {ShepherdTour} from "./Frontend/ShepherdTour.js";
-import {SWInclude} from "./Frontend/SWInclude.js";
+import MediaFeatures from "./Frontend/MediaFeatures.js";
+import { SWInclude } from "./Frontend/SWInclude.js";
+import { ShepherdTour } from "./Frontend/ShepherdTour.js";
+import Timeline from "./Frontend/Timeline.js";
+import { secondsToTimestamp, timestampToSeconds } from "./util.js";
 
 window.Alpine = Alpine;
 
@@ -67,6 +67,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
             if (localStorage.getItem('ct-analytics-state') === 'enabled') {
                 window.deployGA();
+                window.st.show();
             }
         });
 })
