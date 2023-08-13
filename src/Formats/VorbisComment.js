@@ -1,4 +1,4 @@
-import { MKVMergeSimple } from "./MKVMergeSimple";
+import { MKVMergeSimple } from "./MKVMergeSimple.js";
 
 export class VorbisComment extends MKVMergeSimple {
 
