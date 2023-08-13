@@ -1,12 +1,13 @@
-import {ChaptersJson} from "./ChaptersJson.js";
-import {FFMetadata} from "./FFMetadata.js";
-import {MatroskaXML} from "./MatroskaXML.js";
-import {MKVMergeXML} from "./MKVMergeXML.js";
-import {MKVMergeSimple} from "./MKVMergeSimple.js";
-import {WebVTT} from "./WebVTT.js";
-import {Youtube} from "./Youtube.js";
-import {FFMpegInfo} from "./FFMpegInfo.js";
-import {PySceneDetect} from "./PySceneDetect.js";
+import { ChaptersJson } from "./ChaptersJson.js";
+import { FFMetadata } from "./FFMetadata.js";
+import { FFMpegInfo } from "./FFMpegInfo.js";
+import { MKVMergeSimple } from "./MKVMergeSimple.js";
+import { MKVMergeXML } from "./MKVMergeXML.js";
+import { MatroskaXML } from "./MatroskaXML.js";
+import { PySceneDetect } from "./PySceneDetect.js";
+import { VorbisComment } from "./VorbisComment.js";
+import { WebVTT } from "./WebVTT.js";
+import { Youtube } from "./Youtube.js";
 
 export const AutoFormat = {
     classMap: {
@@ -18,7 +19,8 @@ export const AutoFormat = {
         webvtt: WebVTT,
         youtube: Youtube,
         ffmpeginfo: FFMpegInfo,
-        pyscenedetect: PySceneDetect
+        pyscenedetect: PySceneDetect,
+        vorbiscomment: VorbisComment
     },
 
     detect(inputString, returnWhat = 'instance') {

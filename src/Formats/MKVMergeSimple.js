@@ -8,7 +8,7 @@ export class MKVMergeSimple extends FormatBase {
     
 
     constructor(input = null, extraProperties = {}) {
-        super(input, {...extraProperties, zeroPad: 2});
+        super(input, {zeroPad: 2, ...extraProperties});
     }
 
     detect(inputString) {
@@ -18,7 +18,7 @@ export class MKVMergeSimple extends FormatBase {
 
     parse(string) {
         if (!this.detect(string)) {
-            throw new Error('File must start with CHAPTER01')
+            throw new Error(`File must start with CHAPTER${zeroPad(1, this.zeroPad)}`)
         }
 
         const lines = string.split(/\r?\n/)
@@ -45,7 +45,7 @@ export class MKVMergeSimple extends FormatBase {
 
     toString() {
         return this.chapters.map((chapter, index) => {
-            const i = zeroPad(index + 1, 2);
+            const i = zeroPad(index + 1, this.zeroPad);
             const options = {
                 hours: true,
                 milliseconds: true

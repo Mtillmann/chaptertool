@@ -1,7 +1,12 @@
-filename = 'vorbis-comment.txt';
-mimeType = 'text/plain';
+import { MKVMergeSimple } from "./MKVMergeSimple";
 
+export class VorbisComment extends MKVMergeSimple {
 
-constructor(input = null, extraProperties = {}) {
-    super(input, {...extraProperties, zeroPad: 3});
+    filename = 'vorbis-comment.txt';
+    mimeType = 'text/plain';
+    
+
+    constructor(input = null, extraProperties = {}) {
+        super(input, {...extraProperties, zeroPad: 3});
+    }
 }

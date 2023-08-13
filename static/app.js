@@ -9866,6 +9866,95 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
   }
 
+  class FFMpegInfo extends FormatBase {
+
+
+      detect(inputString) {
+          return /^frame:\d/.test(inputString.trim());
+      }
+
+      parse(input) {
+          if (!this.detect(input)) {
+              throw new Error('input must start with frame:')
+          }
+
+          const matches = Array.from(input.matchAll(/frame:(\d+).*pts_time:([\d.]+)\r?\n/g));
+          this.chapters = matches.map(match => {
+              const startTime = enforceMilliseconds(parseFloat(match[2]));
+              return {
+                  startTime
+              };
+          });
+
+          this.rebuildChapterTitles();
+      }
+
+
+      toString() {
+          throw new Error(`this class won't generate actual output`)
+      }
+  }
+
+  class MKVMergeSimple extends FormatBase {
+
+      filename = 'mkvmerge-chapters.txt';
+      mimeType = 'text/plain';
+      
+
+      constructor(input = null, extraProperties = {}) {
+          super(input, {zeroPad: 2, ...extraProperties});
+      }
+
+      detect(inputString) {
+          const re = new RegExp(`^CHAPTER${zeroPad(1, this.zeroPad)}`);
+          return re.test(inputString.trim());
+      }
+
+      parse(string) {
+          if (!this.detect(string)) {
+              throw new Error(`File must start with CHAPTER${zeroPad(1, this.zeroPad)}`)
+          }
+
+          const lines = string.split(/\r?\n/)
+              .filter(line => line.trim().length > 0)
+              .map(line => line.trim());
+
+          let chapters = [];
+          lines.forEach(line => {
+              const match = /^CHAPTER(?<index>\d+)(?<key>NAME)?=(?<value>.*)/.exec(line);
+              const index = parseInt(match.groups.index) - 1;
+              const key = match.groups.key === 'NAME' ? 'title' : 'startTime';
+              const value = key === 'startTime' ? timestampToSeconds(match.groups.value) : match.groups.value;
+
+              if (chapters[index]) {
+                  chapters[index][key] = value;
+              } else {
+                  chapters[index] = {[key]: value};
+              }
+
+          });
+
+          this.chapters = chapters;
+      }
+
+      toString() {
+          return this.chapters.map((chapter, index) => {
+              const i = zeroPad(index + 1, this.zeroPad);
+              const options = {
+                  hours: true,
+                  milliseconds: true
+              };
+              let output = [
+                  `CHAPTER${i}=${secondsToTimestamp(chapter.startTime, options)}`
+              ];
+              if (chapter.title?.trim().length > 0) {
+                  output.push(`CHAPTER${i}NAME=${chapter.title}`);
+              }
+              return output.join("\n");
+          }).join("\n");
+      }
+  }
+
   class MatroskaXML extends FormatBase {
 
       supportsPrettyPrint = true;
@@ -9955,63 +10044,90 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
   }
 
-  class MKVMergeSimple extends FormatBase {
+  class PySceneDetect extends FormatBase {
 
-      filename = 'mkvmerge-chapters.txt';
-      mimeType = 'text/plain';
-      
-
-      constructor(input = null, extraProperties = {}) {
-          super(input, {...extraProperties, zeroPad: 2});
-      }
+      filename = 'psd-scenes.csv';
+      mimeType = 'text/csv';
 
       detect(inputString) {
-          const re = new RegExp(`^CHAPTER${zeroPad(1, this.zeroPad)}`);
-          return re.test(inputString.trim());
+          return ['Scene Number', 'Timecode Lis'].includes(inputString.trim().slice(0, 12));
       }
 
       parse(string) {
           if (!this.detect(string)) {
-              throw new Error('File must start with CHAPTER01')
+              throw new Error('File must start with "Scene Number" or "Timecode List"')
           }
 
           const lines = string.split(/\r?\n/)
               .filter(line => line.trim().length > 0)
               .map(line => line.trim());
 
-          let chapters = [];
-          lines.forEach(line => {
-              const match = /^CHAPTER(?<index>\d+)(?<key>NAME)?=(?<value>.*)/.exec(line);
-              const index = parseInt(match.groups.index) - 1;
-              const key = match.groups.key === 'NAME' ? 'title' : 'startTime';
-              const value = key === 'startTime' ? timestampToSeconds(match.groups.value) : match.groups.value;
+          if (/^Timecode/.test(lines[0])) {
+              lines.shift();
+          }
+          lines.shift();
 
-              if (chapters[index]) {
-                  chapters[index][key] = value;
-              } else {
-                  chapters[index] = {[key]: value};
+          this.chapters = lines.map(line => {
+              const cols = line.split(',');
+
+              return {
+                  startTime: timestampToSeconds(cols[2]),
+                  endTime: timestampToSeconds(cols[5])
               }
+          });
+
+
+      }
+
+      toString(pretty = false, exportOptions = {}) {
+
+          const framerate = exportOptions.psdFramerate || 23.976;
+          const omitTimecodes = !!exportOptions.psdOmitTimecodes;
+
+          let lines = this.chapters.map((chapter, index) => {
+
+              const next = this.chapters[index + 1];
+              const endTime = next?.startTime || this.duration;
+              //use next chapter's start time for maximum native PySceneDetect compatibility
+              const l = endTime - chapter.startTime;
+
+              return [
+                  index + 1,//Scene Number
+                  Math.round(chapter.startTime * framerate) + 1,//Start Frame
+                  secondsToTimestamp(chapter.startTime, {hours: true, milliseconds: true}),// Start Timecode
+                  parseInt(chapter.startTime * 1000),// Start Time (seconds)
+                  Math.round(endTime * framerate),// End Frame
+                  secondsToTimestamp(endTime, {hours: true, milliseconds: true}),// End Timecode
+                  parseInt(endTime * 1000),// End Time (seconds)
+                  Math.round((endTime - chapter.startTime) * framerate),// Length (frames)
+                  secondsToTimestamp(l, {hours: true, milliseconds: true}),// Length (timecode)
+                  parseInt(Math.ceil(l * 1000))// Length (seconds)
+              ]
 
           });
 
-          this.chapters = chapters;
-      }
 
-      toString() {
-          return this.chapters.map((chapter, index) => {
-              const i = zeroPad(index + 1, 2);
-              const options = {
-                  hours: true,
-                  milliseconds: true
-              };
-              let output = [
-                  `CHAPTER${i}=${secondsToTimestamp(chapter.startTime, options)}`
-              ];
-              if (chapter.title?.trim().length > 0) {
-                  output.push(`CHAPTER${i}NAME=${chapter.title}`);
-              }
-              return output.join("\n");
-          }).join("\n");
+          const tl = 'Timecode List:' + lines.slice(1).map(l => l[2]).join(',');
+          lines = lines.map(l => l.join(','));
+
+          lines.unshift('Scene Number,Start Frame,Start Timecode,Start Time (seconds),End Frame,End Timecode,End Time (seconds),Length (frames),Length (timecode),Length (seconds)');
+
+          if(!omitTimecodes){
+              lines.unshift(tl);
+          }
+
+          return lines.join("\n");
+      }
+  }
+
+  class VorbisComment extends MKVMergeSimple {
+
+      filename = 'vorbis-comment.txt';
+      mimeType = 'text/plain';
+      
+
+      constructor(input = null, extraProperties = {}) {
+          super(input, {...extraProperties, zeroPad: 3});
       }
   }
 
@@ -10120,111 +10236,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       }
   }
 
-  class FFMpegInfo extends FormatBase {
-
-
-      detect(inputString) {
-          return /^frame:\d/.test(inputString.trim());
-      }
-
-      parse(input) {
-          if (!this.detect(input)) {
-              throw new Error('input must start with frame:')
-          }
-
-          const matches = Array.from(input.matchAll(/frame:(\d+).*pts_time:([\d.]+)\r?\n/g));
-          this.chapters = matches.map(match => {
-              const startTime = enforceMilliseconds(parseFloat(match[2]));
-              return {
-                  startTime
-              };
-          });
-
-          this.rebuildChapterTitles();
-      }
-
-
-      toString() {
-          throw new Error(`this class won't generate actual output`)
-      }
-  }
-
-  class PySceneDetect extends FormatBase {
-
-      filename = 'psd-scenes.csv';
-      mimeType = 'text/csv';
-
-      detect(inputString) {
-          return ['Scene Number', 'Timecode Lis'].includes(inputString.trim().slice(0, 12));
-      }
-
-      parse(string) {
-          if (!this.detect(string)) {
-              throw new Error('File must start with "Scene Number" or "Timecode List"')
-          }
-
-          const lines = string.split(/\r?\n/)
-              .filter(line => line.trim().length > 0)
-              .map(line => line.trim());
-
-          if (/^Timecode/.test(lines[0])) {
-              lines.shift();
-          }
-          lines.shift();
-
-          this.chapters = lines.map(line => {
-              const cols = line.split(',');
-
-              return {
-                  startTime: timestampToSeconds(cols[2]),
-                  endTime: timestampToSeconds(cols[5])
-              }
-          });
-
-
-      }
-
-      toString(pretty = false, exportOptions = {}) {
-
-          const framerate = exportOptions.psdFramerate || 23.976;
-          const omitTimecodes = !!exportOptions.psdOmitTimecodes;
-
-          let lines = this.chapters.map((chapter, index) => {
-
-              const next = this.chapters[index + 1];
-              const endTime = next?.startTime || this.duration;
-              //use next chapter's start time for maximum native PySceneDetect compatibility
-              const l = endTime - chapter.startTime;
-
-              return [
-                  index + 1,//Scene Number
-                  Math.round(chapter.startTime * framerate) + 1,//Start Frame
-                  secondsToTimestamp(chapter.startTime, {hours: true, milliseconds: true}),// Start Timecode
-                  parseInt(chapter.startTime * 1000),// Start Time (seconds)
-                  Math.round(endTime * framerate),// End Frame
-                  secondsToTimestamp(endTime, {hours: true, milliseconds: true}),// End Timecode
-                  parseInt(endTime * 1000),// End Time (seconds)
-                  Math.round((endTime - chapter.startTime) * framerate),// Length (frames)
-                  secondsToTimestamp(l, {hours: true, milliseconds: true}),// Length (timecode)
-                  parseInt(Math.ceil(l * 1000))// Length (seconds)
-              ]
-
-          });
-
-
-          const tl = 'Timecode List:' + lines.slice(1).map(l => l[2]).join(',');
-          lines = lines.map(l => l.join(','));
-
-          lines.unshift('Scene Number,Start Frame,Start Timecode,Start Time (seconds),End Frame,End Timecode,End Time (seconds),Length (frames),Length (timecode),Length (seconds)');
-
-          if(!omitTimecodes){
-              lines.unshift(tl);
-          }
-
-          return lines.join("\n");
-      }
-  }
-
   const AutoFormat = {
       classMap: {
           chaptersjson: ChaptersJson,
@@ -10235,7 +10246,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
           webvtt: WebVTT,
           youtube: Youtube,
           ffmpeginfo: FFMpegInfo,
-          pyscenedetect: PySceneDetect
+          pyscenedetect: PySceneDetect,
+          vorbiscomment: VorbisComment
       },
 
       detect(inputString, returnWhat = 'instance') {
