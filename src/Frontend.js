@@ -56,7 +56,15 @@ window.addEventListener('DOMContentLoaded', () => {
     window.st = new ShepherdTour();
 
 
-    fetch('ga-code').then(r => r.text())
+    fetch('ga-code')
+        .then(e => {
+            if(e.ok){
+                return e.text()
+            }
+            else{
+                console.log('No Analytics Code found. Place a file called "ga-code" in the root of the webserver (/static).');
+            }
+        })
         .then(code => {
             window.GACODE = code;
             if (!localStorage.getItem('ct-analytics-state')) {
@@ -70,6 +78,8 @@ window.addEventListener('DOMContentLoaded', () => {
                 window.st.show();
             }
         });
+
+    
 })
 
 window.APP = {
