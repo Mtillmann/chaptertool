@@ -14,7 +14,7 @@ template(x-if="currentChapterIndex !== null")
             div.row.p-1.mb-1
                 label.col-3.col-form-label(for="chapterTitle") Title
                 div.col-9
-                    input.form-control#chapterTitle(x-model="data.chapters[currentChapterIndex].title", :placeholder="`Chapter ${currentChapterIndex + 1}`")
+                    input.form-control#chapterTitle(x-model="data.chapters[currentChapterIndex].title", :placeholder="`Untitled Chapter ${currentChapterIndex + 1}`")
             div.row(x-show="currentChapterIndex === 0 && data.chapters[currentChapterIndex].startTime !== 0")
                 div.col
                     p.small.alert.alert-info This is the first chapter but it doesn't start at 00:00:

@@ -81,3 +81,6 @@ be 00:00.
 
 ## How to use the apple chapters?
 I honestly don't know as the only reference I could find is [NVEnc's documentation](https://github.com/rigaya/NVEnc/blob/master/NVEncC_Options.en.md#--chapter-string:~:text=CHAPTER03NAME%3Dchapter%2D3-,apple%20format,-(should%20be%20in.)
+
+## What does "chapter/timeline lock" do?
+When enabled, clicking anywhere on the timeline will select the chapter below. When disabled you can click on the timeline without the chapter below being selected and scrolled into view.
