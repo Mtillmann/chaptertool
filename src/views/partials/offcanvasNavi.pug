@@ -12,6 +12,8 @@ div.offcanvas.offcanvas-end#navi(x-ref="navi")
                 div.form-check.form-switch
                     input#analytics.form-check-input(type="checkbox", x-model="analyticsEnabled" @change="toggleGA()")
                     label.form-check-label(for="analytics") Analytics Enabled
+            div.nav-link.text-muted.disabled(x-show="!analyticsIsAvailable")
+                | No Analytics Available - see console
             hr
             a.nav-link(href="#"  @click.stop.prevent="showTourAgain()") Show Onboarding Tour
             a.nav-link(href="https://github.com/Mtillmann/chaptertool" target="_blank") Github Repo

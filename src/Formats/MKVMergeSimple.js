@@ -1,13 +1,19 @@
-import {FormatBase} from "./FormatBase.js";
-import {secondsToTimestamp, timestampToSeconds, zeroPad} from "../util.js";
+import { secondsToTimestamp, timestampToSeconds, zeroPad } from "../util.js";
+import { FormatBase } from "./FormatBase.js";
 
 export class MKVMergeSimple extends FormatBase {
 
     filename = 'mkvmerge-chapters.txt';
     mimeType = 'text/plain';
+    
+
+    constructor(input = null, extraProperties = {}) {
+        super(input, {...extraProperties, zeroPad: 2});
+    }
 
     detect(inputString) {
-        return /^CHAPTER01/.test(inputString.trim());
+        const re = new RegExp(`^CHAPTER${zeroPad(1, this.zeroPad)}`);
+        return re.test(inputString.trim());
     }
 
     parse(string) {

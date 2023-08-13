@@ -1,5 +1,5 @@
-import {enforceMilliseconds, hash, secondsToTimestamp, timestampToSeconds} from "../util.js";
 import filenamify from "filenamify";
+import { enforceMilliseconds, hash, secondsToTimestamp, timestampToSeconds } from "../util.js";
 
 export class FormatBase {
 
@@ -25,6 +25,8 @@ export class FormatBase {
 
     constructor(input = null, extraProperties = {}) {
         Object.entries(extraProperties).forEach(([key, value]) => this[key] = value);
+
+        
 
         this.meta = {...this.defaultMeta}
 
