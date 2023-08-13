@@ -100,9 +100,11 @@ window.APP = {
         analyticsEnabled: false,
         analyticsIsAvailable: false,
         versionString: '',
+        usesAMPM : false,
 
         init() {
 
+            this.usesAMPM = /[A|P]M$/.test(new Intl.DateTimeFormat(undefined, { hour: "numeric" }).format());
 
             fetch('version').then(r => r.text())
                 .then(version => this.versionString = `Version ${version}`);
@@ -451,6 +453,7 @@ window.APP = {
             this.editTimestampLabel = label;
             this.editTimestampBounds = bounds;
             this.editTimestampTimestamp = timestamp.split('.');
+
 
             this.editTimestampCallback = callback;
             this.timestampOffcanvas.show();

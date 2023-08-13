@@ -12,3 +12,5 @@ div.offcanvas.offcanvas-bottom#timestampEditDialog(x-ref="timestampedit", style=
                             input.form-control(type="number", min=0, max = 999, step=1, :value="editTimestampTimestamp[1]")
                             button.btn.btn-outline-secondary set
                         span.small.text-muted hint: use arrow keys, tab and enter
+                        div(x-show="usesAMPM")
+                            span.small.text-info Using 12h format, ignore the AM/PM value

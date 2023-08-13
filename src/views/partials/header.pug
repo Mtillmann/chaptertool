@@ -5,16 +5,16 @@ header.container-lg
                 a.has-tooltip(href="#" @click.stop.prevent="currentChapterIndex = null")
                     img.mt-1.rounded.shadow(src="icons/icon-64.png")
             div.fs-3.d-none.d-md-flex.flex-column.me-3
-                a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="" title="Insert Chapter at Given Time")
+                a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="addChapterFromTime()" title="Insert Chapter at Given Time")
                     i.bi.bi-input-cursor.d-flex.align-self-center
             div.fs-3.d-none.d-md-flex.flex-column.me-3
-                a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="" title="Change Duration")
+                a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="changeDuration()" title="Change Duration")
                     i.bi.bi-clock-history.d-flex.align-self-center
             div.fs-3.d-none.d-md-flex.flex-column.me-3
-                a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="" title="Edit Meta Attributes")
+                a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="metaPropertiesDialog.show()" title="Edit Meta Attributes")
                     i.bi.bi-pencil-square.d-flex.align-self-center
-            div.fs-3.d-none.d-md-flex.flex-column.me-3
-                a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="" :class="{ 'disabled opacity-50' : data.chapters.length === 0 }" title="Export / Download")
+            div.fs-3.d-none.d-md-flex.flex-column.me-4
+                a.d-flex.flex-grow-1.has-tooltip(href="#" @click.stop.prevent="exportOffcanvas.show()" :class="{ 'disabled opacity-50' : data.chapters.length === 0 }" title="Export / Download")
                     i.bi.bi-download.d-flex.align-self-center
             div.fs-1.d-flex.flex-column
                 a.d-flex.flex-grow-1(href="#" @click.stop.prevent="offcanvasNavi.show()")
