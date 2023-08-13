@@ -28,10 +28,10 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                 |
                                 | Matroska
                         li.nav-item
-                            a.nav-link(:class="{active : exportSettings.type.slice(0,8) === 'mkvmerge'}", href="#", @click.stop.prevent="updateExportContent('mkvmergexml')")
+                            a.nav-link(:class="{active : /^(mkvmerge|vorbis)/.test(exportSettings.type)}", href="#", @click.stop.prevent="updateExportContent('mkvmergexml')")
                                 i.bi.bi-filetype-xml
                                 |
-                                | MKVMerge
+                                | MKVMerge/Nero/Vorbis
                         li.nav-item
                             a.nav-link(:class="{active : exportSettings.type === 'ffmetadata'}", href="#", @click.stop.prevent="updateExportContent('ffmetadata')")
                                 i.bi.bi-file-binary
@@ -76,12 +76,14 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                     div(x-show="exportSettings.canUseImagePrefix")
                                         label.form-label.small(for="imagePrefix") image URI prefix
                                         input.form-control#imagePrefix(@input="updateExportContent()", x-model="exportSettings.imagePrefix")
-                            template(x-if="exportSettings.type.slice(0,8) === 'mkvmerge'")
+                            template(x-if="/^(mkvmerge|vorbis)/.test(exportSettings.type)")
                                 div.btn-group.btn-group-sm(role="group")
                                     input#formatMKVMergeXML.btn-check(type="radio",name="mkvformat",value="mkvmergexml", x-model="exportSettings.type", @change="updateExportContent()")
                                     label.btn.btn-outline-primary(for="formatMKVMergeXML") XML
                                     input#formatMKVMergeSimple.btn-check(type="radio",name="mkvformat",value="mkvmergesimple", x-model="exportSettings.type", @change="updateExportContent()")
-                                    label.btn.btn-outline-primary(for="formatMKVMergeSimple") simple
+                                    label.btn.btn-outline-primary(for="formatMKVMergeSimple") simple aka Nero
+                                    input#formatVorbisComment.btn-check(type="radio",name="mkvformat",value="vorbiscomment", x-model="exportSettings.type", @change="updateExportContent()")
+                                    label.btn.btn-outline-primary(for="formatVorbisComment") Vorbis Comment
                             template(x-if="exportSettings.type === 'pyscenedetect'")
                                 div
                                     div.input-group.mb-2
