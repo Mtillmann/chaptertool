@@ -2,7 +2,7 @@
 
 # chaptertool
 
-Create and convert chapters for podcasts, youtube, matroska, webvtt, ffmpeg and pySceneDetect.  
+Create and convert chapters for podcasts, youtube, matroska, webvtt, ffmpeg, mkvmerge, vorbis comment, apple chapaters and pySceneDetect.  
 
 The cli tools can automatically create chapters with images from videos using ffmpeg's scene detection.
 
@@ -88,7 +88,9 @@ Converts existing chapters between the following formats:
 - `webvtt` WebVTT chapter format ([spec](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API))
 - `youtube` Youtube description chapter notation
 - `ffmpeginfo` (readonly) ffmpeg scene detection output, used internally
-- `pyscenedetect` PySceneDetect list-scenes CSV Format ([project home](https://github.com/Breakthrough/PySceneDetect)) 
+- `pyscenedetect` PySceneDetect list-scenes CSV Format ([project home](https://github.com/Breakthrough/PySceneDetect))
+- `vorbiscomment` [Vorbis Comment](https://wiki.xiph.org/Chapter_Extension#:~:text=two%20sequential%20chapters%3A-,CHAPTER001,-%3D00%3A00%3A00.0009) format that is slightly different from mkvmergesimple
+- `applechapters` [mythical chapter format](https://github.com/rigaya/NVEnc/blob/master/NVEncC_Options.en.md#--chapter-string:~:text=CHAPTER03NAME%3Dchapter%2D3-,apple%20format,-(should%20be%20in)) of unclear origin/spec or purpose
  
 | option                 | description                                                                         | default |
 |------------------------|-------------------------------------------------------------------------------------|---------|
