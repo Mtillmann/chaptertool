@@ -2,7 +2,7 @@
 
 # chaptertool
 
-Create and convert chapters for podcasts, youtube, matroska, webvtt, ffmpeg, mkvmerge, vorbis comment, apple chapaters and pySceneDetect.  
+Create and convert chapters for podcasts, youtube, matroska, webvtt, ffmpeg, mkvmerge, vorbis comment, apple chapters and pySceneDetect.  
 
 The cli tools can automatically create chapters with images from videos using ffmpeg's scene detection.
 
