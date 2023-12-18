@@ -15340,6 +15340,8 @@ textarea.form-control-lg {
 
 .shepherd-element {
   --padding: 0.45rem; }
+  .shepherd-element, .shepherd-element .shepherd-arrow::before {
+    background-color: var(--bs-body-bg); }
   .shepherd-element[data-popper-placement="bottom"] {
     margin-top: 16px; }
   .shepherd-element .shepherd-header {
@@ -15348,7 +15350,8 @@ textarea.form-control-lg {
     .shepherd-element .shepherd-header::before {
       content: "chaptertool"; }
   .shepherd-element .shepherd-text {
-    padding: var(--padding); }
+    padding: var(--padding);
+    color: var(--bs-body-color); }
   .shepherd-element .shepherd-footer {
     padding: 0 var(--padding) var(--padding); }
     .shepherd-element .shepherd-footer::before {

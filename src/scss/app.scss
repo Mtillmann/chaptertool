@@ -6,6 +6,11 @@ $bootstrap-icons-font: bootstrap-icons;
 
 
 .shepherd-element {
+
+  &, & .shepherd-arrow::before { 
+    background-color: var(--bs-body-bg);
+  }
+
   &[data-popper-placement="bottom"] {
     margin-top: 16px;
   }
@@ -23,6 +28,7 @@ $bootstrap-icons-font: bootstrap-icons;
 
   .shepherd-text {
     padding: var(--padding);
+    color:var(--bs-body-color);
   }
 
   .shepherd-footer {
