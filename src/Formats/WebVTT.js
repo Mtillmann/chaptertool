@@ -3,8 +3,8 @@ import {secondsToTimestamp, timestampToSeconds} from "../util.js";
 
 export class WebVTT extends FormatBase {
 
-    filename = 'webvtt-chapters.txt';
-    mimeType = 'text/plain';
+    filename = 'webvtt-chapters.vtt';
+    mimeType = 'text/vtt';
 
     detect(inputString) {
         return inputString.trim().slice(0, 6) === 'WEBVTT';

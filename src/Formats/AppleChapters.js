@@ -54,8 +54,6 @@ export class AppleChapters extends MatroskaXML {
             const attrContent = exportOptions.acUseTextAttr && chapter.title ? ` text="${chapter.title}"` :'';
             const content = !exportOptions.acUseTextAttr && chapter.title ? chapter.title :'';
 
-            console.log();
-
             output.push(indent(3, `<TextSample sampleTime="${secondsToTimestamp(chapter.startTime, {milliseconds: true})}"${attrContent}>${content}</TextSample>`));
         });
 
