@@ -135,6 +135,7 @@ export class ChapterGenerator {
 
     snapshotsFromChapters() {
         lstatSync(this.options.inputChapters);
+        //todo make this accept any supported format
         let json = JSON.parse(readFileSync(this.options.inputChapters, 'utf-8'));
 
 
