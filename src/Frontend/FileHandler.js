@@ -96,7 +96,7 @@ export class FileHandler {
     }
 
     handleFile(file, origin = 'osDialog') {
-        if (['text/plain', 'text/xml', 'application/json', 'text/csv'].includes(file.type)) {
+        if (['text/plain', 'text/xml', 'application/json', 'text/csv', 'text/vtt'].includes(file.type)) {
             fetch(URL.createObjectURL(file))
                 .then(r => r.text())
                 .then(text => {
