@@ -1,5 +1,5 @@
-import {FormatBase} from "./FormatBase.js";
-import {secondsToTimestamp, timestampToSeconds} from "../util.js";
+import { FormatBase } from "./FormatBase.js";
+import { secondsToTimestamp, timestampToSeconds } from "../util.js";
 
 export class PySceneDetect extends FormatBase {
 
@@ -51,13 +51,13 @@ export class PySceneDetect extends FormatBase {
             return [
                 index + 1,//Scene Number
                 Math.round(chapter.startTime * framerate) + 1,//Start Frame
-                secondsToTimestamp(chapter.startTime, {hours: true, milliseconds: true}),// Start Timecode
+                secondsToTimestamp(chapter.startTime, { hours: true, milliseconds: true }),// Start Timecode
                 parseInt(chapter.startTime * 1000),// Start Time (seconds)
                 Math.round(endTime * framerate),// End Frame
-                secondsToTimestamp(endTime, {hours: true, milliseconds: true}),// End Timecode
+                secondsToTimestamp(endTime, { hours: true, milliseconds: true }),// End Timecode
                 parseInt(endTime * 1000),// End Time (seconds)
                 Math.round((endTime - chapter.startTime) * framerate),// Length (frames)
-                secondsToTimestamp(l, {hours: true, milliseconds: true}),// Length (timecode)
+                secondsToTimestamp(l, { hours: true, milliseconds: true }),// Length (timecode)
                 parseInt(Math.ceil(l * 1000))// Length (seconds)
             ]
 
@@ -69,7 +69,7 @@ export class PySceneDetect extends FormatBase {
 
         lines.unshift('Scene Number,Start Frame,Start Timecode,Start Time (seconds),End Frame,End Timecode,End Time (seconds),Length (frames),Length (timecode),Length (seconds)')
 
-        if(!omitTimecodes){
+        if (!omitTimecodes) {
             lines.unshift(tl);
         }
 

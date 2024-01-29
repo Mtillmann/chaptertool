@@ -1,5 +1,5 @@
-import {MatroskaXML} from "./MatroskaXML.js";
-import {secondsToTimestamp, timestampToSeconds} from "../util.js";
+import { MatroskaXML } from "./MatroskaXML.js";
+import { secondsToTimestamp, timestampToSeconds } from "../util.js";
 
 export class MKVMergeXML extends MatroskaXML {
 
@@ -11,7 +11,7 @@ export class MKVMergeXML extends MatroskaXML {
         super(input, {
             chapterStringNodeName: 'ChapterString',
             inputTimeToSeconds: string => timestampToSeconds(string),
-            secondsToOutputTime: seconds => secondsToTimestamp(seconds, {hours: true, milliseconds: true})
+            secondsToOutputTime: seconds => secondsToTimestamp(seconds, { hours: true, milliseconds: true })
         });
     }
 }

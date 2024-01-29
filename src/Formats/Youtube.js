@@ -1,5 +1,5 @@
-import {FormatBase} from "./FormatBase.js";
-import {secondsToTimestamp, timestampToSeconds} from "../util.js";
+import { FormatBase } from "./FormatBase.js";
+import { secondsToTimestamp, timestampToSeconds } from "../util.js";
 
 export class Youtube extends FormatBase {
 
