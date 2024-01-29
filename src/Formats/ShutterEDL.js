@@ -1,10 +1,22 @@
+import { timestampToSeconds } from "../util.js";
 import { FormatBase } from "./FormatBase.js";
-import { enforceMilliseconds } from "../util.js";
 
 export class ShutterEDL extends FormatBase {
 
     detect(inputString) {
         return /^TITLE:\s.*\r?\n/.test(inputString.trim());
+    }
+
+    decodeTime(timeString) {
+        return timeString.replace(/:(\d+)$/,'.$1');
+    }
+
+    encodeTime(time) {
+        const frames = Math.floor(time / 1000 * 24);
+        const seconds = Math.floor(frames / 24);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        return `${hours}:${minutes % 60}:${seconds % 60}:${frames % 24}`;
     }
 
     parse(input) {
@@ -15,23 +27,27 @@ export class ShutterEDL extends FormatBase {
         const titleMatch = input.match(/^TITLE:\s(.*)\r?\n/);
         this.title = titleMatch?.[1] ?? 'Chapters';
 
-        const timeStamps = Array.from(input.matchAll(/(?<index>\d{6})\s+(?<name>[^\s]+)\s+\w+\s+\w+\s+(?<in>\d\d:\d\d:\d\d:\d\d)\s+(?<out>\d\d:\d\d:\d\d:\d\d)/g));
+        this.chapters = Array.from(input.matchAll(/(?<index>\d{6})\s+(?<title>[^\s]+)\s+\w+\s+\w+\s+(?<startTime>\d\d:\d\d:\d\d:\d\d)\s+(?<endTime>\d\d:\d\d:\d\d:\d\d)/g))
+            .reduce((acc, match) => {
+                if (acc.at(-1)?.startTime === match.groups.startTime) {
+                    return acc;
+                }
 
-        console.log(timeStamps);
+                const startTime = timestampToSeconds(this.decodeTime(match.groups.startTime));
+                const endTime = timestampToSeconds(this.decodeTime(match.groups.endTime));
+                const title = match.groups.title;
 
-        const matches = Array.from(input.matchAll(/frame:(\d+).*pts_time:([\d.]+)\r?\n/g));
-        this.chapters = matches.map(match => {
-            const startTime = enforceMilliseconds(parseFloat(match[2]));
-            return {
-                startTime
-            };
-        });
-
-        this.rebuildChapterTitles();
+                acc.push({
+                    startTime,
+                    endTime,
+                    title
+                });
+                return acc;
+            }, []);
     }
 
 
     toString() {
-        throw new Error(`this class won't generate actual output`)
+         
     }
 }
