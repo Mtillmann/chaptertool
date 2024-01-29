@@ -1,3 +1,7 @@
+# 0.4.3
+
+- fixed webvtt file input handling in webapp
+
 # 0.4.0
 
 - added vorbis comment support
