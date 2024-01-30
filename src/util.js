@@ -3,7 +3,7 @@ export function zeroPad(num, len = 3) {
 }
 
 export function secondsToTimestamp(s, options = {}) {
-    options = {...{hours: true, milliseconds: false}, ...options};
+    options = { ...{ hours: true, milliseconds: false }, ...options };
 
     const date = new Date(parseInt(s) * 1000).toISOString();
 
@@ -20,6 +20,54 @@ export function secondsToTimestamp(s, options = {}) {
         return hms + '.' + fraction;
     }
     return hms;
+}
+
+/**
+ * Converts a NPT (normal play time) to seconds, used by podlove simple chapters
+ */
+export function NPTToSeconds(npt) {
+    let [parts, ms] = npt.split('.');
+    ms = parseInt(ms || 0);
+    parts = parts.split(':');
+
+    while (parts.length < 3) {
+        parts.unshift(0);
+    }
+
+    let [hours, minutes, seconds] = parts.map(i => parseInt(i));
+
+    return timestampToSeconds(`${zeroPad(hours, 2)}:${zeroPad(minutes, 2)}:${zeroPad(seconds, 2)}.${zeroPad(ms, 3)}`);
+}
+
+export function secondsToNPT(seconds) {
+
+    if (seconds === 0) {
+        return '0';
+    }
+
+    const regularTimestamp = secondsToTimestamp(seconds, { milliseconds: true });
+    let [hoursAndMinutesAndSeconds, milliseconds] = regularTimestamp.split('.');
+    let [hours, minutes, secondsOnly] = hoursAndMinutesAndSeconds.split(':').map(i => parseInt(i));
+
+    if (milliseconds === '000') {
+        milliseconds = '';
+    } else {
+        milliseconds = '.' + milliseconds;
+    }
+
+    if (hours === 0 && minutes === 0) {
+        return `${secondsOnly}${milliseconds}`;
+    }
+
+    secondsOnly = zeroPad(secondsOnly, 2);
+
+    if(hours === 0){
+        return `${minutes}:${secondsOnly}${milliseconds}`;
+    }
+
+    minutes = zeroPad(minutes, 2);
+
+    return `${hours}:${minutes}:${secondsOnly}${milliseconds}`;
 }
 
 export function timestampToSeconds(timestamp, fixedString = false) {
