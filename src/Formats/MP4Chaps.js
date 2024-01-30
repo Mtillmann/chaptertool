@@ -7,12 +7,12 @@ export class MP4Chaps extends FormatBase {
     mimeType = 'text/plain';
 
     detect(inputString) {
-        return /^00:00:00(\.000)?\s/.test(inputString.trim());
+        return /^\d\d:\d\d:\d\d.\d\d?\d?\s/.test(inputString.trim());
     }
 
     parse(string) {
         if (!this.detect(string)) {
-            throw new Error('MP4Chaps *MUST* begin with 00:00:00');
+            throw new Error('MP4Chaps *MUST* begin with 00:00:00, received: ' + string.substr(0, 10) + '...');
         }
         this.chapters = this.stringToLines(string).map(line => {
             line = line.split(' ');

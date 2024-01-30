@@ -49,7 +49,7 @@ export const AutoFormat = {
                         }
                     }
                 } catch (e) {
-                    console.log(e);
+                    //console.log(e);
                     //do nothing
                 }
             });
