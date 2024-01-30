@@ -7,12 +7,12 @@ export class Youtube extends FormatBase {
     mimeType = 'text/plain';
 
     detect(inputString) {
-        return /^0?0:00/.test(inputString.trim());
+        return /^0?0:00(:00)?\s/.test(inputString.trim());
     }
 
     parse(string) {
         if (!this.detect(string)) {
-            throw new Error('Youtube Chapters *MUST* begin with (0)0:00');
+            throw new Error('Youtube Chapters *MUST* begin with (0)0:00(:00), received: ' + string.substr(0, 10) + '...');
         }
         this.chapters = this.stringToLines(string).map(line => {
             line = line.split(' ');

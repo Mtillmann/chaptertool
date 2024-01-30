@@ -11,6 +11,8 @@ import { WebVTT } from "./WebVTT.js";
 import { Youtube } from "./Youtube.js";
 import { ShutterEDL } from "./ShutterEDL.js";
 import { PodloveSimpleChapters } from "./PodloveSimpleChapters.js";
+import { MP4Chaps } from "./MP4Chaps.js";
+import { PodloveJson } from "./PodloveJson.js";
 
 export const AutoFormat = {
     classMap: {
@@ -26,7 +28,9 @@ export const AutoFormat = {
         vorbiscomment: VorbisComment,
         applechapters: AppleChapters,
         shutteredl: ShutterEDL,
-        psc: PodloveSimpleChapters
+        psc: PodloveSimpleChapters,
+        mp4chaps: MP4Chaps,
+        podlovejson: PodloveJson
     },
 
     detect(inputString, returnWhat = 'instance') {
@@ -55,6 +59,8 @@ export const AutoFormat = {
         if (!detected) {
             throw new Error('failed to detect type of given input :(')
         }
+
+        
 
         return detected;
     },
