@@ -15,6 +15,7 @@ import { PodloveSimpleChapters } from "../src/Formats/PodloveSimpleChapters.js";
 import { PySceneDetect } from "../src/Formats/PySceneDetect.js";
 import { ShutterEDL } from "../src/Formats/ShutterEDL.js";
 import { VorbisComment } from "../src/Formats/VorbisComment.js";
+import { PodloveJson } from "../src/Formats/PodloveJson.js";
 
 describe('autodetection of sample files', () => {
 
@@ -28,6 +29,7 @@ describe('autodetection of sample files', () => {
         ['mkvmerge.xml', 'mkvmergexml', MKVMergeXML],
         ['mp4chaps.txt', 'mp4chaps', MP4Chaps],
         ['podlove-simple-chapters.xml', 'psc', PodloveSimpleChapters],
+        ['podlove.json', 'podlovejson', PodloveJson],
         ['pyscenedetect.csv', 'pyscenedetect', PySceneDetect],
         ['shutter.edl', 'shutteredl', ShutterEDL],
         ['vorbiscomment.txt', 'vorbiscomment', VorbisComment],

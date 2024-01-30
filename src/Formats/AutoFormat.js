@@ -12,6 +12,7 @@ import { Youtube } from "./Youtube.js";
 import { ShutterEDL } from "./ShutterEDL.js";
 import { PodloveSimpleChapters } from "./PodloveSimpleChapters.js";
 import { MP4Chaps } from "./MP4Chaps.js";
+import { PodloveJson } from "./PodloveJson.js";
 
 export const AutoFormat = {
     classMap: {
@@ -29,6 +30,7 @@ export const AutoFormat = {
         shutteredl: ShutterEDL,
         psc: PodloveSimpleChapters,
         mp4chaps: MP4Chaps,
+        podlovejson: PodloveJson
     },
 
     detect(inputString, returnWhat = 'instance') {
