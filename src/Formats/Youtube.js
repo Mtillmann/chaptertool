@@ -7,7 +7,7 @@ export class Youtube extends FormatBase {
     mimeType = 'text/plain';
 
     detect(inputString) {
-        return /^0?0:00/.test(inputString.trim());
+        return /^0?0:00\s/.test(inputString.trim());
     }
 
     parse(string) {
