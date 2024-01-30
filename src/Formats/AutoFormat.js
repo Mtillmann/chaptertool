@@ -10,6 +10,7 @@ import { VorbisComment } from "./VorbisComment.js";
 import { WebVTT } from "./WebVTT.js";
 import { Youtube } from "./Youtube.js";
 import { ShutterEDL } from "./ShutterEDL.js";
+import { PodloveSimpleChapters } from "./PodloveSimpleChapters.js";
 
 export const AutoFormat = {
     classMap: {
@@ -24,7 +25,8 @@ export const AutoFormat = {
         pyscenedetect: PySceneDetect,
         vorbiscomment: VorbisComment,
         applechapters: AppleChapters,
-        shutteredl: ShutterEDL
+        shutteredl: ShutterEDL,
+        psc: PodloveSimpleChapters
     },
 
     detect(inputString, returnWhat = 'instance') {
@@ -45,6 +47,7 @@ export const AutoFormat = {
                         }
                     }
                 } catch (e) {
+                    //console.log(e);
                     //do nothing
                 }
             });

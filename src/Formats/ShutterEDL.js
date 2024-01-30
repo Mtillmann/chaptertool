@@ -43,8 +43,6 @@ export class ShutterEDL extends FormatBase {
                     return acc;
                 }
 
-                console.log(startTime, endTime, title);
-                
                 acc.push({
                     startTime,
                     endTime,
@@ -56,7 +54,7 @@ export class ShutterEDL extends FormatBase {
 
     toString() {
         // this format is weird, it expects 3 tracks per chapter, i suspect it's
-        // V = video, A, A2 = stereo audio
+        // V = video, [A, A2] = stereo audio
         const tracks = ['V', 'A', 'A2'];
         const output = this.chapters.reduce((acc, chapter,i) => {
             
