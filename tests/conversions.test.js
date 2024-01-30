@@ -9,11 +9,12 @@ import { PySceneDetect } from "../src/Formats/PySceneDetect.js";
 import { AppleChapters } from "../src/Formats/AppleChapters.js";
 import { ShutterEDL } from "../src/Formats/ShutterEDL.js";
 import { VorbisComment } from "../src/Formats/VorbisComment.js";
+import { PodloveSimpleChapters } from "../src/Formats/PodloveSimpleChapters.js";
 import { readFileSync } from "fs";
 import { sep } from "path";
 
 describe('conversions from one format to any other', () => {
-    const formats = [ChaptersJson, WebVTT, Youtube, FFMetadata, MatroskaXML, MKVMergeXML, MKVMergeSimple, PySceneDetect, AppleChapters, ShutterEDL, VorbisComment];
+    const formats = [ChaptersJson, WebVTT, Youtube, FFMetadata, MatroskaXML, MKVMergeXML, MKVMergeSimple, PySceneDetect, AppleChapters, ShutterEDL, VorbisComment, PodloveSimpleChapters];
 
     const content = readFileSync(module.path + sep + 'samples' + sep + 'chapters.json', 'utf-8');
 

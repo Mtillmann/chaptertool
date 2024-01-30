@@ -35,7 +35,7 @@ export class PodloveSimpleChapters extends FormatBase {
                 const title = node.getAttribute('title');
                 const image = node.getAttribute('image');
                 const href = node.getAttribute('href');
-                
+
                 const chapter = {
                     startTime: NPTToSeconds(start)
                 }
@@ -46,7 +46,7 @@ export class PodloveSimpleChapters extends FormatBase {
                 if (image) {
                     chapter.img = image;
                 }
-                if (href){
+                if (href) {
                     //is this ever used, except for this format?
                     chapter.href = href;
                 }
@@ -64,11 +64,11 @@ export class PodloveSimpleChapters extends FormatBase {
 
         let output = [
             '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
-            indent(0,'<channel>'),
-            indent(1,'<!-- this is only a fragment of an rss feed, see -->'),
-            indent(1,'<!-- https://podlove.org/simple-chapters/#:~:text=37%20seconds-,Embedding%20Example,-This%20is%20an -->'),
-            indent(1,'<!-- for more information -->'),
-            indent(1,'<psc:chapters version="1.2" xmlns:psc="http://podlove.org/simple-chapters">'),
+            indent(1, '<channel>'),
+            indent(2, '<!-- this is only a fragment of an rss feed, see -->'),
+            indent(2, '<!-- https://podlove.org/simple-chapters/#:~:text=37%20seconds-,Embedding%20Example,-This%20is%20an -->'),
+            indent(2, '<!-- for more information -->'),
+            indent(2, '<psc:chapters version="1.2" xmlns:psc="http://podlove.org/simple-chapters">'),
         ];
 
         this.chapters.forEach(chapter => {
@@ -88,13 +88,14 @@ export class PodloveSimpleChapters extends FormatBase {
             }
             node.push('/>');
 
-            output.push(indent(2, node.join('')));
-            
+            output.push(indent(3, node.join('')));
+
         });
 
         output.push(
-            indent(1, '</psc:chapters>'),
-            indent(0, '</channel>')
+            indent(2, '</psc:chapters>'),
+            indent(1, '</channel>'),
+            indent(0, '</rss>')
         );
 
         return output.join(pretty ? "\n" : '');

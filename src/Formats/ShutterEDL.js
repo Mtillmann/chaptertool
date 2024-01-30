@@ -43,8 +43,6 @@ export class ShutterEDL extends FormatBase {
                     return acc;
                 }
 
-                console.log(startTime, endTime, title);
-                
                 acc.push({
                     startTime,
                     endTime,
