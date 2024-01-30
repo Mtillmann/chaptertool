@@ -26,6 +26,7 @@ export class FFMpegInfo extends FormatBase {
 
 
     toString() {
+        //why?
         throw new Error(`this class won't generate actual output`)
     }
 }

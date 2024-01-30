@@ -9,6 +9,7 @@ import { PySceneDetect } from "./PySceneDetect.js";
 import { VorbisComment } from "./VorbisComment.js";
 import { WebVTT } from "./WebVTT.js";
 import { Youtube } from "./Youtube.js";
+import { ShutterEDL } from "./ShutterEDL.js";
 
 export const AutoFormat = {
     classMap: {
@@ -22,7 +23,8 @@ export const AutoFormat = {
         ffmpeginfo: FFMpegInfo,
         pyscenedetect: PySceneDetect,
         vorbiscomment: VorbisComment,
-        applechapters: AppleChapters
+        applechapters: AppleChapters,
+        shutteredl: ShutterEDL
     },
 
     detect(inputString, returnWhat = 'instance') {
@@ -30,7 +32,6 @@ export const AutoFormat = {
 
         Object.entries(this.classMap)
             .forEach(([key, className]) => {
-
                 if (detected) {
                     return;
                 }

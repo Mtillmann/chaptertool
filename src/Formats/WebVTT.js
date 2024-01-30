@@ -1,5 +1,5 @@
-import {FormatBase} from "./FormatBase.js";
-import {secondsToTimestamp, timestampToSeconds} from "../util.js";
+import { FormatBase } from "./FormatBase.js";
+import { secondsToTimestamp, timestampToSeconds } from "../util.js";
 
 export class WebVTT extends FormatBase {
 
@@ -53,16 +53,16 @@ export class WebVTT extends FormatBase {
         if (this.meta.title.trim().length > 0) {
             output[0] += ' - ' + this.meta.title.trim();
         }
-        const options = {hours: true, milliseconds: true};
+        const options = { hours: true, milliseconds: true };
 
 
         this.chapters.forEach((chapter, index) => {
             output.push('');
             output.push(...[
-                    index + 1,
-                    secondsToTimestamp(chapter.startTime, options) + ' --> ' + secondsToTimestamp(chapter.endTime, options),
-                    chapter.title || this.getChapterTitle(index)
-                ].filter(line => String(line).trim().length > 0)
+                index + 1,
+                secondsToTimestamp(chapter.startTime, options) + ' --> ' + secondsToTimestamp(chapter.endTime, options),
+                chapter.title || this.getChapterTitle(index)
+            ].filter(line => String(line).trim().length > 0)
             );
         });
 
