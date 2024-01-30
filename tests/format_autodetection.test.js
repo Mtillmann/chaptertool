@@ -18,7 +18,6 @@ import { VorbisComment } from "../src/Formats/VorbisComment.js";
 
 describe('autodetection of sample files', () => {
 
-
     const filesAndKeysAndHandlers = [
         ['applechapters.xml', 'applechapters', AppleChapters],
         ['chapters.json', 'chaptersjson', ChaptersJson],
@@ -33,8 +32,7 @@ describe('autodetection of sample files', () => {
         ['shutter.edl', 'shutteredl', ShutterEDL],
         ['vorbiscomment.txt', 'vorbiscomment', VorbisComment],
         ['webvtt.txt', 'webvtt', WebVTT],
-        ['youtube-chapters.txt', 'youtube', Youtube],
-
+        ['youtube-chapters.txt', 'youtube', Youtube]
     ];
 
     filesAndKeysAndHandlers.forEach(item => {
@@ -75,32 +73,4 @@ describe('autodetection of sample files', () => {
 
     });
 
-
-    return;
-    /*
-    Object.entries(filesAndHAndlers).forEach(pair => {
-        const [file, className] = pair;
-        const content = readFileSync(module.path + sep + 'samples' + sep + file, 'utf-8');
-        it(`${className.name} detects ${file}`, () => {
-            expect(() => {
-                new className(content)
-            }).not.toThrow(Error);
-        });
-
-        Object.entries(filesAndHAndlers).forEach(pair => {
-            const className2 = pair[1];
-            if (className2 === className) {
-                return;
-            }
-
-            it(`${className2.name} rejects ${file}`, () => {
-                expect(() => {
-                    new className2(content)
-                }).toThrow(Error);
-            });
-        })
-    });
-
-
-     */
 });
