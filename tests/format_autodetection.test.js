@@ -20,7 +20,7 @@ describe('autodetection of sample files', () => {
 
 
     const filesAndKeysAndHandlers = [
-        ['applechapters.xml', 'apple', AppleChapters],
+        ['applechapters.xml', 'applechapters', AppleChapters],
         ['chapters.json', 'chaptersjson', ChaptersJson],
         ['FFMetadata.txt', 'ffmetadata', FFMetadata],
         ['ffmpeginfo.txt', 'ffmpeginfo', FFMpegInfo],
