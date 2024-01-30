@@ -12,8 +12,7 @@
     "webvtt",
     "pyscenedetect",
     "vorbis",
-    "apple-chapters",
-    ""
+    "apple-chapters"
   ],
   "type": "module",
   "main": "chaptertool.js",
