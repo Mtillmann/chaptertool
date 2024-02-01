@@ -134,6 +134,6 @@ You can combine config with regular cli options. Evaluation occurs in this order
 3. config yaml (if present) value
 4. explicit cli value
 
-## Examples
+## Examples & FAQ
 
-[see examples.md](./examples.md)
+[examples.md](/examples.md), [FAQ](/faq.md)
