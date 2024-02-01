@@ -1,0 +1,102 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "HLS Chapter Data",
+    "description": "HLS chapter data format",
+    "type": "array",
+    "items": {
+        "description": "chapter entry",
+        "type": "object",
+        "properties": {
+            "chapter": {
+                "description": "Chapter number (optional)",
+                "type": "number",
+                "minimum": 1
+            },
+            "start-time": {
+                "description": "Chapter start time",
+                "type": "number",
+                "minimum": 0
+            },
+            "duration": {
+                "description": "Chapter duration (optional)",
+                "type": "number",
+                "minimum": 0,
+                "exclusiveMinimum": true
+            },
+            "titles": {
+                "description": "List of titles by language for chapter (optional)",
+                "type": "array",
+                "items": {
+                    "description": "Title object",
+                    "type": "object",
+                    "properties": {
+                        "language": {
+                            "description": "BCP 47 language code; und for undefined",
+                            "type": "string"
+                        },
+                        "title": {
+                            "description": "Chapter title string",
+                            "type": "string"
+                        }
+                    },
+                    "required": ["language", "title"]
+                }
+            },
+            "images": {
+                "description": "List of images for chapter (optional)",
+                "type": "array",
+                "items": {
+                    "description": "Image object",
+                    "type": "object",
+                    "properties": {
+                        "image-category": {
+                            "description": "Image category",
+                            "type": "string"
+                        },
+                        "pixel-width": {
+                            "description": "Pixel width",
+                            "type": "integer",
+                            "minimum": 0,
+                            "exclusiveMinimum": true
+                        },
+                        "pixel-height": {
+                            "description": "Pixel height",
+                            "type": "integer",
+                            "minimum": 0,
+                            "exclusiveMinimum": true
+                        },
+                        "url": {
+                            "description": "URL to image (relative or absolute)",
+                            "type": "string"
+                        }
+                    },
+                    "required": ["image-category", "pixel-width", "pixel-height", "url"]
+                }
+            },
+            "metadata": {
+                "description": "List of metadata entries for chapter (optional)",
+                "type": "array",
+                "items": {
+                    "description": "Metadata object",
+                    "type": "object",
+                    "properties": {
+                        "key": {
+                            "description": "Key value name",
+                            "type": "string"
+                        },
+                        "value": {
+                            "description": "Metadata value",
+                            "type": ["string", "number", "boolean", "array", "object"]
+                        },
+                        "language": {
+                            "description": "BCP 47 language code (optional)",
+                            "type": "string"
+                        }
+                    },
+                    "required": ["key", "value"]
+                }
+            }
+        },
+        "required": ["start-time"]
+    }
+}

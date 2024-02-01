@@ -1,0 +1,44 @@
+[
+    {
+        "chapter": 1,
+        "start-time": 0,
+        "titles": [
+            {
+                "language": "en",
+                "title": "birth"
+            },
+            {
+                "language": "es",
+                "title": "nacimiento"
+            }
+        ]
+    },
+    {
+        "chapter": 2,
+        "start-time": 500.1,
+        "titles": [
+            {
+                "language": "en",
+                "title": "life"
+            },
+            {
+                "language": "es",
+                "title": "vida"
+            }
+        ]
+    },
+    {
+        "chapter": 3,
+        "start-time": 1200.2,
+        "titles": [
+            {
+                "language": "en",
+                "title": "death"
+            },
+            {
+                "language": "es",
+                "title": "muerte"
+            }
+        ]
+    }
+]

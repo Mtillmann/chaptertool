@@ -16,11 +16,13 @@ import { PySceneDetect } from "../src/Formats/PySceneDetect.js";
 import { ShutterEDL } from "../src/Formats/ShutterEDL.js";
 import { VorbisComment } from "../src/Formats/VorbisComment.js";
 import { PodloveJson } from "../src/Formats/PodloveJson.js";
+import { AppleHLS } from "../src/Formats/AppleHLS.js";
 
 describe('autodetection of sample files', () => {
 
     const filesAndKeysAndHandlers = [
         ['applechapters.xml', 'applechapters', AppleChapters],
+        ['applehls.json', 'applehls', AppleHLS],
         ['chapters.json', 'chaptersjson', ChaptersJson],
         ['FFMetadata.txt', 'ffmetadata', FFMetadata],
         ['ffmpeginfo.txt', 'ffmpeginfo', FFMpegInfo],
@@ -34,7 +36,7 @@ describe('autodetection of sample files', () => {
         ['shutter.edl', 'shutteredl', ShutterEDL],
         ['vorbiscomment.txt', 'vorbiscomment', VorbisComment],
         ['webvtt.txt', 'webvtt', WebVTT],
-        ['youtube-chapters.txt', 'youtube', Youtube]
+        ['youtube-chapters.txt', 'youtube', Youtube],
     ];
 
     filesAndKeysAndHandlers.forEach(item => {

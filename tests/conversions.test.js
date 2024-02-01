@@ -12,6 +12,7 @@ import { VorbisComment } from "../src/Formats/VorbisComment.js";
 import { PodloveSimpleChapters } from "../src/Formats/PodloveSimpleChapters.js";
 import { MP4Chaps } from "../src/Formats/MP4Chaps.js";
 import { PodloveJson } from "../src/Formats/PodloveJson.js";
+import { AppleHLS } from "../src/Formats/AppleHLS.js";
 import { readFileSync } from "fs";
 import { sep } from "path";
 
@@ -21,7 +22,7 @@ describe('conversions from one format to any other', () => {
         MatroskaXML, MKVMergeXML, MKVMergeSimple, 
         PySceneDetect, AppleChapters, ShutterEDL, 
         VorbisComment, PodloveSimpleChapters, MP4Chaps,
-        PodloveJson
+        PodloveJson, AppleHLS
     ];
 
     const content = readFileSync(module.path + sep + 'samples' + sep + 'chapters.json', 'utf-8');
