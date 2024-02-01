@@ -48,7 +48,7 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                 |
                                 | Apple Chapters
                         li.nav-item
-                            a.nav-link(:class="{active : /^(psc|podlove)/.test(exportSettings.type)}", href="#", @click.stop.prevent="updateExportContent('podlove')")
+                            a.nav-link(:class="{active : /^(psc|podlove)/.test(exportSettings.type)}", href="#", @click.stop.prevent="updateExportContent('psc')")
                                 i.bi.bi-filetype-xml
                                 |
                                 | Podlove

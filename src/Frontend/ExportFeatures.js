@@ -30,6 +30,7 @@ export default {
         if (type) {
             this.exportSettings.type = type;
         }
+        
 
         this.data.ensureUniqueFilenames();
         this.exportData = AutoFormat.as(this.exportSettings.type, this.data);
