@@ -47,6 +47,22 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                 i.bi.bi-filetype-xml
                                 |
                                 | Apple Chapters
+                        li.nav-item
+                            a.nav-link(:class="{active : /^(psc|podlove)/.test(exportSettings.type)}", href="#", @click.stop.prevent="updateExportContent('podlove')")
+                                i.bi.bi-filetype-xml
+                                |
+                                | Podlove
+                        li.nav-item
+                            a.nav-link(:class="{active : exportSettings.type === 'mp4chaps'}", href="#", @click.stop.prevent="updateExportContent('mp4chaps')")
+                                i.bi.bi-filetype-txt
+                                |
+                                | MP4Chaps
+                        li.nav-item
+                            a.nav-link(:class="{active : exportSettings.type === 'shutteredl'}", href="#", @click.stop.prevent="updateExportContent('shutteredl')")
+                                i.bi.bi-filetype-txt
+                                |
+                                | EDL
+
                     div.row.flex-grow-1
                         div.col-8.d-flex.flex-column
                             textarea.flex-grow-1.overflow-visible.form-control(:value="exportContent", readonly, x-ref="outputTextarea")
@@ -89,6 +105,12 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                     label.btn.btn-outline-primary(for="formatMKVMergeSimple") simple aka Nero
                                     input#formatVorbisComment.btn-check(type="radio",name="mkvformat",value="vorbiscomment", x-model="exportSettings.type", @change="updateExportContent()")
                                     label.btn.btn-outline-primary(for="formatVorbisComment") Vorbis Comment
+                            template(x-if="/^(psc|podlove)/.test(exportSettings.type)")
+                                div.btn-group.btn-group-sm(role="group")
+                                    input#podloveSimpleChapters.btn-check(type="radio",name="podloveformat",value="psc", x-model="exportSettings.type", @change="updateExportContent()")
+                                    label.btn.btn-outline-primary(for="podloveSimpleChapters") Podlove Simple Chapters
+                                    input#podloveJson.btn-check(type="radio",name="podloveformat",value="podlovejson", x-model="exportSettings.type", @change="updateExportContent()")
+                                    label.btn.btn-outline-primary(for="podloveJson") podlove json
                             template(x-if="exportSettings.type === 'pyscenedetect'")
                                 div
                                     div.input-group.mb-2
