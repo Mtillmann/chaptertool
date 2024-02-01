@@ -82,5 +82,18 @@ be 00:00.
 ## How to use the apple chapters?
 I honestly don't know as the only reference I could find is [NVEnc's documentation](https://github.com/rigaya/NVEnc/blob/master/NVEncC_Options.en.md#--chapter-string:~:text=apple%20format%20(should%20be%20in%20utf%2D8))
 
+## Which EDL format is used?
+I used the EDL format that is yielded by [shutter encoder](https://www.shutterencoder.com/en/). I hope the format is compatible with other software, but I haven't tested it.
+
+## How to use the podlove simple chapters?
+The podlove simple chapters are used in the podlove web player. The format is described in the [podlove documentation](https://podlove.org/simple-chapters/).
+
+## How to use the apple hls chapters?
+I have no idea. Also the format is only partially supported as it has more features than `chaptersjson` (which is the internal format used by chaptertool) can express.
+
+## How to use the mp4chaps chapters?
+No clue, hopefully you can figure it out.
+
+
 ## What does "chapter/timeline lock" do?
 When enabled, clicking anywhere on the timeline will select the chapter below. When disabled you can click on the timeline without the chapter below being selected and scrolled into view.
