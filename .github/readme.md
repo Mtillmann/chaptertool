@@ -2,15 +2,34 @@
 
 # chaptertool
 
-Create and convert chapters for podcasts, youtube, matroska, webvtt, ffmpeg, mkvmerge, vorbis comment, apple chapters and pySceneDetect.  
-
-The cli tools can automatically create chapters with images from videos using ffmpeg's scene detection.
+Create and _convert_ chapters for podcasts, youtube, matroska, mkvmerge/nero/vorbis, webvtt, ffmpeginfo, ffmetadata, pyscenedetect, apple chapters, edl, podlove simple chapters (xml, json), apple hls chapters and mp4chaps.
 
 ## [Web App](https://mtillmann.github.io/chaptertool)
 
 [Click here to open the web app](https://mtillmann.github.io/chaptertool).
 
-## CLI Prerequisite
+## Supported Formats
+
+- `chaptersjson` podcasting 2.0 chapters json file ([spec](https://github.com/Podcastindex-org/podcast-namespace/blob/main/chapters/jsonChapters.md)) 
+- `ffmpegdata` ffmpeg metadata format ([spec](https://ffmpeg.org/ffmpeg-formats.html#Metadata-1))
+- `matroskaxml` matroska XML format ([spec](https://www.matroska.org/technical/chapters.html))
+- `mkvmergexml` MKVToolNix mkvmerge XML format ([spec](https://mkvtoolnix.download/doc/mkvmerge.html#mkvmerge.chapters))
+- `mkvmergesimple` MKVToolNix mkvmerge "simple" format ([spec](https://mkvtoolnix.download/doc/mkvmerge.html#mkvmerge.chapters))
+- `webvtt` WebVTT chapter format ([spec](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API))
+- `youtube` Youtube description chapter notation
+- `ffmpeginfo` (readonly) ffmpeg scene detection output, used internally
+- `pyscenedetect` PySceneDetect list-scenes CSV Format ([project home](https://github.com/Breakthrough/PySceneDetect))
+- `vorbiscomment` [Vorbis Comment](https://wiki.xiph.org/Chapter_Extension#:~:text=two%20sequential%20chapters%3A-,CHAPTER001,-%3D00%3A00%3A00.0009) format that is slightly different from mkvmergesimple
+- `applechapters` [mythical chapter format](https://github.com/rigaya/NVEnc/blob/master/NVEncC_Options.en.md#--chapter-string:~:text=CHAPTER03NAME%3Dchapter%2D3-,apple%20format,-(should%20be%20in)) of unclear origin/spec or purpose
+- `edl` Edit Decision List, compatible with [shutter encoder](https://www.shutterencoder.com/en/), unclear actual spec
+- `podlove simple chapters` [xml](https://podlove.org/simple-chapters/) and [json](https://github.com/podlove/chapters#:~:text=org/%3E-,Encode%20to%20JSON,-iex%3E%20Chapters) format
+- `mp4chaps` [mp4chaps](https://github.com/podlove/chapters#:~:text=%3Achapters%3E-,Encode%20to%20mp4chaps,-iex%3E%20Chapters) format - actual spec unknown
+- `applehls` [Apple HLS Chapter](https://developer.apple.com/documentation/http-live-streaming/providing-javascript-object-notation-json-chapters) format - partial support
+
+
+## CLI 
+
+## Prerequisite
 
 You need to install `node` and optionally `ffmpeg` on your system:
 
@@ -19,8 +38,6 @@ macOS: [package manager](https://brew.sh/), [node](https://www.startpage.com/sp/
 linux: [node](https://www.startpage.com/sp/search?q=linux%20install%20node), [ffmpeg](https://www.startpage.com/sp/search?q=linux%20install%20ffmpeg)
 
 ## create chapters from video
-
-First, navigate your terminal to the folder that contains the video file. Next, run
 
 ```shell
 npx chaptertool@latest generate YOUR_FILE.mp4
@@ -38,8 +55,6 @@ Run the http-server that hosts the web ui.
 | option    | description                                                                | default |
 |-----------|----------------------------------------------------------------------------|---------|
 | `--port`  | port for the http-server                                                   | `8989`  |
-
-
 
 ### `generate`
 Generate raw chapters from video using ffmpeg.
@@ -78,20 +93,8 @@ Generate raw chapters from video using ffmpeg.
 
 ### `convert`
 
-Converts existing chapters between the following formats:
+Converts existing chapters between any of the supported formats:
 
-- `chaptersjson` podcasting 2.0 chapters json file ([spec](https://github.com/Podcastindex-org/podcast-namespace/blob/main/chapters/jsonChapters.md)) 
-- `ffmpegdata` ffmpeg metadata format ([spec](https://ffmpeg.org/ffmpeg-formats.html#Metadata-1))
-- `matroskaxml` matroska XML format ([spec](https://www.matroska.org/technical/chapters.html))
-- `mkvmergexml` MKVToolNix mkvmerge XML format ([spec](https://mkvtoolnix.download/doc/mkvmerge.html#mkvmerge.chapters))
-- `mkvmergesimple` MKVToolNix mkvmerge "simple" format ([spec](https://mkvtoolnix.download/doc/mkvmerge.html#mkvmerge.chapters))
-- `webvtt` WebVTT chapter format ([spec](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API))
-- `youtube` Youtube description chapter notation
-- `ffmpeginfo` (readonly) ffmpeg scene detection output, used internally
-- `pyscenedetect` PySceneDetect list-scenes CSV Format ([project home](https://github.com/Breakthrough/PySceneDetect))
-- `vorbiscomment` [Vorbis Comment](https://wiki.xiph.org/Chapter_Extension#:~:text=two%20sequential%20chapters%3A-,CHAPTER001,-%3D00%3A00%3A00.0009) format that is slightly different from mkvmergesimple
-- `applechapters` [mythical chapter format](https://github.com/rigaya/NVEnc/blob/master/NVEncC_Options.en.md#--chapter-string:~:text=CHAPTER03NAME%3Dchapter%2D3-,apple%20format,-(should%20be%20in)) of unclear origin/spec or purpose
- 
 | option                 | description                                                                         | default |
 |------------------------|-------------------------------------------------------------------------------------|---------|
 | `<input>`              | the file that you want to convert, format will be detected                          |         |
@@ -131,39 +134,6 @@ You can combine config with regular cli options. Evaluation occurs in this order
 3. config yaml (if present) value
 4. explicit cli value
 
-
 ## Examples
 
-Some of the examples require [yt-dlp](https://github.com/yt-dlp/yt-dlp).   
-
-### cropping
-
-[This video](https://www.youtube.com/watch?v=rpDWoshRnME) is a podcast with a slideshow version on youtube that
-only uses a small portion of the video:
-
-```shell
-yt-dlp "https://www.youtube.com/watch?v=rpDWoshRnME" -o cropme.webm
-npx chaptertool@latest generate cropme.webm --crop="926:608:831:72"
-```
-
-### handling cross-fade slideshows
-
-[This video](https://www.youtube.com/watch?v=EL9ftQJ3Yjw) is a podcast with a slideshow version on youtube that
-unfortunately uses cross-fade transitions between slides. Scene detection fails with those transitions
-because the difference between the frames during the the transition is very small.
-
-```shell
-yt-dlp "https://www.youtube.com/watch?v=EL9ftQJ3Yjw" -o crossfaded.webm
-npx chaptertool@latest generate crossfaded.webm --use-crossfade-fix
-```
-
-### Bad Display Aspect Ratio
-
-[This video](https://cdn.media.ccc.de/events/gpn/gpn16/h264-sd/gpn16-7623-deu-Wie_baut_man_eigentlich_Raumschiffe_sd.mp4)
-([from here](https://media.ccc.de/v/gpn16-7623-wie_baut_man_eigentlich_raumschiffe)) has a display aspect ratio of 16:9 (1.77)
-but a natural resolution of 720x576 (1.25). Create images(1024x576) with square pixels like this:
-
-```shell
-wget "https://cdn.media.ccc.de/events/gpn/gpn16/h264-sd/gpn16-7623-deu-Wie_baut_man_eigentlich_Raumschiffe_sd.mp4" -o baddar.mp4
-npx chaptertool@latest generate baddar.mp4 --force-dar
-```
+[see examples.md](./examples.md)

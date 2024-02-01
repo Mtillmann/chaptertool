@@ -1,6 +1,6 @@
 {
   "name": "chaptertool",
-  "version": "0.4.3",
+  "version": "0.4.5",
   "description": "Manage and generate chapters for podcasts and other media via cli or web",
   "keywords": [
     "podcast",
@@ -12,7 +12,11 @@
     "webvtt",
     "pyscenedetect",
     "vorbis",
-    "apple-chapters"
+    "apple-chapters",
+    "podlove",
+    "podcast-chapters",
+    "edl",
+    "hls"
   ],
   "type": "module",
   "main": "chaptertool.js",
