@@ -6,6 +6,7 @@ export class AppleHLS extends FormatBase {
 
     filename = 'apple-hls.json';
     mimeType = 'application/json';
+    supportsPrettyPrint = true;
 
     titleLanguage = 'en';
     imageDims = [1280, 720];

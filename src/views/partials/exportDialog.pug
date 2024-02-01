@@ -62,7 +62,11 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                 i.bi.bi-filetype-txt
                                 |
                                 | EDL
-
+                        li.nav-item
+                            a.nav-link(:class="{active : exportSettings.type === 'applehls'}", href="#", @click.stop.prevent="updateExportContent('applehls')")
+                                i.bi.bi-filetype-json
+                                |
+                                | Apple HLS chapters
                     div.row.flex-grow-1
                         div.col-8.d-flex.flex-column
                             textarea.flex-grow-1.overflow-visible.form-control(:value="exportContent", readonly, x-ref="outputTextarea")

@@ -68,7 +68,7 @@ export class ShutterEDL extends FormatBase {
             return acc;
         }, []);
         
-        output.unshift('TITLE: ' + this.meta.title);
+        output.unshift('TITLE: ' + (this.meta.title || 'Chapters'));
         return output.join("\n");
     }
 }
