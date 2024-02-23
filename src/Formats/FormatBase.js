@@ -206,7 +206,11 @@ export class FormatBase {
                             }
                         });
 
-                        if ('img_filename' in chapter && 'img' in filtered) {
+
+                        
+
+                        if ('img_filename' in chapter && 'img' in filtered && chapter.img_type === 'relative') {
+                            
                             filtered.img = filenamify(chapter.img_filename);
                         }
 
