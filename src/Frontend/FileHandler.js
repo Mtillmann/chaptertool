@@ -102,7 +102,9 @@ export class FileHandler {
                 .then(text => {
                     try {
                         const detected = AutoFormat.from(text);
-                        const data = new ChaptersJson(detected);
+
+                        const data = ChaptersJson.create(detected);
+
                         gtag('event', 'ui', {
                             action: 'external',
                             origin,

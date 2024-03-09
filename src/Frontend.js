@@ -154,7 +154,7 @@ window.APP = {
             });
 
             window.addEventListener('timeline:scrollintoview', e => {
-                this.editChapter(e.detail.index)
+                this.editChapter(e.detail.index);
             });
 
             window.addEventListener('dragndrop:video', e => {
@@ -210,6 +210,7 @@ window.APP = {
             });
 
             window.addEventListener('dragndrop:json', e => {
+
                 if (this.data.chapters.length > 0 || this.hasVideo || this.hasAudio) {
                     this.showImportDialog({
                         mode: 'data',
@@ -218,6 +219,7 @@ window.APP = {
                     });
                     return;
                 }
+
                 this.newProject(e.detail.data);
             });
 
@@ -272,13 +274,16 @@ window.APP = {
             });
         },
 
-        scrollChapterIntoView(index) {
-            this.$refs.chapterList.querySelectorAll('.list-chapter')[index].scrollIntoView({block: 'center'});
+        scrollChapterIntoView(index = 0) {
+
+            this.$refs.chapterList.querySelectorAll('.list-chapter')?.[index]?.scrollIntoView({block: 'center'});
         },
 
         editChapter(index) {
+
             this.$nextTick(() => {
                 this.scrollChapterIntoView(index);
+
                 this.currentChapterIndex = index;
                 window.timeline.setActive(index);
             });

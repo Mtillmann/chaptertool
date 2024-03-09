@@ -20810,7 +20810,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                   .then(text => {
                       try {
                           const detected = AutoFormat.from(text);
-                          const data = new ChaptersJson(detected);
+
+                          const data = ChaptersJson.create(detected);
+
                           gtag('event', 'ui', {
                               action: 'external',
                               origin,
@@ -26550,6 +26552,7 @@ Z`;
               });
 
               window.addEventListener('dragndrop:json', e => {
+
                   if (this.data.chapters.length > 0 || this.hasVideo || this.hasAudio) {
                       this.showImportDialog({
                           mode: 'data',
@@ -26558,6 +26561,7 @@ Z`;
                       });
                       return;
                   }
+
                   this.newProject(e.detail.data);
               });
 
@@ -26612,13 +26616,16 @@ Z`;
               });
           },
 
-          scrollChapterIntoView(index) {
-              this.$refs.chapterList.querySelectorAll('.list-chapter')[index].scrollIntoView({block: 'center'});
+          scrollChapterIntoView(index = 0) {
+
+              this.$refs.chapterList.querySelectorAll('.list-chapter')?.[index]?.scrollIntoView({block: 'center'});
           },
 
           editChapter(index) {
+
               this.$nextTick(() => {
                   this.scrollChapterIntoView(index);
+
                   this.currentChapterIndex = index;
                   window.timeline.setActive(index);
               });
