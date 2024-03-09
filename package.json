@@ -1,6 +1,6 @@
 {
   "name": "chaptertool",
-  "version": "0.4.5",
+  "version": "0.5.0",
   "description": "Manage and generate chapters for podcasts and other media via cli or web",
   "keywords": [
     "podcast",
@@ -16,7 +16,8 @@
     "podlove",
     "podcast-chapters",
     "edl",
-    "hls"
+    "hls",
+    "scenecut"
   ],
   "type": "module",
   "main": "chaptertool.js",
@@ -41,6 +42,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@mtillmann/chapters": "^0.1.0",
     "@zip.js/zip.js": "^2.7.32",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",

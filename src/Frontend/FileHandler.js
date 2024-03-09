@@ -1,5 +1,5 @@
-import {AutoFormat} from "../Formats/AutoFormat.js";
-import {ChaptersJson} from "../Formats/ChaptersJson";
+import {AutoFormat} from "@mtillmann/chapters";
+import {ChaptersJson} from "@mtillmann/chapters";
 
 export class FileHandler {
 
@@ -102,7 +102,9 @@ export class FileHandler {
                 .then(text => {
                     try {
                         const detected = AutoFormat.from(text);
-                        const data = new ChaptersJson(detected);
+
+                        const data = ChaptersJson.create(detected);
+
                         gtag('event', 'ui', {
                             action: 'external',
                             origin,

@@ -3,9 +3,9 @@ import {lstatSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSyn
 import {execSync, spawn} from "child_process";
 import {secondsToTimestamp, zeroPad} from "../util.js";
 import {addSuffixToPath} from "../cli_util.js";
-import {FFMpegInfo} from "../Formats/FFMpegInfo.js";
-import {ChaptersJson} from "../Formats/ChaptersJson.js";
-import {AutoFormat} from "../Formats/AutoFormat.js";
+import {FFMpegInfo} from "@mtillmann/chapters";
+import {ChaptersJson} from "@mtillmann/chapters";
+import {AutoFormat} from "@mtillmann/chapters";
 
 export class ChapterGenerator {
 

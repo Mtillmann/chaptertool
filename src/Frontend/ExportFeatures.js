@@ -1,6 +1,6 @@
 import * as zip from "@zip.js/zip.js";
 import { Offcanvas } from "bootstrap";
-import { AutoFormat } from "../Formats/AutoFormat.js";
+import { AutoFormat } from "@mtillmann/chapters";
 
 
 export default {
@@ -30,7 +30,7 @@ export default {
         if (type) {
             this.exportSettings.type = type;
         }
-        
+
 
         this.data.ensureUniqueFilenames();
         this.exportData = AutoFormat.as(this.exportSettings.type, this.data);

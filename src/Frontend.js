@@ -1,6 +1,6 @@
 import Alpine from "alpinejs";
 import { Offcanvas, Toast, Tooltip } from "bootstrap";
-import { ChaptersJson } from "./Formats/ChaptersJson.js";
+import { ChaptersJson } from "@mtillmann/chapters";
 import ExportFeatures from "./Frontend/ExportFeatures.js";
 import { FileHandler } from "./Frontend/FileHandler.js";
 import ImportDialog from "./Frontend/ImportDialog.js";
@@ -79,7 +79,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-    
+
 })
 
 window.APP = {
@@ -154,7 +154,7 @@ window.APP = {
             });
 
             window.addEventListener('timeline:scrollintoview', e => {
-                this.editChapter(e.detail.index)
+                this.editChapter(e.detail.index);
             });
 
             window.addEventListener('dragndrop:video', e => {
@@ -210,6 +210,7 @@ window.APP = {
             });
 
             window.addEventListener('dragndrop:json', e => {
+
                 if (this.data.chapters.length > 0 || this.hasVideo || this.hasAudio) {
                     this.showImportDialog({
                         mode: 'data',
@@ -218,6 +219,7 @@ window.APP = {
                     });
                     return;
                 }
+
                 this.newProject(e.detail.data);
             });
 
@@ -272,12 +274,15 @@ window.APP = {
             });
         },
 
-        scrollChapterIntoView(index) {
-            this.$refs.chapterList.querySelectorAll('.list-chapter')[index].scrollIntoView({block: 'center'});
+        scrollChapterIntoView(index = 0) {
+
+            this.$refs.chapterList.querySelectorAll('.list-chapter')?.[index]?.scrollIntoView({block: 'center'});
         },
 
         editChapter(index) {
+
             this.$nextTick(() => {
+                index = index ?? 0;
                 this.scrollChapterIntoView(index);
                 this.currentChapterIndex = index;
                 window.timeline.setActive(index);
@@ -419,10 +424,8 @@ window.APP = {
             }
 
             gtag('event', 'chapter', {action: 'add', where: 'atIndex'});
-
             let startTime = this.data.addChapterAt(index);
             this.updateTimeline();
-
             this.toast(`added chapter at position ${index + 1} (${secondsToTimestamp(startTime)})`);
 
             this.$nextTick(() => {
