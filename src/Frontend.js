@@ -1,6 +1,6 @@
 import Alpine from "alpinejs";
 import { Offcanvas, Toast, Tooltip } from "bootstrap";
-import { ChaptersJson } from "./Formats/ChaptersJson.js";
+import { ChaptersJson } from "@mtillmann/chapters";
 import ExportFeatures from "./Frontend/ExportFeatures.js";
 import { FileHandler } from "./Frontend/FileHandler.js";
 import ImportDialog from "./Frontend/ImportDialog.js";
@@ -79,7 +79,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-    
+
 })
 
 window.APP = {
@@ -419,10 +419,8 @@ window.APP = {
             }
 
             gtag('event', 'chapter', {action: 'add', where: 'atIndex'});
-
             let startTime = this.data.addChapterAt(index);
             this.updateTimeline();
-
             this.toast(`added chapter at position ${index + 1} (${secondsToTimestamp(startTime)})`);
 
             this.$nextTick(() => {

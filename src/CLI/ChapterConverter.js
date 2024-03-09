@@ -1,5 +1,5 @@
 import { lstatSync, readFileSync, writeFileSync } from "fs";
-import { AutoFormat } from "../Formats/AutoFormat.js";
+import { AutoFormat } from "@mtillmann/chapters";
 
 export class ChapterConverter {
 

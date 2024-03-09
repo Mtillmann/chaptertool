@@ -1,5 +1,5 @@
-import {AutoFormat} from "../Formats/AutoFormat.js";
-import {ChaptersJson} from "../Formats/ChaptersJson";
+import {AutoFormat} from "@mtillmann/chapters";
+import {ChaptersJson} from "@mtillmann/chapters";
 
 export class FileHandler {
 

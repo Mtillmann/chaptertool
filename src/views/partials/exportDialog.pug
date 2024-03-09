@@ -67,6 +67,11 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                 i.bi.bi-filetype-json
                                 |
                                 | Apple HLS chapters
+                        li.nav-item
+                        a.nav-link(:class="{active : exportSettings.type === 'scenecut'}", href="#", @click.stop.prevent="updateExportContent('scenecut')")
+                            i.bi.bi-filetype-json
+                            |
+                            | Scenecut
                     div.row.flex-grow-1
                         div.col-8.d-flex.flex-column
                             textarea.flex-grow-1.overflow-visible.form-control(:value="exportContent", readonly, x-ref="outputTextarea")
@@ -124,7 +129,7 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                         input.form-check-input#psdOmitTimecodes(@change="updateExportContent()",type="checkbox", x-model="exportSettings.psdOmitTimecodes")
                                         label.form-check-label(for="psdOmitTimecodes") omit <kbd>Timecode List</kbd>
                             template(x-if="exportSettings.type === 'applechapters'")
-                                div 
+                                div
                                     div.form-check.form-switch.mb-2
                                         input.form-check-input#psdOmitTimecodes(@change="updateExportContent()",type="checkbox", x-model="exportSettings.acUseTextAttr")
                                         label.form-check-label(for="psdOmitTimecodes") use <kbd>text</kbd>-attr
