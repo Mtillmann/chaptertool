@@ -26297,7 +26297,7 @@ Z`;
           if (index === false) {
               return;
           }
-          this.node.querySelectorAll('.chapter')[index].classList.add('active');
+          this.node.querySelectorAll('.chapter')?.[index ?? 0]?.classList.add('active');
       }
 
       mouseMoveHandler(e) {
@@ -26624,8 +26624,8 @@ Z`;
           editChapter(index) {
 
               this.$nextTick(() => {
+                  index = index ?? 0;
                   this.scrollChapterIntoView(index);
-
                   this.currentChapterIndex = index;
                   window.timeline.setActive(index);
               });

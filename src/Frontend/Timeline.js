@@ -261,7 +261,7 @@ export default class Timeline {
         if (index === false) {
             return;
         }
-        this.node.querySelectorAll('.chapter')[index].classList.add('active');
+        this.node.querySelectorAll('.chapter')?.[index ?? 0]?.classList.add('active');
     }
 
     mouseMoveHandler(e) {

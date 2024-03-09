@@ -282,8 +282,8 @@ window.APP = {
         editChapter(index) {
 
             this.$nextTick(() => {
+                index = index ?? 0;
                 this.scrollChapterIntoView(index);
-
                 this.currentChapterIndex = index;
                 window.timeline.setActive(index);
             });
