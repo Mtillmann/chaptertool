@@ -1,6 +1,6 @@
 # chaptertool
 
-Create and _convert_ chapters for podcasts, youtube, matroska, mkvmerge/nero/vorbis, webvtt, ffmpeginfo, ffmetadata, pyscenedetect, apple chapters, edl, podlove simple chapters (xml, json), apple hls chapters and mp4chaps.
+Create and _convert_ chapters for podcasts, youtube, matroska, mkvmerge/nero/vorbis, webvtt, ffmpeginfo, ffmetadata, pyscenedetect, apple chapters, edl, podlove simple chapters (xml, json), apple hls chapters, mp4chaps and scenecut.
 
 The cli tools can automatically create chapters with images from videos using ffmpeg's scene detection.
 
