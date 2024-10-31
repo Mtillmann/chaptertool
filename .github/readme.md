@@ -152,3 +152,9 @@ docker build -t chaptertool-gui .
 docker run -p 8989:8989 chaptertool-gui
 # open http://localhost:8989 in your browser
 ```
+
+or use the image from dockerhub:
+
+```shell
+docker run -p 8989:8989 martintillmann/chaptertool-gui
+```
