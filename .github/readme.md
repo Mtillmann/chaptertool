@@ -4,6 +4,8 @@
 
 Create and _convert_ chapters for podcasts, youtube, matroska, mkvmerge/nero/vorbis, webvtt, ffmpeginfo, ffmetadata, pyscenedetect, apple chapters, edl, podlove simple chapters (xml, json), apple hls chapters and mp4chaps.
 
+> Build on [@mtillmann/chapters](https://github.com/Mtillmann/chapters)
+
 ## [Web App](https://mtillmann.github.io/chaptertool)
 
 [Click here to open the web app](https://mtillmann.github.io/chaptertool).
@@ -140,3 +142,13 @@ You can combine config with regular cli options. Evaluation occurs in this order
 ## Examples & FAQ
 
 [examples.md](/examples.md), [FAQ](/faq.md)
+
+## Docker 
+
+Use docker to run the web GUI:
+
+```shell
+docker build -t chaptertool-gui .
+docker run -p 8989:8989 chaptertool-gui
+# open http://localhost:8989 in your browser
+```
