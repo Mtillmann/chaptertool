@@ -103,7 +103,7 @@ Converts existing chapters between any of the supported formats:
 | option                 | description                                                                         | default |
 |------------------------|-------------------------------------------------------------------------------------|---------|
 | `<input>`              | the file that you want to convert, format will be detected                          |         |
-| `--format`             | target format, one of those listed above. When omitted, detected input format is used |         |
+| `--output-format`             | target format, one of those listed above. When omitted, detected input format is used |         |
 | `--pretty`             | some formats support pretty printing                                                |         |
 | `--img-uri`            | see above, works only with `chaptersjson`                                           |         |
 | `--output-file`        | file to write the output to. see below                                              |         |

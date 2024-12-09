@@ -1,6 +1,6 @@
 {
   "name": "chaptertool",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Manage and generate chapters for podcasts and other media via cli or web",
   "keywords": [
     "podcast",
@@ -24,7 +24,6 @@
   "bin": "chaptertool.js",
   "homepage": "https://github.com/Mtillmann/chaptertool",
   "scripts": {
-    "test": "jest",
     "sass-dev": "node-sass --recursive --watch src/scss --output static",
     "build": "rollup -c && terser static/app.js --compress ecma=2021 --output static/app.js && node-sass --recursive --output-style compressed src/scss --output static && node scripts/writeversion.js",
     "createIndexHTML": "node scripts/empuggen.js",
@@ -61,23 +60,11 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-replace": "^5.0.5",
     "alpinejs": "^3.13.4",
-    "babel-jest": "^29.7.0",
     "concurrently": "^8.2.2",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
     "node-sass": "^9.0.0",
     "nodemon": "^3.0.3",
     "rollup": "^4.9.6",
     "rollup-plugin-copy": "^3.5.0",
     "terser": "^5.27.0"
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "!node_modules/"
-    ],
-    "testMatch": [
-      "<rootDir>/tests/*.test.js"
-    ],
-    "testEnvironment": "./jest-env-jsdom.js"
   }
 }
