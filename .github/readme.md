@@ -32,17 +32,19 @@ Create and _convert_ chapters for podcasts, youtube, matroska, mkvmerge/nero/vor
 | Apple HLS Chapters | applehls | `json` | [spec](https://developer.apple.com/documentation/http-live-streaming/providing-javascript-object-notation-json-chapters), partial support |
 | SceneCut | scenecut | `json` | [spec](https://github.com/slhck/scenecut-extractor#:~:text=cuts%20in%20JSON-,format,-%3A) |
 
-## CLI 
+## CLI
 
 ## Prerequisite
 
 You need to install `node` and optionally `ffmpeg` on your system:
 
-Windows: [modern terminal](https://github.com/microsoft/terminal), [package manager](https://chocolatey.org/), [node](https://www.startpage.com/sp/search?q=windows%20install%20node), [ffmpeg](https://www.startpage.com/sp/search?q=windows%20install%20ffmpeg)   
-macOS: [package manager](https://brew.sh/), [node](https://www.startpage.com/sp/search?q=macOS%20install%20node), [ffmpeg](https://www.startpage.com/sp/search?q=macOS%20install%20ffmpeg)    
+Windows: [modern terminal](https://github.com/microsoft/terminal), [package manager](https://chocolatey.org/), [node](https://www.startpage.com/sp/search?q=windows%20install%20node), [ffmpeg](https://www.startpage.com/sp/search?q=windows%20install%20ffmpeg)
+macOS: [package manager](https://brew.sh/), [node](https://www.startpage.com/sp/search?q=macOS%20install%20node), [ffmpeg](https://www.startpage.com/sp/search?q=macOS%20install%20ffmpeg)
 linux: [node](https://www.startpage.com/sp/search?q=linux%20install%20node), [ffmpeg](https://www.startpage.com/sp/search?q=linux%20install%20ffmpeg)
 
 ## create chapters from video
+
+> An updated cli tool with better interface is available here: [chapconv](https://github.com/Mtillmann/chapconv)
 
 ```shell
 npx chaptertool@latest generate YOUR_FILE.mp4
@@ -69,7 +71,7 @@ Generate raw chapters from video using ffmpeg.
 | `<input>`              | the video file that you want to process                                                                                                                                             |                              |
 | `--y`                  | when set ffmpeg will _always_ overwrite existing output                                                                                                                             |                              |
 | `--n`                  | when set ffmpeg will _never_ overwrite existing output                                                                                                                              |                              |
-| `--output-format`      | output format for the chapters, [see below](#convert)                                                                                                                               | `chaptersjson`               | 
+| `--output-format`      | output format for the chapters, [see below](#convert)                                                                                                                               | `chaptersjson`               |
 | `--output-folder`      | image destination folder, `$filename` will be replaced with the input video filename minus the extension                                                                            | `$filename_chapters`         |
 | `--chapter-template`   | template string for the chapter names.                                                                                                                                              | `Chapter $chapter of $total` |
 | `--scene-value`        | min value for ffmpeg's scene detection. If you only use a small portion of the screen, the value should be smaller. See the crop option                                             | `0.1`                        |
@@ -111,7 +113,7 @@ Converts existing chapters between any of the supported formats:
 | `--psd-framerate`      | set the framerate for _PySceneDetect_ output                                        |         |
 | `--ac-use-text-attr`      | use the text-attribute for _Apple Chapters_            |      |
 
-> use `--output-file` when using powershell, otherwise you'll have BOMs in your output 
+> use `--output-file` when using powershell, otherwise you'll have BOMs in your output
 
 ## config yaml and .env
 
@@ -143,7 +145,7 @@ You can combine config with regular cli options. Evaluation occurs in this order
 
 [examples.md](/examples.md), [FAQ](/faq.md)
 
-## Docker 
+## Docker
 
 Use docker to run the web GUI:
 
