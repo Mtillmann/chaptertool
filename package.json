@@ -1,6 +1,6 @@
 {
   "name": "chaptertool",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Manage and generate chapters for podcasts and other media via cli or web",
   "keywords": [
     "podcast",
