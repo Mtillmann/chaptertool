@@ -7,71 +7,71 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
             div.row.flex-grow-1
                 div.col-12.d-flex.flex-column.flex-grow-1
                     ul.nav.nav-tabs.mb-2(style="--bs-nav-link-padding-x:0.5rem")
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('chaptersjson') || selectedFormats.length === 0")
                             a.nav-link(:class="{active : exportSettings.type === 'chaptersjson'}", href="#", @click.stop.prevent="updateExportContent('chaptersjson')")
                                 i.bi.bi-filetype-json
                                 |
                                 | chapters.json
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('webvtt')")
                             a.nav-link(:class="{active : exportSettings.type === 'webvtt'}", href="#", @click.stop.prevent="updateExportContent('webvtt')")
                                 i.bi.bi-filetype-txt
                                 |
                                 | WebVTT
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('youtube')")
                             a.nav-link(:class="{active : exportSettings.type === 'youtube'}", href="#", @click.stop.prevent="updateExportContent('youtube')")
                                 i.bi.bi-youtube
                                 |
                                 | Youtube
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('matroskaxml')")
                             a.nav-link(:class="{active : exportSettings.type === 'matroskaxml'}", href="#", @click.stop.prevent="updateExportContent('matroskaxml')")
                                 i.bi.bi-filetype-xml
                                 |
                                 | Matroska
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('mkvmergexml') || selectedFormats.includes('mkvmersimple') || selectedFormats.includes('vorbiscomment')")
                             a.nav-link(:class="{active : /^(mkvmerge|vorbis)/.test(exportSettings.type)}", href="#", @click.stop.prevent="updateExportContent('mkvmergexml')")
                                 i.bi.bi-filetype-xml
                                 |
                                 | MKVMerge/Nero/Vorbis
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('ffmetadata')")
                             a.nav-link(:class="{active : exportSettings.type === 'ffmetadata'}", href="#", @click.stop.prevent="updateExportContent('ffmetadata')")
                                 i.bi.bi-file-binary
                                 |
                                 | FFMetadata
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('pyscenedetect')")
                             a.nav-link(:class="{active : exportSettings.type === 'pyscenedetect'}", href="#", @click.stop.prevent="updateExportContent('pyscenedetect')")
                                 i.bi.bi-filetype-py
                                 |
                                 | PySceneDetect
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('applechapters')")
                             a.nav-link(:class="{active : exportSettings.type === 'applechapters'}", href="#", @click.stop.prevent="updateExportContent('applechapters')")
                                 i.bi.bi-filetype-xml
                                 |
                                 | Apple Chapters
-                        li.nav-item
-                            a.nav-link(:class="{active : /^(psc|podlove)/.test(exportSettings.type)}", href="#", @click.stop.prevent="updateExportContent('psc')")
+                        li.nav-item(x-show="selectedFormats.includes('psc') || selectedFormats.includes('podlovejson')")
+                            a.nav-link(:class="{active : /^(psc|podlovejson)/.test(exportSettings.type)}", href="#", @click.stop.prevent="updateExportContent('psc')")
                                 i.bi.bi-filetype-xml
                                 |
                                 | Podlove
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('mp4chaps')")
                             a.nav-link(:class="{active : exportSettings.type === 'mp4chaps'}", href="#", @click.stop.prevent="updateExportContent('mp4chaps')")
                                 i.bi.bi-filetype-txt
                                 |
                                 | MP4Chaps
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('shutteredl')")
                             a.nav-link(:class="{active : exportSettings.type === 'shutteredl'}", href="#", @click.stop.prevent="updateExportContent('shutteredl')")
                                 i.bi.bi-filetype-txt
                                 |
                                 | EDL
-                        li.nav-item
+                        li.nav-item(x-show="selectedFormats.includes('applehls')")
                             a.nav-link(:class="{active : exportSettings.type === 'applehls'}", href="#", @click.stop.prevent="updateExportContent('applehls')")
                                 i.bi.bi-filetype-json
                                 |
                                 | Apple HLS chapters
-                        li.nav-item
-                        a.nav-link(:class="{active : exportSettings.type === 'scenecut'}", href="#", @click.stop.prevent="updateExportContent('scenecut')")
-                            i.bi.bi-filetype-json
-                            |
-                            | Scenecut
+                        li.nav-item(x-show="selectedFormats.includes('scenecut')")
+                            a.nav-link(:class="{active : exportSettings.type === 'scenecut'}", href="#", @click.stop.prevent="updateExportContent('scenecut')")
+                                i.bi.bi-filetype-json
+                                |
+                                | Scenecut
                     div.row.flex-grow-1
                         div.col-8.d-flex.flex-column
                             textarea.flex-grow-1.overflow-visible.form-control(:value="exportContent", readonly, x-ref="outputTextarea")

@@ -8,9 +8,9 @@
                     br
                     p.small.mb-2 Controls which export formats are shown in the export dialog:
                 div.d-flex.flex-wrap
-                    template(x-for="format in selectedFormats", :key="format.key")
+                    template(x-for="format in availableFormats", :key="format.key")
                         div.form-check.me-2.mb-2
-                            input.form-check-input(:id="`sf-${format.key}`", type="checkbox", x-model="format.selected")
+                            input.form-check-input(:id="`sf-${format.key}`", type="checkbox", @change="toggleFormat(format.key)", :checked="selectedFormats.includes(format.key)")
                             label.form-check-label(:for="`sf-${format.key}`", x-text="format.name")
             .modal-footer.justify-content-evenly
-                button.btn.btn-primary(@click="storeSettings()") Save Settings
+                button.btn.btn-secondary(@click="settingsModal.hide()") Close
