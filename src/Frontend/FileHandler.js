@@ -1,169 +1,160 @@
-import {AutoFormat} from "@mtillmann/chapters";
-import {ChaptersJson} from "@mtillmann/chapters";
+import { AutoFormat, ChaptersJson } from '@mtillmann/chapters'
 
 export class FileHandler {
+  editorHasProject = false
 
-    editorHasProject = false;
+  constructor () {
+    document.documentElement.addEventListener('paste', e => {
+      if (e.target.matches('input')) {
+        return
+      }
 
-    constructor() {
+      const text = (e.clipboardData || window.clipboardData).getData('text')
+      const files = [...(e.clipboardData || e.originalEvent.clipboardData).items]
+        .filter(item => item.kind === 'file')
+        .map(item => item.getAsFile())
 
-        document.documentElement.addEventListener('paste', e => {
-            if (e.target.matches('input')) {
-                return;
+      if (files[0]) {
+        return this.handleFile(files[0], 'paste')
+      }
+
+      try {
+        const url = new URL(text)
+        if (/(jpg|png|jpeg|webm|gif)$/.test(url.pathname)) {
+          gtag('event', 'ui', { action: 'external', origin: 'paste', type: 'image-url' })
+          return window.dispatchEvent(new CustomEvent('dragndrop:image', {
+            detail: {
+              image: url.toString(),
+              type: 'absolute',
+              name: url.toString()
             }
+          }))
+        }
+      } catch (e) {
+        // do nothing
+      }
 
-            const text = (e.clipboardData || window.clipboardData).getData('text');
-            const files = [...(event.clipboardData || event.originalEvent.clipboardData).items]
-                .filter(item => item.kind === 'file')
-                .map(item => item.getAsFile());
-
-
-            if (files[0]) {
-                return this.handleFile(files[0], 'paste')
-            }
-
-            try {
-                const url = new URL(text);
-                if (/(jpg|png|jpeg|webm|gif)$/.test(url.pathname)) {
-                    gtag('event', 'ui', {action: 'external', origin: 'paste', type: 'image-url'});
-                    return window.dispatchEvent(new CustomEvent('dragndrop:image', {
-                        detail: {
-                            image: url.toString(),
-                            type: 'absolute',
-                            name: url.toString()
-                        }
-                    }));
-                }
-            } catch (e) {
-                //do nothing
-            }
-
-            try {
-                const detected = AutoFormat.from(text);
-                const data = new ChaptersJson(detected);
-                gtag('event', 'ui', {
-                    action: 'external',
-                    origin: 'paste',
-                    type: 'data',
-                    format: detected.constructor.name
-                });
-                return window.dispatchEvent(new CustomEvent('dragndrop:json', {
-                    detail: {
-                        data,
-                        name: 'clipboard paste'
-                    }
-                }));
-            } catch (e) {
-                return window.dispatchEvent(new CustomEvent('dragndrop:jsonfail', {detail: {}}));
-            }
-
+      try {
+        const detected = AutoFormat.from(text)
+        const data = new ChaptersJson(detected)
+        gtag('event', 'ui', {
+          action: 'external',
+          origin: 'paste',
+          type: 'data',
+          format: detected.constructor.name
         })
+        return window.dispatchEvent(new CustomEvent('dragndrop:json', {
+          detail: {
+            data,
+            name: 'clipboard paste'
+          }
+        }))
+      } catch (e) {
+        return window.dispatchEvent(new CustomEvent('dragndrop:jsonfail', { detail: {} }))
+      }
+    })
 
-        document.getElementById('app').addEventListener('dragover', e => {
-            e.preventDefault();
-        });
+    document.getElementById('app').addEventListener('dragover', e => {
+      e.preventDefault()
+    })
 
-        document.getElementById('app').addEventListener('drop', e => {
-            // Prevent default behavior (Prevent file from being opened)
-            e.preventDefault();
+    document.getElementById('app').addEventListener('drop', e => {
+      // Prevent default behavior (Prevent file from being opened)
+      e.preventDefault()
 
-            if (e.dataTransfer.items) {
-                // Use DataTransferItemList interface to access the file(s)
-                [...e.dataTransfer.items].forEach((item, i) => {
-                    if (item.kind === 'file' && i === 0) {
-                        const file = item.getAsFile();
-                        this.handleFile(file, 'dragdrop');
-                    } else if (item.kind === 'file' && i > 1) {
-                        window.dispatchEvent(new CustomEvent('dragndrop:ignoredfile', {detail: {filename: '...'}}));
-                    }
-                });
-            } else {
-                [...e.dataTransfer.files].forEach((file, i) => {
-                    if (i === 0) {
-                        return this.handleFile(file, 'dragdrop');
-                    }
-                    window.dispatchEvent(new CustomEvent('dragndrop:ignoredfile', {detail: {filename: file.name}}));
-                });
-            }
+      if (e.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        [...e.dataTransfer.items].forEach((item, i) => {
+          if (item.kind === 'file' && i === 0) {
+            const file = item.getAsFile()
+            this.handleFile(file, 'dragdrop')
+          } else if (item.kind === 'file' && i > 1) {
+            window.dispatchEvent(new CustomEvent('dragndrop:ignoredfile', { detail: { filename: '...' } }))
+          }
+        })
+      } else {
+        [...e.dataTransfer.files].forEach((file, i) => {
+          if (i === 0) {
+            return this.handleFile(file, 'dragdrop')
+          }
+          window.dispatchEvent(new CustomEvent('dragndrop:ignoredfile', { detail: { filename: file.name } }))
+        })
+      }
+    })
+  }
+
+  askForNewProject () {
+    if (!this.editorHasProject) {
+      return true
+    }
+    return confirm('Do you want to discard the current project and start a new one?')
+  }
+
+  handleFile (file, origin = 'osDialog') {
+    if (['text/plain', 'text/xml', 'application/json', 'text/csv', 'text/vtt'].includes(file.type)) {
+      fetch(URL.createObjectURL(file))
+        .then(r => r.text())
+        .then(text => {
+          try {
+            const detected = AutoFormat.from(text)
+
+            const data = ChaptersJson.create(detected)
+
+            gtag('event', 'ui', {
+              action: 'external',
+              origin,
+              type: 'data',
+              format: detected.constructor.name
+            })
+            return window.dispatchEvent(new CustomEvent('dragndrop:json', {
+              detail: {
+                data,
+                name: file.name
+              }
+            }))
+          } catch (e) {
+            // do nothing
+            return window.dispatchEvent(new CustomEvent('dragndrop:jsonfail', { detail: {} }))
+          }
         })
     }
 
-    askForNewProject() {
-        if (!this.editorHasProject) {
-            return true;
+    if (file.type.slice(0, 5) === 'video') {
+      gtag('event', 'ui', { action: 'external', origin, type: 'video' })
+
+      window.dispatchEvent(new CustomEvent('dragndrop:video', {
+        detail: {
+          video: URL.createObjectURL(file),
+          name: file.name
         }
-        return confirm('Do you want to discard the current project and start a new one?');
+      }))
+      return
     }
 
-    handleFile(file, origin = 'osDialog') {
-        if (['text/plain', 'text/xml', 'application/json', 'text/csv', 'text/vtt'].includes(file.type)) {
-            fetch(URL.createObjectURL(file))
-                .then(r => r.text())
-                .then(text => {
-                    try {
-                        const detected = AutoFormat.from(text);
+    if (file.type.slice(0, 5) === 'audio' && this.askForNewProject()) {
+      gtag('event', 'ui', { action: 'external', origin, type: 'audio' })
 
-                        const data = ChaptersJson.create(detected);
-
-                        gtag('event', 'ui', {
-                            action: 'external',
-                            origin,
-                            type: 'data',
-                            format: detected.constructor.name
-                        });
-                        return window.dispatchEvent(new CustomEvent('dragndrop:json', {
-                            detail: {
-                                data,
-                                name: file.name
-                            }
-                        }));
-                    } catch (e) {
-                        // do nothing
-                        return window.dispatchEvent(new CustomEvent('dragndrop:jsonfail', {detail: {}}));
-                    }
-                })
+      window.dispatchEvent(new CustomEvent('dragndrop:audio', {
+        detail: {
+          audio: URL.createObjectURL(file),
+          name: file.name
         }
-
-        if (file.type.slice(0, 5) === 'video') {
-
-            gtag('event', 'ui', {action: 'external', origin, type: 'video'});
-
-            window.dispatchEvent(new CustomEvent('dragndrop:video', {
-                detail: {
-                    video: URL.createObjectURL(file),
-                    name: file.name
-                }
-            }));
-            return;
-        }
-
-        if (file.type.slice(0, 5) === 'audio' && this.askForNewProject()) {
-            gtag('event', 'ui', {action: 'external', origin, type: 'audio'});
-
-            window.dispatchEvent(new CustomEvent('dragndrop:audio', {
-                detail: {
-                    audio: URL.createObjectURL(file),
-                    name: file.name
-                }
-            }));
-            return;
-        }
-
-        if (file.type.slice(0, 5) === 'image') {
-            gtag('event', 'ui', {action: 'external', origin, type: 'image'});
-
-            window.dispatchEvent(new CustomEvent('dragndrop:image', {
-                detail: {
-                    image: URL.createObjectURL(file),
-                    name: file.name
-                }
-            }));
-            return;
-        }
-
-
-        window.dispatchEvent(new CustomEvent('dragndrop:ignoredfile', {detail: {filename: file.name}}));
-
+      }))
+      return
     }
 
+    if (file.type.slice(0, 5) === 'image') {
+      gtag('event', 'ui', { action: 'external', origin, type: 'image' })
+
+      window.dispatchEvent(new CustomEvent('dragndrop:image', {
+        detail: {
+          image: URL.createObjectURL(file),
+          name: file.name
+        }
+      }))
+      return
+    }
+
+    window.dispatchEvent(new CustomEvent('dragndrop:ignoredfile', { detail: { filename: file.name } }))
+  }
 }

@@ -7,6 +7,7 @@ div.offcanvas.offcanvas-end#navi(x-ref="navi")
             a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();metaPropertiesDialog.show()") Edit Meta Attributes
             a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();changeDuration()") Change Duration
             a.nav-link.offcanvas-export-link(href="#"  @click.stop.prevent="offcanvasNavi.hide();exportOffcanvas.show()") Export / Download
+            a.nav-link(href="#" @click.stop.prevent="offcanvasNavi.hide();showSettingsDialog()") Settings
             hr
             div.nav-link(x-show="analyticsIsAvailable")
                 div.form-check.form-switch
