@@ -10572,35 +10572,85 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
   };
 
-  // src/Formats/Youtube.ts
-  var Youtube = class extends Base {
-    filename = "youtube-chapters.txt";
+  // src/Formats/TextGeneric.ts
+  var TextGeneric = class extends Base {
+    filename = "chapters.txt";
     mimeType = "text/plain";
+    formats = {
+      spotifya: {
+        string: (title, start) => `(${start}) ${title}`,
+        hours: "default"
+      },
+      spotifyb: {
+        string: (title, start) => `${start}-${title}`,
+        hours: "default"
+      },
+      youtube: {
+        string: (title, start) => `${start} ${title}`,
+        hours: "whenOverOneHour",
+        enforceZeroStartTime: true
+      },
+      shownotes: {
+        string: (title, start) => [`(${start})`, "", title, ""].join("\n"),
+        hours: "default"
+      },
+      transistorfm: {
+        string: (title, start) => `${start} - ${title}`,
+        hours: "default"
+      },
+      podigeetext: {
+        string: (title, start) => `${start} - ${title}`,
+        hours: "always"
+      },
+      podcastpage: {
+        string: (title, start) => `(${start}) - ${title}`,
+        hours: "default"
+      }
+    };
     detect(inputString) {
-      return /^0?0:00(:00)?\s/.test(inputString.trim());
+      return /^\(?(?<ts>\d?\d:\d\d(?::\d\d)?)\)?[\s-]+(?<title>[^\n]+)/.test(inputString.trim());
     }
     parse(string) {
       if (!this.detect(string)) {
-        throw new Error("Youtube Chapters *MUST* begin with (0)0:00(:00), received: " + string.substr(0, 10) + "...");
+        throw new Error("Invalid format, see documentation for supported formats");
       }
-      this.chapters = stringToLines(string).map((line) => {
-        const l = line.split(" ");
-        const timestamp = String(l.shift());
+      const matches = [...string.matchAll(/^\(?(?<ts>\d?\d:\d\d(?::\d\d)?)\)?[\s-]+(?<title>[^\n]+)/gm)];
+      this.chapters = matches.map((match) => {
         return {
-          startTime: timestampToSeconds$1(timestamp),
-          title: l.join(" ")
+          startTime: timestampToSeconds$1(match.groups.ts),
+          title: match.groups.title
         };
       });
     }
-    toString() {
-      const options = {
-        milliseconds: false,
-        hours: this.chapters.at(-1).startTime > 3600
-      };
+    toString(pretty = false, exportOptions = "youtube") {
+      const formatKey = typeof exportOptions === "string" ? exportOptions : exportOptions.format;
+      if (!(formatKey in this.formats)) {
+        throw new Error("Invalid format: " + formatKey);
+      }
+      const template = this.formats[formatKey];
+      const exceedsOneHour = this.chapters.at(-1).startTime > 3600;
       return this.chapters.map((chapter, index) => {
-        const startTime = index === 0 && chapter.startTime !== 0 ? 0 : chapter.startTime;
-        return `${secondsToTimestamp$1(startTime, options)} ${this.ensureTitle(index)}`;
+        const startTime = template.enforceZeroStartTime && index === 0 && chapter.startTime !== 0 ? 0 : chapter.startTime;
+        let hours;
+        if (startTime > 3600 || template.hours === "always" || template.hours === "whenOverOneHour" && exceedsOneHour) {
+          hours = true;
+        } else {
+          hours = false;
+        }
+        return template.string(chapter.title, secondsToTimestamp$1(startTime, { hours }));
       }).join("\n");
+    }
+  };
+
+  // src/Formats/Youtube.ts
+  var Youtube = class extends TextGeneric {
+    filename = "youtube-chapters.txt";
+    mimeType = "text/plain";
+    detect(inputString) {
+      return /^(?<ts>\d?\d:\d\d(?::\d\d)?) [^-](?<title>[^\n]+)/.test(inputString.trim());
+    }
+    toString() {
+      return super.toString(false, { format: "youtube" });
     }
   };
 
@@ -11022,6 +11072,134 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
   };
 
+  // src/Formats/Podigee.ts
+  var Podigee = class extends Base {
+    filename = "podigee-chapters.json";
+    supportsPrettyPrint = true;
+    test(data) {
+      if (!Array.isArray(data)) {
+        return { errors: ["JSON Structure: must be an array"] };
+      }
+      if (data.length === 0) {
+        return { errors: ["JSON Structure: must not be empty"] };
+      }
+      if (!data.every((chapter) => "start_time" in chapter && "title" in chapter)) {
+        return { errors: ["JSON Structure: every chapter must have a start_time and title property"] };
+      }
+      return { errors: [] };
+    }
+    parse(string) {
+      const data = JSON.parse(string);
+      const { errors } = this.test(data);
+      if (errors.length > 0) {
+        throw new Error(errors.join(""));
+      }
+      this.chapters = data.map((raw) => {
+        const { start_time: start, title, image, url } = raw;
+        const chapter = {
+          startTime: timestampToSeconds$1(start)
+        };
+        if (title) {
+          chapter.title = title;
+        }
+        if (image) {
+          chapter.img = image;
+        }
+        if (url) {
+          chapter.url = url;
+        }
+        return chapter;
+      });
+    }
+    toString(pretty = false) {
+      return JSON.stringify(this.chapters.map((chapter, i) => {
+        const output = {
+          start_time: secondsToTimestamp$1(chapter.startTime),
+          title: this.ensureTitle(i)
+        };
+        if (chapter.img) {
+          output.image = chapter.img;
+        }
+        if (chapter.url) {
+          output.url = chapter.url;
+        }
+        return output;
+      }), null, pretty ? 2 : 0);
+    }
+  };
+
+  // src/Formats/PodigeeText.ts
+  var PodigeeText = class extends TextGeneric {
+    filename = "podigee-chapters.txt";
+    mimeType = "text/plain";
+    detect(inputString) {
+      return /^(?<ts>\d?\d:\d\d(?::\d\d)?) - (?<title>[^\n]+)/.test(inputString.trim());
+    }
+    toString() {
+      return super.toString(false, { format: "podigeetext" });
+    }
+  };
+
+  // src/Formats/ShowNotes.ts
+  var ShowNotes = class extends TextGeneric {
+    filename = "shownote-chapters.txt";
+    mimeType = "text/plain";
+    detect(inputString) {
+      return /^\((?<ts>\d?\d:\d\d(?::\d\d)?)\)\n\n(?<title>[^\n]+)/.test(inputString.trim());
+    }
+    toString() {
+      return super.toString(false, { format: "shownotes" });
+    }
+  };
+
+  // src/Formats/SpotifyA.ts
+  var SpotifyA = class extends TextGeneric {
+    filename = "spotify-chapters.txt";
+    mimeType = "text/plain";
+    detect(inputString) {
+      return /^\((?<ts>\d?\d:\d\d(?::\d\d)?)\) [^-](?<title>[^\n]+)/.test(inputString.trim());
+    }
+    toString() {
+      return super.toString(false, { format: "spotifya" });
+    }
+  };
+
+  // src/Formats/SpotifyB.ts
+  var SpotifyB = class extends TextGeneric {
+    filename = "spotify-chapters.txt";
+    mimeType = "text/plain";
+    detect(inputString) {
+      return /^(?<ts>\d?\d:\d\d(?::\d\d)?)-(?<title>[^\n]+)/.test(inputString.trim());
+    }
+    toString() {
+      return super.toString(false, { format: "spotifyb" });
+    }
+  };
+
+  // src/Formats/PodcastPage.ts
+  var PodcastPage = class extends TextGeneric {
+    filename = "podcastpage-chapters.txt";
+    mimeType = "text/plain";
+    detect(inputString) {
+      return /^\((?<ts>\d?\d:\d\d(?::\d\d)?)\) - (?<title>[^\n]+)/.test(inputString.trim());
+    }
+    toString() {
+      return super.toString(false, { format: "podcastpage" });
+    }
+  };
+
+  // src/Formats/TransistorFM.ts
+  var TransistorFM = class extends TextGeneric {
+    filename = "transistorfm-chapters.txt";
+    mimeType = "text/plain";
+    detect(inputString) {
+      return /^(?<ts>\d?\d:\d\d(?::\d\d)?) - (?<title>[^\n]+)/.test(inputString.trim());
+    }
+    toString() {
+      return super.toString(false, { format: "transistorfm" });
+    }
+  };
+
   // src/Formats/AutoFormat.ts
   var classMap = {
     chaptersjson: ChaptersJson,
@@ -11041,7 +11219,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     podlovejson: PodloveJson,
     applehls: AppleHLS,
     scenecut: Scenecut,
-    audible: Audible
+    audible: Audible,
+    podigee: Podigee,
+    podigeetext: PodigeeText,
+    shownotes: ShowNotes,
+    spotifya: SpotifyA,
+    spotifyb: SpotifyB,
+    podcastpage: PodcastPage,
+    transistorfm: TransistorFM
   };
   var AutoFormat = {
     classMap,
@@ -20728,11 +20913,27 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
       writeEndTimes: false,
       psdFramerate: 23.976,
       psdOmitTimecodes: false,
-      acUseTextAttr: false
+      acUseTextAttr: false,
+      miscTextType: 'spotifya'
     },
     exportContent: '',
     exportData: null,
+    miscTextTypes: [
+      'spotifya',
+      'spotifyb',
+      'podcastpage',
+      'transistorfm',
+      'podigeetext',
+      'shownotes'
+    ],
     initExportDialog () {
+      for (const type of this.miscTextTypes) {
+        if (this.selectedFormats.includes(type)) {
+          this.exportSettings.miscTextType = type;
+          break
+        }
+      }
+
       this.exportOffcanvas = new Offcanvas(this.$refs.exportDialog);
       this.$refs.exportDialog.addEventListener('show.bs.offcanvas', () => {
         this.updateExportContent();
@@ -20743,8 +20944,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         this.exportSettings.type = type;
       }
 
+      const actualType = this.exportSettings.type === 'misctext' ? this.exportSettings.miscTextType : this.exportSettings.type;
+
       this.data.ensureUniqueFilenames();
-      this.exportData = AutoFormat.as(this.exportSettings.type, this.data);
+      this.exportData = AutoFormat.as(actualType, this.data);
       this.exportSettings.hasImages = this.data.chapters.some(item => item.img && item.img_type === 'blob');
       this.exportSettings.canUseImagePrefix = this.data.chapters.some(item => item.img && ['blob', 'relative'].includes('blob'));
 

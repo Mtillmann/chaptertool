@@ -72,6 +72,16 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                 i.bi.bi-filetype-json
                                 |
                                 | Scenecut
+                        li.nav-item(x-show="selectedFormats.includes('podigee')")
+                            a.nav-link(:class="{active : exportSettings.type === 'podigee'}", href="#", @click.stop.prevent="updateExportContent('podigee')")
+                                i.bi.bi-filetype-json
+                                |
+                                | Podigee
+                        li.nav-item(x-show="/podcastpage|podigeetext|spofitfya|spotifyb|shownotes|transistorfm/.test(selectedFormats.join(','))")
+                            a.nav-link(:class="{active : exportSettings.type === 'misctext'}", href="#", @click.stop.prevent="updateExportContent('misctext')")
+                                i.bi.bi-filetype-txt
+                                |
+                                | Misc Text
                     div.row.flex-grow-1
                         div.col-8.d-flex.flex-column
                             textarea.flex-grow-1.overflow-visible.form-control(:value="exportContent", readonly, x-ref="outputTextarea")
@@ -114,6 +124,28 @@ div.offcanvas.offcanvas-bottom#exportDialog(x-ref="exportDialog", style="--bs-of
                                     label.btn.btn-outline-primary(for="formatMKVMergeSimple") simple aka Nero
                                     input#formatVorbisComment.btn-check(type="radio",name="mkvformat",value="vorbiscomment", x-model="exportSettings.type", @change="updateExportContent()")
                                     label.btn.btn-outline-primary(for="formatVorbisComment") Vorbis Comment
+                            template(x-if="exportSettings.type === 'misctext'")
+                                div
+                                    div.form-check.mb-2
+                                        input.form-check-input#miscTextSpotifyA(@change="updateExportContent()", value="spotifya" type="radio", x-model="exportSettings.miscTextType")
+                                        label.form-check-label(for="miscTextSpotifyA") spotify(A)
+                                    div.form-check.mb-2
+                                        input.form-check-input#miscTextSpotifyB(@change="updateExportContent()", value="spotifyb" type="radio", x-model="exportSettings.miscTextType")
+                                        label.form-check-label(for="miscTextSpotifyB") spotify(B)
+                                    div.form-check.mb-2
+                                        input.form-check-input#miscTextTransistorFM(@change="updateExportContent()", value="transistorfm" type="radio", x-model="exportSettings.miscTextType")
+                                        label.form-check-label(for="miscTextTransistorFM") TransistorFM
+                                    div.form-check.mb-2
+                                        input.form-check-input#miscTextPodigeeText(@change="updateExportContent()", value="podigeetext" type="radio", x-model="exportSettings.miscTextType")
+                                        label.form-check-label(for="miscTextPodigeeText") PodigeeText
+                                    div.form-check.mb-2
+                                        input.form-check-input#miscTextPodcastPage(@change="updateExportContent()", value="podcastpage" type="radio", x-model="exportSettings.miscTextType")
+                                        label.form-check-label(for="miscTextPodcastPage") PodcastPage
+                                    div.form-check.mb-2
+                                        input.form-check-input#miscTextShownotes(@change="updateExportContent()", value="shownotes" type="radio", x-model="exportSettings.miscTextType")
+                                        label.form-check-label(for="miscTextShownotes") "Shownotes"
+
+                                
                             template(x-if="/^(psc|podlove)/.test(exportSettings.type)")
                                 div.btn-group.btn-group-sm(role="group")
                                     input#podloveSimpleChapters.btn-check(type="radio",name="podloveformat",value="psc", x-model="exportSettings.type", @change="updateExportContent()")

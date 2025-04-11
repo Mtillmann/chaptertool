@@ -15,11 +15,27 @@ export default {
     writeEndTimes: false,
     psdFramerate: 23.976,
     psdOmitTimecodes: false,
-    acUseTextAttr: false
+    acUseTextAttr: false,
+    miscTextType: 'spotifya'
   },
   exportContent: '',
   exportData: null,
+  miscTextTypes: [
+    'spotifya',
+    'spotifyb',
+    'podcastpage',
+    'transistorfm',
+    'podigeetext',
+    'shownotes'
+  ],
   initExportDialog () {
+    for (const type of this.miscTextTypes) {
+      if (this.selectedFormats.includes(type)) {
+        this.exportSettings.miscTextType = type
+        break
+      }
+    }
+
     this.exportOffcanvas = new Offcanvas(this.$refs.exportDialog)
     this.$refs.exportDialog.addEventListener('show.bs.offcanvas', () => {
       this.updateExportContent()
@@ -30,8 +46,10 @@ export default {
       this.exportSettings.type = type
     }
 
+    const actualType = this.exportSettings.type === 'misctext' ? this.exportSettings.miscTextType : this.exportSettings.type
+
     this.data.ensureUniqueFilenames()
-    this.exportData = AutoFormat.as(this.exportSettings.type, this.data)
+    this.exportData = AutoFormat.as(actualType, this.data)
     this.exportSettings.hasImages = this.data.chapters.some(item => item.img && item.img_type === 'blob')
     this.exportSettings.canUseImagePrefix = this.data.chapters.some(item => item.img && ['blob', 'relative'].includes('blob'))
 
