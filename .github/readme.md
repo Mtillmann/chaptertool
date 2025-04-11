@@ -12,26 +12,6 @@ Create and _convert_ chapters for podcasts, youtube, matroska, mkvmerge/nero/vor
 
 ## Supported Formats
 
-| name | key | ext    | info |
-|-------|------|--------|------|
-| Podcasting 2.0 Chapters | chaptersjson | `json` | [spec](https://github.com/Podcastindex-org/podcast-namespace/blob/main/chapters/jsonChapters.md) |
-| FFMetadata | ffmpegdata | `txt`  | [spec](https://ffmpeg.org/ffmpeg-formats.html#Metadata-1) |
-| Matroska XML chapters | matroskaxml | `xml`  | [spec](https://www.matroska.org/technical/chapters.html) |
-| MKVToolNix mkvmerge XML | mkvmergexml | `xml`  | [spec](https://mkvtoolnix.download/doc/mkvmerge.html#mkvmerge.chapters) |
-| MKVToolNix mkvmerge _simple_ | mkvmergesimple | `txt`  | [spec](https://mkvtoolnix.download/doc/mkvmerge.html#mkvmerge.chapters) |
-| WebVTT Chapters | webvtt | `vtt`  | [spec](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API) |
-| Youtube Chapter Syntax | youtube | `txt`  |  |
-| FFMpegInfo | ffmpeginfo | `txt`  | read only, used internally |
-| PySceneDetect | pyscenedetect | `csv`  | [project home](https://github.com/Breakthrough/PySceneDetect) |
-| Vorbis Comment Format | vorbiscomment | `txt`  | [spec](https://wiki.xiph.org/Chapter_Extension) |
-| "Apple Chapters" | applechapters | `xml`  | [source](https://github.com/rigaya/NVEnc/blob/master/NVEncC_Options.en.md#--chapter-string:~:text=CHAPTER03NAME%3Dchapter%2D3-,apple%20format,-(should%20be%20in)) |
-| Shutter EDL | edl | `edl`  | [source](https://github.com/paulpacifico/shutter-encoder/blob/f3d6bb6dfcd629861a0b0a50113bf4b062e1ba17/src/application/SceneDetection.java) |
-| Podlove Simple Chapters | psc | `xml`  | [spec](https://podlove.org/simple-chapters/) |
-| Podlove Simple Chapters JSON | podlovejson | `json` | [source](https://github.com/podlove/chapters#:~:text=org/%3E-,Encode%20to%20JSON,-iex%3E%20Chapters) |
-| MP4Chaps | mp4chaps | `txt`  | [source](https://github.com/podlove/chapters#:~:text=%3Achapters%3E-,Encode%20to%20mp4chaps,-iex%3E%20Chapters) |
-| Apple HLS Chapters | applehls | `json` | [spec](https://developer.apple.com/documentation/http-live-streaming/providing-javascript-object-notation-json-chapters), partial support |
-| SceneCut | scenecut | `json` | [spec](https://github.com/slhck/scenecut-extractor#:~:text=cuts%20in%20JSON-,format,-%3A) |
-
 | name                  | key            | ext    | info                                                                                                                                                               |
 | ---------------------------- | -------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Podcasting 2.0 Chapters      | chaptersjson   | `json` | [spec](https://github.com/Podcastindex-org/podcast-namespace/blob/main/chapters/jsonChapters.md)                                                                   |
