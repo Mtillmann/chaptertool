@@ -36,7 +36,7 @@ export class FileHandler {
 
       try {
         const detected = AutoFormat.from(text)
-        const data = new ChaptersJson(detected)
+        const data = ChaptersJson.create(detected, detected.duration)
         gtag('event', 'ui', {
           action: 'external',
           origin: 'paste',
