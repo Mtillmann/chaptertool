@@ -1,6 +1,6 @@
 {
   "name": "chaptertool",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Manage and generate chapters for podcasts and other media via cli or web",
   "keywords": [
     "podcast",
@@ -23,14 +23,14 @@
   "main": "chaptertool.js",
   "bin": "chaptertool.js",
   "homepage": "https://github.com/Mtillmann/chaptertool",
-  "scripts": {
-    "sass-dev": "node-sass --recursive --watch src/scss --output static",
-    "build": "rollup -c && terser static/app.js --compress ecma=2021 --output static/app.js && node-sass --recursive --output-style compressed src/scss --output static && node scripts/writeversion.js",
-    "createIndexHTML": "node scripts/empuggen.js",
-    "dev": "rollup -c -w",
-    "lint": "eslint",
-    "watch": "concurrently \"node-sass --recursive --watch src/scss --output static\" \"npm run dev\" \"nodemon --watch src/Server.js --exec node chaptertool.js serve\""
-  },
+"scripts": {
+  "sass-dev": "sass --watch src/scss:static",
+  "build": "rollup -c && terser static/app.js --compress ecma=2021 -o static/app.js && sass --style=compressed src/scss:static && node scripts/writeversion.js",
+  "createIndexHTML": "node scripts/empuggen.js",
+  "dev": "rollup -c -w",
+  "lint": "eslint",
+  "watch": "concurrently \"npm run sass-dev\" \"npm run dev\" \"nodemon --watch src/Server.js --exec node chaptertool.js serve\""
+},
   "author": "Martin Tillmann<mtillmann@gmail.com>",
   "bugs": {
     "url": "https://github.com/Mtillmann/chaptertool/issues"
@@ -42,7 +42,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@mtillmann/chapters": "^0.1.8",
+    "@mtillmann/chapters": "^0.2.2",
     "@zip.js/zip.js": "^2.7.32",
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.3",
@@ -63,10 +63,10 @@
     "alpinejs": "^3.13.4",
     "concurrently": "^8.2.2",
     "neostandard": "^0.12.1",
-    "node-sass": "^9.0.0",
     "nodemon": "^3.0.3",
     "rollup": "^4.9.6",
     "rollup-plugin-copy": "^3.5.0",
+    "sass": "^1.97.3",
     "terser": "^5.27.0"
   }
 }

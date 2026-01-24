@@ -95,12 +95,12 @@ template(x-if="currentChapterIndex !== null")
             div.row.p-1.mb-1
                 label.col-3.col-form-label(for="chapterGeoName") Name
                 div.col-9
-                    input.form-control#chapterGeoName(x-model="data.chapters[currentChapterIndex].geo_name")
+                    input.form-control#chapterGeoName(x-model="data.chapters[currentChapterIndex].location.name")
             div.row.p-1.mb-1
                 label.col-3.col-form-label(for="chapterGeoLL") Geo
                 div.col-9
-                    input.form-control#chapterGeoLL(x-model="data.chapters[currentChapterIndex].geo_ll", placeholder="geo:lat,lon")
+                    input.form-control#chapterGeoLL(x-model="data.chapters[currentChapterIndex].location.geo", placeholder="geo:lat,lon")
             div.row.p-1.mb-1
                 label.col-3.col-form-label(for="chapterGeoOSM") OSM
                 div.col-9
-                    input.form-control#chapterGeoOSM(x-model="data.chapters[currentChapterIndex].geo_osm", placeholder="osm query string")
+                    input.form-control#chapterGeoOSM(x-model="data.chapters[currentChapterIndex].location.osm", placeholder="osm query string")
